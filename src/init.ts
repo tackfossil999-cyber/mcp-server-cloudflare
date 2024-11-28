@@ -15,32 +15,52 @@ import os from 'node:os'
 import path from 'node:path'
 import fs from 'node:fs'
 import { fileURLToPath } from 'url'
+import { createDialog, endSection, logRaw, startSection, updateStatus } from './utils/c3'
+import { mcpCloudflareVersion } from './utils/helpers'
 
 const __filename = fileURLToPath(import.meta.url)
 
 const execAsync = promisify(exec)
 
 export async function init(accountTag: string | undefined) {
+  logRaw(
+    createDialog([
+      `👋 Welcome to ${chalk.yellow('mcp-server-cloudflare')} v${mcpCloudflareVersion}!`,
+      `💁‍♀️ This ${chalk.green("'init'")} process will ensure you're connected to the Cloudflare API`,
+      '   and install the Cloudflare MCP Server into Claude Desktop',
+      'ℹ️ For more information, visit https://github.com/cloudflare/mcp-server-cloudflare',
+      `🧡 Let's get started.`,
+    ]),
+  )
+
+  startSection(`Checking for existing Wrangler auth info`, `Step 1 of 3`)
+
   try {
     getAuthTokens()
   } catch (e: any) {
-    console.log(
-      `Caught error while reading Wrangler auth info:\n  ${chalk.gray(e.message)}\n${chalk.yellow(`Running 'wrangler login' and retrying...`)}`,
-    )
+    updateStatus(`${chalk.underline.red('Warning:')} ${chalk.gray(e.message)}`, false)
+    updateStatus(`Running '${chalk.yellow('npx wrangler login')}' and retrying...`)
 
-    await execAsync('npx wrangler@latest login')
+    const { stderr, stdout } = await execAsync('npx wrangler@latest login')
+    if (stderr) {
+      throw new Error(stderr)
+    }
     getAuthTokens()
   }
 
-  console.log(`✅ Wrangler auth info loaded!`)
+  updateStatus(`Wrangler auth info loaded!`)
 
   if (isAccessTokenExpired()) {
+    updateStatus(`Access token expired, refreshing...`, false)
     if (await refreshToken()) {
-      console.log('Successfully refreshed access token')
+      updateStatus('Successfully refreshed access token')
     } else {
-      console.log('Failed to refresh access token')
+      updateStatus('Failed to refresh access token')
     }
   }
+
+  endSection('Done')
+  startSection(`Fetching account info`, `Step 2 of 3`)
 
   const { result: accounts } = await fetchInternal<FetchResult<AccountInfo[]>>('/accounts')
 
@@ -64,7 +84,10 @@ export async function init(accountTag: string | undefined) {
       break
   }
 
-  console.log(`✅ Using account: ${chalk.yellow(account)}`)
+  updateStatus(`Using account: ${chalk.yellow(account)}`)
+  endSection('Done')
+
+  startSection(`Configuring Claude Desktop`, `Step 3 of 3`)
 
   const claudeConfigPath = path.join(
     os.homedir(),
@@ -78,14 +101,15 @@ export async function init(accountTag: string | undefined) {
     args: [__filename, 'run', account],
   }
 
+  updateStatus(`Looking for existing config in: ${chalk.yellow(path.dirname(claudeConfigPath))}`)
   const configDirExists = isDirectory(path.dirname(claudeConfigPath))
   if (configDirExists) {
     const existingConfig = fs.existsSync(claudeConfigPath)
       ? JSON.parse(fs.readFileSync(claudeConfigPath, 'utf8'))
       : { mcpServers: {} }
     if ('cloudflare' in existingConfig.mcpServers || {}) {
-      console.log(
-        `Replacing existing Claude Cloudflare MCP config: ${JSON.stringify(existingConfig.mcpServers.cloudflare)}`,
+      updateStatus(
+        `${chalk.green('Note:')} Replacing existing Cloudflare MCP config:\n${chalk.gray(JSON.stringify(existingConfig.mcpServers.cloudflare))}`,
       )
     }
     const newConfig = {
@@ -97,13 +121,16 @@ export async function init(accountTag: string | undefined) {
     }
     fs.writeFileSync(claudeConfigPath, JSON.stringify(newConfig, null, 2))
 
-    console.log(`✅ mcp-server-cloudflare configured & added to Claude Desktop!`)
-    console.log(`Wrote the following config:\n${JSON.stringify(newConfig, null, 2)}`)
-    console.log(`Try asking Claude to "tell me which Workers I have on my account" to get started!`)
+    updateStatus(`${chalk.yellow('mcp-server-cloudflare')} configured & added to Claude Desktop!`, false)
+    updateStatus(`Wrote config to ${chalk.yellow(claudeConfigPath)}:`, false)
+    updateStatus(chalk.gray(JSON.stringify(newConfig, null, 2)))
+    updateStatus(chalk.blue(`Try asking Claude to "tell me which Workers I have on my account" to get started!`))
   } else {
     const fullConfig = { mcpServers: { cloudflare: cloudflareConfig } }
-    console.log(
+    updateStatus(
       `Couldn't detect Claude Desktop config at ${claudeConfigPath}.\nTo add the Cloudflare MCP server manually, add the following config to your ${chalk.yellow('claude_desktop_configs.json')} file:\n\n${JSON.stringify(fullConfig, null, 2)}`,
     )
   }
+
+  endSection('Done')
 }

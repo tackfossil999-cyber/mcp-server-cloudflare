@@ -9,7 +9,7 @@ import path from 'node:path'
 import xdgAppPaths from 'xdg-app-paths'
 import TOML from '@iarna/toml'
 import assert from 'node:assert'
-import { version as mcpCloudflareVersion } from '../../package.json'
+import { mcpCloudflareVersion } from './helpers'
 
 export function isDirectory(configPath: string) {
   try {
@@ -123,7 +123,7 @@ function getAuthConfigFilePath() {
 export function getAuthTokens() {
   const configPath = getAuthConfigFilePath()
 
-  if (!fs.existsSync(configPath)) throw new Error(`Missing config file at ${configPath}`)
+  if (!fs.existsSync(configPath)) throw new Error(`No config file found at ${configPath}`)
 
   const toml = parseTOML(readFileSync(configPath, 'utf8')) as {
     oauth_token?: string
