@@ -1,6 +1,6 @@
 {
   "name": "@cloudflare/mcp-server-cloudflare",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "MCP server for interacting with Cloudflare API",
   "license": "MIT",
   "author": "Cloudflare, Inc. (https://cloudflare.com)",
