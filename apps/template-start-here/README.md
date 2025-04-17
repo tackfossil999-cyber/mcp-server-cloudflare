@@ -8,7 +8,7 @@ You should use this as a template to build an MCP server for Cloudflare, provide
 
 ### For Production
 
-- Set secrets via Wrangler
+- Set secrets via Wrangler (ask in the `Cloudflare's Own MCP Servers` channel to get credentials)
 
 ```bash
 wrangler secret put CLOUDFLARE_CLIENT_ID
