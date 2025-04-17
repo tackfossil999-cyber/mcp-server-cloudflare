@@ -1,5 +1,5 @@
 {
-	"name": "workers-observability",
+	"name": "example-cloudflare-mcp-server",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
