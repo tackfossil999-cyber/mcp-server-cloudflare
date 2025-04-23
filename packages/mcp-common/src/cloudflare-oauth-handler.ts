@@ -2,6 +2,8 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
 
+import { AuthUser, MetricsTracker } from '@repo/mcp-observability'
+
 import { getAuthorizationURL, getAuthToken, refreshAuthToken } from './cloudflare-auth'
 import { McpError } from './mcp-error'
 
@@ -141,10 +143,20 @@ export async function handleTokenExchangeCallback(
  * @param scopes optional subset of scopes to request when handling authorization requests
  * @returns a Hono app with configured OAuth routes
  */
-export function createAuthHandlers({ scopes }: { scopes: Record<string, string> }) {
+export function createAuthHandlers({
+	serverInfo,
+	scopes,
+	metrics,
+}: {
+	serverInfo: {
+		name: string,
+		version: string,
+	}
+	scopes: Record<string, string>
+	metrics: MetricsTracker
+}) {
 	{
 		const app = new Hono<AuthContext>()
-
 		/**
 		 * OAuth Authorization Endpoint
 		 *
@@ -170,6 +182,13 @@ export function createAuthHandlers({ scopes }: { scopes: Record<string, string> 
 
 				return Response.redirect(res.authUrl, 302)
 			} catch (e) {
+				metrics.logEvent(
+					new AuthUser({
+						mcpServer: serverInfo.name,
+						mcpServerVersion: serverInfo.version,
+						errorMessage: `Authorize Error: ${(e as any).toString()}`,
+					})
+				)
 				if (e instanceof McpError) {
 					return c.text(e.message, { status: e.code })
 				}
@@ -231,9 +250,24 @@ export function createAuthHandlers({ scopes }: { scopes: Record<string, string> 
 					},
 				})
 
+				metrics.logEvent(
+					new AuthUser({
+						userId: user.id,
+						mcpServer: serverInfo.name,
+						mcpServerVersion: serverInfo.version,
+					})
+				)
+
 				return Response.redirect(redirectTo, 302)
 			} catch (e) {
 				console.error(e)
+				metrics.logEvent(
+					new AuthUser({
+						mcpServer: serverInfo.name,
+						mcpServerVersion: serverInfo.version,
+						errorMessage: `Callback Error: ${(e as any).toString()}`,
+					})
+				)
 				if (e instanceof McpError) {
 					return c.text(e.message, { status: e.code })
 				}
