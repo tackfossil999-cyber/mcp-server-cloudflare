@@ -179,11 +179,13 @@ export function createAuthHandlers({
 
 				return Response.redirect(res.authUrl, 302)
 			} catch (e) {
-				metrics.logEvent(
-					new AuthUser({
-						errorMessage: `Authorize Error: ${(e as any).toString()}`,
-					})
-				)
+				if (e instanceof Error) {
+					metrics.logEvent(
+						new AuthUser({
+							errorMessage: `Authorize Error: ${e.name}: ${e.message}`,
+						})
+					)
+				}
 				if (e instanceof McpError) {
 					return c.text(e.message, { status: e.code })
 				}
@@ -253,12 +255,14 @@ export function createAuthHandlers({
 
 				return Response.redirect(redirectTo, 302)
 			} catch (e) {
-				console.error(e)
-				metrics.logEvent(
-					new AuthUser({
-						errorMessage: `Callback Error: ${(e as any).toString()}`,
-					})
-				)
+				if (e instanceof Error) {
+					console.error(e)
+					metrics.logEvent(
+						new AuthUser({
+							errorMessage: `Callback Error: ${e.name}: ${e.message}`,
+						})
+					)
+				}
 				if (e instanceof McpError) {
 					return c.text(e.message, { status: e.code })
 				}

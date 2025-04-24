@@ -13,9 +13,9 @@
 		"postinstall": "mkdir -p workdir",
 		"test": "vitest",
 		"types": "wrangler types",
-		"eval:dev": "start-server-and-test --expect 404 eval:server http://localhost:8976 'vitest --config vitest.config.evals.ts'",
+		"eval:dev": "start-server-and-test --expect 404 eval:server http://localhost:8976 'vitest --testTimeout=60000 --config vitest.config.evals.ts'",
 		"eval:server": "concurrently \"tsx container/index.ts\" \"wrangler dev --var \"ENVIRONMENT:test\"\"",
-		"eval:ci": "start-server-and-test --expect 404 eval:server http://localhost:8976 'vitest run --config vitest.config.evals.ts'"
+		"eval:ci": "start-server-and-test --expect 404 eval:server http://localhost:8976 'vitest run --testTimeout=60000 --config vitest.config.evals.ts'"
 	},
 	"dependencies": {
 		"@cloudflare/workers-oauth-provider": "0.0.2",

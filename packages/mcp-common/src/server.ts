@@ -56,7 +56,7 @@ export class CloudflareMCPServer extends McpServer {
 								)
 								return r
 							})
-							.catch((e: any) => {
+							.catch((e: unknown) => {
 								// promise throws
 								this.trackToolCallError(e, name, userId)
 								throw e
@@ -71,7 +71,7 @@ export class CloudflareMCPServer extends McpServer {
 						)
 						return toolCall
 					}
-				} catch (e: any) {
+				} catch (e: unknown) {
 					// non-promise throws
 					this.trackToolCallError(e, name, userId)
 					throw e
@@ -84,7 +84,8 @@ export class CloudflareMCPServer extends McpServer {
 		}
 	}
 
-	private trackToolCallError(e: any, toolName: string, userId?: string) {
+	private trackToolCallError(e: unknown, toolName: string, userId?: string) {
+		// placeholder error code
 		let errorCode = -1
 		if (e instanceof McpError) {
 			errorCode = e.code
