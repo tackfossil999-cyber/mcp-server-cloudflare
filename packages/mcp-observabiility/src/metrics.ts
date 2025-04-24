@@ -1,67 +1,78 @@
-import { MetricsEvent, MetricsEventIndexIds, mapBlobs, mapDoubles } from "./analytics-engine"
+import { MetricsEvent, MetricsEventIndexIds } from "./analytics-engine"
+import { type ClientCapabilities } from "@modelcontextprotocol/sdk/types.js"
 
-export class ToolCall implements MetricsEvent {
+/**
+ * TODO: once there are better hooks into MCP servers, we should track the session ID
+ */
+export class ToolCall extends MetricsEvent {
 	constructor(
 		private toolCall: {
 			userId?: string
-            sessionId?: string
             toolName: string
 			errorCode?: number
 		}
-	) {}
+	) {
+		super()
+	}
 
 	toDataPoint(): AnalyticsEngineDataPoint {
         return {
             indexes: [MetricsEventIndexIds.TOOL_CALL],
-            blobs: mapBlobs({
+            blobs: this.mapBlobs({
 				blob3: this.toolCall.userId,
-				blob4: this.toolCall.sessionId,
-				blob5: this.toolCall.toolName,
+				blob4: this.toolCall.toolName,
 			}),
-			doubles: mapDoubles({
+			doubles: this.mapDoubles({
 				double1: this.toolCall.errorCode
 			})
         }
 	}
 }
 
-export class SessionStart implements MetricsEvent {
+export class SessionStart extends MetricsEvent {
 	constructor(
 		private session: {
 			userId?: string,
-			sessionId?: string,
 			clientInfo?: {
 				name: string,
 				version: string
 			}
+			clientCapabilities?: ClientCapabilities
 		}
-	) {}
+	) {
+		super()
+	}
 
 	toDataPoint(): AnalyticsEngineDataPoint {
         return {
             indexes: [MetricsEventIndexIds.SESSION_START],
-            blobs: mapBlobs({
+            blobs: this.mapBlobs({
 				blob3: this.session.userId,
-				blob4: this.session.sessionId,
-				blob5: this.session.clientInfo?.name,
-				blob6: this.session.clientInfo?.version,
+				blob4: this.session.clientInfo?.name,
+				blob5: this.session.clientInfo?.version,
 			}),
+			doubles: this.mapDoubles({
+				double1: this.session.clientCapabilities?.roots ? 1 : 0,
+				double2: this.session.clientCapabilities?.sampling ? 1 : 0
+			})
         }
 	}
 }
 
-export class AuthUser implements MetricsEvent {
+export class AuthUser extends MetricsEvent {
 	constructor(
 		private authUser: {
 			userId?: string,
 			errorMessage?: string
 		}
-	) {}
+	) {
+		super()
+	}
 
 	toDataPoint(): AnalyticsEngineDataPoint {
         return {
             indexes: [MetricsEventIndexIds.SESSION_START],
-            blobs: mapBlobs({
+            blobs: this.mapBlobs({
 				blob3: this.authUser.userId,
 				blob4: this.authUser.errorMessage
 			}),

@@ -1,14 +1,16 @@
 import { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { InitializedNotificationSchema, ClientCapabilities } from "@modelcontextprotocol/sdk/types.js"
 import { type ServerOptions } from "@modelcontextprotocol/sdk/server/index.js"
 import { MetricsTracker, SessionStart, ToolCall } from '@repo/mcp-observability';
-import { ZodRawShape } from 'zod';
+import { ZodRawShape, ZodType } from 'zod';
 import { McpError } from './mcp-error';
+import { isPromise } from 'node:util/types'
 
 export class CloudflareMCPServer extends McpServer {
     private metrics;
 
 	constructor(
-        userId: string | undefined,
+        private userId: string | undefined,
         wae: AnalyticsEngineDataset,
 		serverInfo: {
 			[x: string]: unknown
@@ -21,47 +23,67 @@ export class CloudflareMCPServer extends McpServer {
         this.metrics = new MetricsTracker(wae, serverInfo)
 
         this.server.oninitialized = () => {
-            const sessionId = this.server.transport?.sessionId
             const clientInfo = this.server.getClientVersion()
+            const clientCapabilities = this.server.getClientCapabilities()
             this.metrics.logEvent(new SessionStart({
                 userId,
-                sessionId,
-                clientInfo
+                clientInfo,
+                clientCapabilities
             }))
         }
 
         const _tool = this.tool.bind(this);
         this.tool = (name: string, ...rest: unknown[]): ReturnType<typeof this.tool> => {
-            const baseToolCallback = rest[rest.length - 1] as ToolCallback<ZodRawShape | undefined>
-            rest[rest.length - 1] = (args: Parameters<ToolCallback<ZodRawShape | undefined>>) => {
-                const sessionId = args.length === 2 ? args[1].sessionId : args[0].sessionId
-                // @ts-ignore there's a weird typescript issue where it uses | instead of &
-                return baseToolCallback(...args)
-                    .then(() => {
+            const toolCb = rest[rest.length - 1] as ToolCallback<ZodRawShape | undefined>
+            const replacementToolCb: ToolCallback<ZodRawShape | undefined> = (arg1, arg2) => {
+                const toolCall = toolCb(arg1 as { [x: string]: any; } & { signal: AbortSignal }, arg2)
+                // There are 4 cases to track:
+                try {
+                    if (isPromise(toolCall)) {
+                        return toolCall
+                            .then((r) => {
+                                // promise succeeds
+                                this.metrics.logEvent(new ToolCall({
+                                    userId,
+                                    toolName: name
+                                }))
+                                return r
+                            })
+                            .catch((e) => {
+                                // promise throws
+                                this.trackToolCallError(e, name)
+                                throw e
+                            })
+                    } else {
+                        // non-promise succeeds
                         this.metrics.logEvent(new ToolCall({
                             userId,
-                            sessionId,
                             toolName: name
                         }))
-                    })
-                    .catch((e: any) => {
-                        let errorCode = -1
-                        if (e instanceof McpError) {
-                            errorCode = e.code
-                        }
-                        this.metrics.logEvent(new ToolCall({
-                            userId,
-                            sessionId,
-                            toolName: name,
-                            errorCode: errorCode
-                        }))
-
-                        throw e
-                    })
+                        return toolCall
+                    }
+                } catch (e) {
+                    // non-promise throws
+                    this.trackToolCallError(e, name)
+                    throw e
+                }
             }
+            rest[rest.length - 1] = replacementToolCb
 
-            // @ts-ignore 
+            // @ts-ignore
             return _tool(name, ...rest)
         }
 	}
+
+    private trackToolCallError(e: any, toolName: string) {
+        let errorCode = -1
+        if (e instanceof McpError) {
+            errorCode = e.code
+        }
+        this.metrics.logEvent(new ToolCall({
+            toolName,
+            userId: this.userId,
+            errorCode: errorCode
+        }))
+    }
 }

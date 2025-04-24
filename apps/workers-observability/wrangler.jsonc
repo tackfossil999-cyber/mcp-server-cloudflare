@@ -71,7 +71,13 @@
 			],
 			"vars": {
 				"ENVIRONMENT": "staging"
-			}
+			},
+			"analytics_engine_datasets": [
+				{
+				  "binding": "MCP_METRICS",
+				  "dataset": "mcp-metrics-staging"
+				}
+			],
 		},
 		"production": {
 			"name": "mcp-cloudflare-workers-observability-production",
@@ -93,7 +99,13 @@
 			],
 			"vars": {
 				"ENVIRONMENT": "production"
-			}
+			},
+			"analytics_engine_datasets": [
+				{
+				  "binding": "MCP_METRICS",
+				  "dataset": "mcp-metrics-production"
+				}
+			],
 		}
 	}
 }

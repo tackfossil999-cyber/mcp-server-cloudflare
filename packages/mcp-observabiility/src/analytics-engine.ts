@@ -17,19 +17,8 @@ export class MetricsTracker {
 
 	logEvent(event: MetricsEvent): void {
 		try {
+			event.serverInfo = this.mcpServerInfo
 			let dataPoint = event.toDataPoint()
-			if (
-				dataPoint.blobs &&
-				dataPoint.blobs.length >= 2 &&
-				dataPoint.blobs[0] === null &&
-				dataPoint.blobs[1] === null
-			) {
-				dataPoint.blobs[0] = this.mcpServerInfo.name
-				dataPoint.blobs[1] = this.mcpServerInfo.version
-			} else {
-				// we should never hit this because of type definitions and our mapBlobs utility function
-				throw new MetricsError('Unexpected result from toDataPoint, could not add MCP server info. Was the `mapBlobs` utility function used?')
-			}
 			this.wae.writeDataPoint(dataPoint)
 		} catch (e) {
 			console.error(`Failed to log metrics event, ${e}`)
@@ -43,13 +32,77 @@ export class MetricsTracker {
  * Each event type is stored with a different indexId and has an associated class which
  * maps a more ergonomic event object to a ReadyAnalyticsEvent
  */
-export interface MetricsEvent {
+export abstract class MetricsEvent {
+	public _serverInfo: { name: string, version: string } | undefined
+	set serverInfo(serverInfo: { name: string, version: string }) {
+		this._serverInfo = serverInfo
+	}
+
+	get serverInfo(): { name: string, version: string } {
+		if (!this._serverInfo) {
+			throw new Error("Server info not set")
+		}
+		return this._serverInfo
+	}
+
 	/**
 	 * Output a valid AnalyticsEngineDataPoint. Use `mapBlobs` and `mapDoubles` to write well defined
 	 * analytics engine datapoints. The first and second blob entries are reserved for the MCP server name and
 	 * MCP server version.
 	 */
-	toDataPoint(): AnalyticsEngineDataPoint
+	abstract toDataPoint(): AnalyticsEngineDataPoint
+
+	mapBlobs(blobs: Blobs): Array<string | null> {
+		if (blobs.blob1 || blobs.blob2) {
+			throw new MetricsError('Failed to map blobs, blob1 and blob2 are reserved for MCP server info')
+		}
+		// add placeholder blobs, filled in by the MetricsTracker later
+		blobs.blob1 = this.serverInfo.name
+		blobs.blob2 = this.serverInfo.version
+		const blobsArray = new Array(Object.keys(blobs).length)
+		for (const [key, value] of Object.entries(blobs)) {
+			const match = key.match(/^blob(\d+)$/)
+			if (match === null || match.length < 2) {
+				// we should never hit this because of the typedefinitions above,
+				// but this error is for safety
+				throw new MetricsError('Failed to map blobs, invalid key')
+			}
+			const index = parseInt(match[1], 10)
+			if (isNaN(index)) {
+				// we should never hit this because of the typedefinitions above,
+				// but this esrror is for safety
+				throw new MetricsError('Failed to map blobs, invalid index')
+			}
+			if (index - 1 >= blobsArray.length) {
+				throw new MetricsError('Failed to map blobs, missing blob')
+			}
+			blobsArray[index - 1] = value
+		}
+		return blobsArray
+	}
+
+	mapDoubles(doubles: Doubles): number[] {
+		const doublesArray = new Array(Object.keys(doubles).length)
+		for (const [key, value] of Object.entries(doubles)) {
+			const match = key.match(/^double(\d+)$/)
+			if (match === null || match.length < 2) {
+				// we should never hit this because of the typedefinitions above,
+				// but this error is for safety
+				throw new MetricsError(': Failed to map doubles, invalid key')
+			}
+			const index = parseInt(match[1], 10)
+			if (isNaN(index)) {
+				// we should never hit this because of the typedefinitions above,
+				// but this error is for safety
+				throw new MetricsError('Failed to map doubles, invalid index')
+			}
+			if (index - 1 >= doublesArray.length) {
+				throw new MetricsError('Failed to map doubles, missing blob')
+			}
+			doublesArray[index - 1] = value
+		}
+		return doublesArray
+	}	
 }
 
 export enum MetricsEventIndexIds {
@@ -92,7 +145,7 @@ type Range1To20 =
 // blob1 and blob2 are reserved for server name and version
 type Blobs = {
 	[key in `blob${Range1To20}`]?: string | null
-} & { blob1?: never; blob2?: never }
+}
 
 type Doubles = {
 	[key in `double${Range1To20}`]?: number
@@ -103,69 +156,4 @@ export class MetricsError extends Error {
 		super(message)
 		this.name = 'MetricsError'
 	}
-}
-
-/**
- * 
- * @param blobs Named blobs to map to an array. blob1 and blob2 are reserved.
- * @returns Array of blobs
- */
-export function mapBlobs(blobs: Blobs): Array<string | null> {
-	if (blobs.blob1 || blobs.blob2) {
-		throw new MetricsError('Failed to map blobs, blob1 and blob2 are reserved for MCP server info')
-	}
-	// add placeholder blobs, filled in by the MetricsTracker later
-	blobs = {
-		...blobs,
-		blob1: undefined,
-		blob2: undefined
-	}
-	const blobsArray = new Array(Object.keys(blobs).length)
-	for (const [key, value] of Object.entries(blobs)) {
-		const match = key.match(/^blob(\d+)$/)
-		if (match === null || match.length < 2) {
-			// we should never hit this because of the typedefinitions above,
-			// but this error is for safety
-			throw new MetricsError('Failed to map blobs, invalid key')
-		}
-		const index = parseInt(match[1], 10)
-		if (isNaN(index)) {
-			// we should never hit this because of the typedefinitions above,
-			// but this error is for safety
-			throw new MetricsError('Failed to map blobs, invalid index')
-		}
-		if (index - 1 >= blobsArray.length) {
-			throw new MetricsError('Failed to map blobs, missing blob')
-		}
-		blobsArray[index - 1] = value
-	}
-	return blobsArray
-}
-
-/**
- * 
- * @param doubles List of named doubles
- * @returns Doubles mapped to a valid WAE doubles array
- */
-export function mapDoubles(doubles: Doubles): number[] {
-	const doublesArray = new Array(Object.keys(doubles).length)
-	for (const [key, value] of Object.entries(doubles)) {
-		const match = key.match(/^double(\d+)$/)
-		if (match === null || match.length < 2) {
-			// we should never hit this because of the typedefinitions above,
-			// but this error is for safety
-			throw new MetricsError(': Failed to map doubles, invalid key')
-		}
-		const index = parseInt(match[1], 10)
-		if (isNaN(index)) {
-			// we should never hit this because of the typedefinitions above,
-			// but this error is for safety
-			throw new MetricsError('Failed to map doubles, invalid index')
-		}
-		if (index - 1 >= doublesArray.length) {
-			throw new MetricsError('Failed to map doubles, missing blob')
-		}
-		doublesArray[index - 1] = value
-	}
-	return doublesArray
 }

@@ -62,10 +62,15 @@
 				"ENVIRONMENT": "staging",
 				"AUTORAG_NAME": "cloudflare-docs-autorag"
 			},
-
 			"ai": {
 				"binding": "AI"
-			}
+			},
+			"analytics_engine_datasets": [
+				{
+				  "binding": "MCP_METRICS",
+				  "dataset": "mcp-metrics-staging"
+				}
+			],
 		},
 		"production": {
 			"name": "mcp-cloudflare-docs-autorag-production",
@@ -85,7 +90,13 @@
 			},
 			"ai": {
 				"binding": "AI"
-			}
+			},
+			"analytics_engine_datasets": [
+				{
+				  "binding": "MCP_METRICS",
+				  "dataset": "mcp-metrics-production"
+				}
+			],
 		}
 	}
 }
