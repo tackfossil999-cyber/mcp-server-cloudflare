@@ -1,5 +1,4 @@
 import OAuthProvider from '@cloudflare/workers-oauth-provider'
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { McpAgent } from 'agents/mcp'
 import { env } from 'cloudflare:workers'
 

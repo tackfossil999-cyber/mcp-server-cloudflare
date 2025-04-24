@@ -2,7 +2,7 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import { AuthUser, MetricsTracker } from '@repo/mcp-observability'
+import { AuthUser, type MetricsTracker } from '@repo/mcp-observability'
 
 import { getAuthorizationURL, getAuthToken, refreshAuthToken } from './cloudflare-auth'
 import { McpError } from './mcp-error'

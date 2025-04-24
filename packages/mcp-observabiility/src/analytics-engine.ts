@@ -1,5 +1,5 @@
 export type MetricsBindings = {
-    MCP_METRICS: AnalyticsEngineDataset
+	MCP_METRICS: AnalyticsEngineDataset
 }
 
 /**
@@ -33,14 +33,14 @@ export class MetricsTracker {
  * maps a more ergonomic event object to a ReadyAnalyticsEvent
  */
 export abstract class MetricsEvent {
-	public _serverInfo: { name: string, version: string } | undefined
-	set serverInfo(serverInfo: { name: string, version: string }) {
+	public _serverInfo: { name: string; version: string } | undefined
+	set serverInfo(serverInfo: { name: string; version: string }) {
 		this._serverInfo = serverInfo
 	}
 
-	get serverInfo(): { name: string, version: string } {
+	get serverInfo(): { name: string; version: string } {
 		if (!this._serverInfo) {
-			throw new Error("Server info not set")
+			throw new Error('Server info not set')
 		}
 		return this._serverInfo
 	}
@@ -54,7 +54,9 @@ export abstract class MetricsEvent {
 
 	mapBlobs(blobs: Blobs): Array<string | null> {
 		if (blobs.blob1 || blobs.blob2) {
-			throw new MetricsError('Failed to map blobs, blob1 and blob2 are reserved for MCP server info')
+			throw new MetricsError(
+				'Failed to map blobs, blob1 and blob2 are reserved for MCP server info'
+			)
 		}
 		// add placeholder blobs, filled in by the MetricsTracker later
 		blobs.blob1 = this.serverInfo.name
@@ -102,7 +104,7 @@ export abstract class MetricsEvent {
 			doublesArray[index - 1] = value
 		}
 		return doublesArray
-	}	
+	}
 }
 
 export enum MetricsEventIndexIds {

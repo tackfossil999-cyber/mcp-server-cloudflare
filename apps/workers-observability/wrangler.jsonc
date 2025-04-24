@@ -37,7 +37,6 @@
 		"MCP_SERVER_VERSION": "PLACEHOLDER",
 		"CLOUDFLARE_CLIENT_ID": "PLACEHOLDER",
 		"CLOUDFLARE_CLIENT_SECRET": "PLACEHOLDER"
-
 	},
 	"dev": {
 		"port": 8976
@@ -46,8 +45,8 @@
 	"preview_urls": false,
 	"analytics_engine_datasets": [
 		{
-		  "binding": "MCP_METRICS",
-		  "dataset": "mcp-metrics-dev"
+			"binding": "MCP_METRICS",
+			"dataset": "mcp-metrics-dev"
 		}
 	],
 	"env": {
@@ -74,10 +73,10 @@
 			},
 			"analytics_engine_datasets": [
 				{
-				  "binding": "MCP_METRICS",
-				  "dataset": "mcp-metrics-staging"
+					"binding": "MCP_METRICS",
+					"dataset": "mcp-metrics-staging"
 				}
-			],
+			]
 		},
 		"production": {
 			"name": "mcp-cloudflare-workers-observability-production",
@@ -102,10 +101,10 @@
 			},
 			"analytics_engine_datasets": [
 				{
-				  "binding": "MCP_METRICS",
-				  "dataset": "mcp-metrics-production"
+					"binding": "MCP_METRICS",
+					"dataset": "mcp-metrics-production"
 				}
-			],
+			]
 		}
 	}
 }

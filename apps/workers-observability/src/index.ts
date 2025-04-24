@@ -1,5 +1,4 @@
 import OAuthProvider from '@cloudflare/workers-oauth-provider'
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { McpAgent } from 'agents/mcp'
 import { env } from 'cloudflare:workers'
 
@@ -7,18 +6,18 @@ import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
+import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
 import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
+import { MetricsTracker } from '@repo/mcp-observability'
 
 import { registerLogsTools } from './tools/logs'
 
 import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import { MetricsTracker } from "@repo/mcp-observability"
-import { CloudflareMCPServer } from "@repo/mcp-common/src/server"
 
 const metrics = new MetricsTracker(env.MCP_METRICS, {
 	name: env.MCP_SERVER_NAME,
-	version: env.MCP_SERVER_VERSION
+	version: env.MCP_SERVER_VERSION,
 })
 
 // Context from the auth process, encrypted & stored in the auth token

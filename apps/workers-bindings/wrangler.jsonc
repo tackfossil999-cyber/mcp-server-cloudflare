@@ -45,8 +45,8 @@
 	"preview_urls": false,
 	"analytics_engine_datasets": [
 		{
-		  "binding": "MCP_METRICS",
-		  "dataset": "mcp-metrics-dev"
+			"binding": "MCP_METRICS",
+			"dataset": "mcp-metrics-dev"
 		}
 	],
 	"env": {
@@ -73,10 +73,10 @@
 			},
 			"analytics_engine_datasets": [
 				{
-				  "binding": "MCP_METRICS",
-				  "dataset": "mcp-metrics-staging"
+					"binding": "MCP_METRICS",
+					"dataset": "mcp-metrics-staging"
 				}
-			],
+			]
 		},
 		"production": {
 			"name": "mcp-cloudflare-workers-bindings-production",
@@ -101,10 +101,10 @@
 			},
 			"analytics_engine_datasets": [
 				{
-				  "binding": "MCP_METRICS",
-				  "dataset": "mcp-metrics-production"
+					"binding": "MCP_METRICS",
+					"dataset": "mcp-metrics-production"
 				}
-			],
+			]
 		}
 	}
 }

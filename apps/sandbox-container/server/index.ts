@@ -6,6 +6,7 @@ import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
+import { MetricsTracker } from '@repo/mcp-observability'
 
 import { ContainerManager } from './containerManager'
 import { ContainerMcpAgent } from './containerMcp'
@@ -14,11 +15,9 @@ import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-
 
 export { ContainerManager, ContainerMcpAgent }
 
-import { MetricsTracker } from "@repo/mcp-observability"
-
 const metrics = new MetricsTracker(env.MCP_METRICS, {
 	name: env.MCP_SERVER_NAME,
-	version: env.MCP_SERVER_VERSION
+	version: env.MCP_SERVER_VERSION,
 })
 
 // Context from the auth process, encrypted & stored in the auth token

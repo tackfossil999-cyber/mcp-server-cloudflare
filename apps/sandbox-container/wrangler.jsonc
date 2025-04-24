@@ -55,8 +55,8 @@
 	},
 	"analytics_engine_datasets": [
 		{
-		  "binding": "MCP_METRICS",
-		  "dataset": "mcp-metrics-dev"
+			"binding": "MCP_METRICS",
+			"dataset": "mcp-metrics-dev"
 		}
-	],
+	]
 }

@@ -14,11 +14,11 @@
 		"@cloudflare/workers-oauth-provider": "0.0.2",
 		"@hono/zod-validator": "0.4.3",
 		"@modelcontextprotocol/sdk": "1.9.0",
+		"@repo/mcp-observability": "workspace:*",
 		"agents": "0.0.62",
 		"cloudflare": "4.2.0",
 		"hono": "4.7.6",
-		"zod": "3.24.2",
-		"@repo/mcp-observability": "workspace:*"
+		"zod": "3.24.2"
 	},
 	"devDependencies": {
 		"@cloudflare/types": "6.29.1",
@@ -28,6 +28,7 @@
 		"@repo/tools": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@vitest/ui": "3.0.9",
-		"vitest": "3.0.9"
+		"vitest": "3.0.9",
+		"@types/node": "^22.14.1"
 	}
 }

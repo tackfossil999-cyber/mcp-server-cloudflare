@@ -1,5 +1,7 @@
 import { McpAgent } from 'agents/mcp'
 
+import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
+
 import { OPEN_CONTAINER_PORT } from '../shared/consts'
 import { ExecParams, FilePathParam, FileWrite } from '../shared/schema'
 import { MAX_CONTAINERS, proxyFetch, startAndWaitForPort } from './containerHelpers'
@@ -9,7 +11,6 @@ import { fileToBase64, stripProtocolFromFilePath } from './utils'
 
 import type { FileList } from '../shared/schema'
 import type { Props } from '.'
-import { CloudflareMCPServer } from "@repo/mcp-common/src/server"
 
 export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 	server: CloudflareMCPServer

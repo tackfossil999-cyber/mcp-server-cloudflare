@@ -16,7 +16,8 @@
 		"types": [
 			"./worker-configuration.d.ts",
 			"@cloudflare/vitest-pool-workers",
-			"@cloudflare/workers-types/2023-07-01"
+			"@cloudflare/workers-types/2023-07-01",
+			"@types/node"
 		],
 		"resolveJsonModule": true,
 		"allowJs": true,
