@@ -14,13 +14,12 @@ import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-
 
 export { ContainerManager, ContainerMcpAgent }
 
-export type Env = {
-	CONTAINER_MCP_AGENT: DurableObjectNamespace<ContainerMcpAgent>
-	CONTAINER_MANAGER: DurableObjectNamespace<ContainerManager>
-	ENVIRONMENT: 'dev' | 'prod' | 'test'
-	CLOUDFLARE_CLIENT_ID: string
-	CLOUDFLARE_CLIENT_SECRET: string
-}
+import { MetricsTracker } from "@repo/mcp-observability"
+
+const metrics = new MetricsTracker(env.MCP_METRICS, {
+	name: env.MCP_SERVER_NAME,
+	version: env.MCP_SERVER_VERSION
+})
 
 // Context from the auth process, encrypted & stored in the auth token
 // and provided to the DurableMCP as this.props
@@ -41,6 +40,7 @@ const ContainerScopes = {
 
 export default {
 	fetch: (req: Request, env: Env, ctx: ExecutionContext) => {
+		// @ts-ignore
 		if (env.ENVIRONMENT === 'test') {
 			ctx.props = {}
 			return ContainerMcpAgent.mount('/sse', { binding: 'CONTAINER_MCP_AGENT' }).fetch(
@@ -55,7 +55,7 @@ export default {
 			// @ts-ignore
 			apiHandler: ContainerMcpAgent.mount('/sse', { binding: 'CONTAINER_MCP_AGENT' }),
 			// @ts-ignore
-			defaultHandler: createAuthHandlers({ scopes: ContainerScopes }),
+			defaultHandler: createAuthHandlers({ scopes: ContainerScopes, metrics }),
 			authorizeEndpoint: '/oauth/authorize',
 			tokenEndpoint: '/token',
 			tokenExchangeCallback: (options) =>

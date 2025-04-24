@@ -1,3 +1,7 @@
+export type MetricsBindings = {
+    MCP_METRICS: AnalyticsEngineDataset
+}
+
 /**
  * Generic metrics event utilities
  * @description Wrapper for RA binding
@@ -5,18 +9,30 @@
 export class MetricsTracker {
 	constructor(
 		private wae: AnalyticsEngineDataset,
-		//private env: MetricsBindings['ENVIRONMENT']
+		private mcpServerInfo: {
+			name: string
+			version: string
+		}
 	) {}
 
 	logEvent(event: MetricsEvent): void {
 		try {
-			this.wae.writeDataPoint(event.toDataPoint())
+			let dataPoint = event.toDataPoint()
+			if (
+				dataPoint.blobs &&
+				dataPoint.blobs.length >= 2 &&
+				dataPoint.blobs[0] === null &&
+				dataPoint.blobs[1] === null
+			) {
+				dataPoint.blobs[0] = this.mcpServerInfo.name
+				dataPoint.blobs[1] = this.mcpServerInfo.version
+			} else {
+				// we should never hit this because of type definitions and our mapBlobs utility function
+				throw new MetricsError('Unexpected result from toDataPoint, could not add MCP server info. Was the `mapBlobs` utility function used?')
+			}
+			this.wae.writeDataPoint(dataPoint)
 		} catch (e) {
 			console.error(`Failed to log metrics event, ${e}`)
-			// rethrow errors in vitest, but failsafe in other environments
-			/*if (this.env === 'VITEST') {
-				throw e
-			}*/
 		}
 	}
 }
@@ -28,6 +44,11 @@ export class MetricsTracker {
  * maps a more ergonomic event object to a ReadyAnalyticsEvent
  */
 export interface MetricsEvent {
+	/**
+	 * Output a valid AnalyticsEngineDataPoint. Use `mapBlobs` and `mapDoubles` to write well defined
+	 * analytics engine datapoints. The first and second blob entries are reserved for the MCP server name and
+	 * MCP server version.
+	 */
 	toDataPoint(): AnalyticsEngineDataPoint
 }
 
@@ -68,9 +89,10 @@ type Range1To20 =
 	| 19
 	| 20
 
+// blob1 and blob2 are reserved for server name and version
 type Blobs = {
 	[key in `blob${Range1To20}`]?: string | null
-}
+} & { blob1?: never; blob2?: never }
 
 type Doubles = {
 	[key in `double${Range1To20}`]?: number
@@ -83,7 +105,21 @@ export class MetricsError extends Error {
 	}
 }
 
+/**
+ * 
+ * @param blobs Named blobs to map to an array. blob1 and blob2 are reserved.
+ * @returns Array of blobs
+ */
 export function mapBlobs(blobs: Blobs): Array<string | null> {
+	if (blobs.blob1 || blobs.blob2) {
+		throw new MetricsError('Failed to map blobs, blob1 and blob2 are reserved for MCP server info')
+	}
+	// add placeholder blobs, filled in by the MetricsTracker later
+	blobs = {
+		...blobs,
+		blob1: undefined,
+		blob2: undefined
+	}
 	const blobsArray = new Array(Object.keys(blobs).length)
 	for (const [key, value] of Object.entries(blobs)) {
 		const match = key.match(/^blob(\d+)$/)
@@ -106,6 +142,11 @@ export function mapBlobs(blobs: Blobs): Array<string | null> {
 	return blobsArray
 }
 
+/**
+ * 
+ * @param doubles List of named doubles
+ * @returns Doubles mapped to a valid WAE doubles array
+ */
 export function mapDoubles(doubles: Doubles): number[] {
 	const doublesArray = new Array(Object.keys(doubles).length)
 	for (const [key, value] of Object.entries(doubles)) {

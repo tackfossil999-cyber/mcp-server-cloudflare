@@ -1,16 +1,10 @@
 import { MetricsEvent, MetricsEventIndexIds, mapBlobs, mapDoubles } from "./analytics-engine"
 
-export type MetricsBindings = {
-    MCP_METRICS: AnalyticsEngineDataset
-}
-
 export class ToolCall implements MetricsEvent {
 	constructor(
 		private toolCall: {
 			userId?: string
-            mcpServer: string
-			mcpServerVersion: string
-            sessionId: string
+            sessionId?: string
             toolName: string
 			errorCode?: number
 		}
@@ -20,9 +14,7 @@ export class ToolCall implements MetricsEvent {
         return {
             indexes: [MetricsEventIndexIds.TOOL_CALL],
             blobs: mapBlobs({
-				blob1: this.toolCall.userId,
-				blob2: this.toolCall.mcpServer,
-				blob3: this.toolCall.mcpServerVersion,
+				blob3: this.toolCall.userId,
 				blob4: this.toolCall.sessionId,
 				blob5: this.toolCall.toolName,
 			}),
@@ -37,10 +29,11 @@ export class SessionStart implements MetricsEvent {
 	constructor(
 		private session: {
 			userId?: string,
-			mcpServer: string,
-			mcpServerVersion: string,
-			sessionId: string,
-			client: string
+			sessionId?: string,
+			clientInfo?: {
+				name: string,
+				version: string
+			}
 		}
 	) {}
 
@@ -48,11 +41,10 @@ export class SessionStart implements MetricsEvent {
         return {
             indexes: [MetricsEventIndexIds.SESSION_START],
             blobs: mapBlobs({
-				blob1: this.session.userId,
-				blob2: this.session.mcpServer,
-				blob3: this.session.mcpServerVersion,
+				blob3: this.session.userId,
 				blob4: this.session.sessionId,
-				blob5: this.session.client,
+				blob5: this.session.clientInfo?.name,
+				blob6: this.session.clientInfo?.version,
 			}),
         }
 	}
@@ -62,8 +54,6 @@ export class AuthUser implements MetricsEvent {
 	constructor(
 		private authUser: {
 			userId?: string,
-			mcpServer: string,
-			mcpServerVersion: string,
 			errorMessage?: string
 		}
 	) {}
@@ -72,9 +62,7 @@ export class AuthUser implements MetricsEvent {
         return {
             indexes: [MetricsEventIndexIds.SESSION_START],
             blobs: mapBlobs({
-				blob1: this.authUser.userId,
-				blob2: this.authUser.mcpServer,
-				blob3: this.authUser.mcpServerVersion,
+				blob3: this.authUser.userId,
 				blob4: this.authUser.errorMessage
 			}),
         }

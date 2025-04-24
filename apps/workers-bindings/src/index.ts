@@ -7,13 +7,20 @@ import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
+import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
 import { registerD1Tools } from '@repo/mcp-common/src/tools/d1'
 import { registerKVTools } from '@repo/mcp-common/src/tools/kv_namespace'
 import { registerR2BucketTools } from '@repo/mcp-common/src/tools/r2_bucket'
 import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
+import { MetricsTracker } from '@repo/mcp-observability'
 
 import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-oauth-handler'
+
+const metrics = new MetricsTracker(env.MCP_METRICS, {
+	name: env.MCP_SERVER_NAME,
+	version: env.MCP_SERVER_VERSION,
+})
 
 export type WorkersBindingsMCPState = { activeAccountId: string | null }
 
@@ -26,10 +33,19 @@ export type Props = {
 }
 
 export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, Props> {
-	server = new McpServer({
-		name: 'Demo',
-		version: '1.0.0',
-	})
+	server: CloudflareMCPServer
+
+	initialState: WorkersBindingsMCPState = {
+		activeAccountId: null,
+	}
+
+	constructor(ctx: DurableObjectState, env: Env) {
+		super(ctx, env)
+		this.server = new CloudflareMCPServer(this.props.user.id, this.env.MCP_METRICS, {
+			name: this.env.MCP_SERVER_NAME,
+			version: this.env.MCP_SERVER_VERSION,
+		})
+	}
 
 	async init() {
 		registerAccountTools(this)
@@ -76,7 +92,7 @@ export default new OAuthProvider({
 	// @ts-ignore
 	apiHandler: WorkersBindingsMCP.mount('/sse'),
 	// @ts-ignore
-	defaultHandler: createAuthHandlers({ scopes: BindingsScopes }),
+	defaultHandler: createAuthHandlers({ scopes: BindingsScopes, metrics }),
 	authorizeEndpoint: '/oauth/authorize',
 	tokenEndpoint: '/token',
 	tokenExchangeCallback: (options) =>

@@ -1,5 +1,7 @@
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { McpAgent } from 'agents/mcp'
+import { env } from 'cloudflare:workers'
+
+import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 
 import { registerDocsTools } from './tools/docs'
 
@@ -9,9 +11,9 @@ export type Props = never
 export type State = never
 
 export class CloudflareDocumentationMCP extends McpAgent<Env, State, Props> {
-	server = new McpServer({
-		name: 'Remote MCP Server with Cloudflare Documentation',
-		version: '1.0.0',
+	server = new CloudflareMCPServer(undefined, env.MCP_METRICS, {
+		name: env.MCP_SERVER_NAME,
+		version: env.MCP_SERVER_VERSION,
 	})
 
 	constructor(

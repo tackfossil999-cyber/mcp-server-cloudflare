@@ -1,4 +1,3 @@
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { McpAgent } from 'agents/mcp'
 
 import { OPEN_CONTAINER_PORT } from '../shared/consts'
@@ -9,16 +8,11 @@ import { BASE_INSTRUCTIONS } from './prompts'
 import { fileToBase64, stripProtocolFromFilePath } from './utils'
 
 import type { FileList } from '../shared/schema'
-import type { Env, Props } from '.'
+import type { Props } from '.'
+import { CloudflareMCPServer } from "@repo/mcp-common/src/server"
 
-export class ContainerMcpAgent extends McpAgent<Env, Props> {
-	server = new McpServer(
-		{
-			name: 'Container MCP Agent',
-			version: '1.0.0',
-		},
-		{ instructions: BASE_INSTRUCTIONS }
-	)
+export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
+	server: CloudflareMCPServer
 
 	constructor(
 		public ctx: DurableObjectState,
@@ -26,6 +20,15 @@ export class ContainerMcpAgent extends McpAgent<Env, Props> {
 	) {
 		console.log('creating container DO')
 		super(ctx, env)
+		this.server = new CloudflareMCPServer(
+			this.props.user.id,
+			this.env.MCP_METRICS,
+			{
+				name: this.env.MCP_SERVER_NAME,
+				version: this.env.MCP_SERVER_VERSION,
+			},
+			{ instructions: BASE_INSTRUCTIONS }
+		)
 	}
 
 	async destroyContainer(): Promise<void> {

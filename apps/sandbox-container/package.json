@@ -26,6 +26,7 @@
 		"@n8n/json-schema-to-zod": "^1.1.0",
 		"@repo/eval-tools": "workspace:*",
 		"@repo/mcp-common": "workspace:*",
+		"@repo/mcp-observability": "workspace:*",
 		"@types/node": "^22.13.10",
 		"agents": "^0.0.62",
 		"cron-schedule": "^5.0.4",

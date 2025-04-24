@@ -5,7 +5,7 @@
 	"scripts": {
 		"check:lint": "run-eslint-workers",
 		"check:types": "run-tsc",
-		"deploy": "wrangler deploy",
+		"deploy": "run-wrangler-deploy",
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
 		"cf-typegen": "wrangler types",
@@ -16,6 +16,7 @@
 		"@hono/zod-validator": "0.4.3",
 		"@modelcontextprotocol/sdk": "1.9.0",
 		"@repo/mcp-common": "workspace:*",
+		"@repo/mcp-observability": "workspace:*",
 		"agents": "0.0.62",
 		"cloudflare": "4.2.0",
 		"hono": "4.7.6",

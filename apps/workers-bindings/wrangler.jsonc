@@ -35,10 +35,20 @@
 		"port": 8976
 	},
 	"vars": {
-		"ENVIRONMENT": "development"
+		"ENVIRONMENT": "development",
+		"MCP_SERVER_NAME": "<PLACEHOLDER>",
+		"MCP_SERVER_VERSION": "<PLACEHOLDER>",
+		"CLOUDFLARE_CLIENT_ID": "<PLACEHOLDER>",
+		"CLOUDFLARE_CLIENT_SECRET": "<PLACEHOLDER>"
 	},
 	"workers_dev": false,
 	"preview_urls": false,
+	"analytics_engine_datasets": [
+		{
+		  "binding": "MCP_METRICS",
+		  "dataset": "mcp-metrics-dev"
+		}
+	],
 	"env": {
 		"staging": {
 			"name": "mcp-cloudflare-workers-bindings-staging",

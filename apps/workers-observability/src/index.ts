@@ -13,6 +13,13 @@ import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
 import { registerLogsTools } from './tools/logs'
 
 import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-oauth-handler'
+import { MetricsTracker } from "@repo/mcp-observability"
+import { CloudflareMCPServer } from "@repo/mcp-common/src/server"
+
+const metrics = new MetricsTracker(env.MCP_METRICS, {
+	name: env.MCP_SERVER_NAME,
+	version: env.MCP_SERVER_VERSION
+})
 
 // Context from the auth process, encrypted & stored in the auth token
 // and provided to the DurableMCP as this.props
@@ -25,10 +32,19 @@ export type Props = {
 export type State = { activeAccountId: string | null }
 
 export class ObservabilityMCP extends McpAgent<Env, State, Props> {
-	server = new McpServer({
-		name: 'Remote MCP Server with Workers Observability',
-		version: '1.0.0',
-	})
+	server: CloudflareMCPServer
+
+	initialState: State = {
+		activeAccountId: null,
+	}
+
+	constructor(ctx: DurableObjectState, env: Env) {
+		super(ctx, env)
+		this.server = new CloudflareMCPServer(this.props.user.id, this.env.MCP_METRICS, {
+			name: this.env.MCP_SERVER_NAME,
+			version: this.env.MCP_SERVER_VERSION,
+		})
+	}
 
 	async init() {
 		registerAccountTools(this)
@@ -76,7 +92,7 @@ export default new OAuthProvider({
 	// @ts-ignore
 	apiHandler: ObservabilityMCP.mount('/sse'),
 	// @ts-ignore
-	defaultHandler: createAuthHandlers({ scopes: ObservabilityScopes }),
+	defaultHandler: createAuthHandlers({ scopes: ObservabilityScopes, metrics }),
 	authorizeEndpoint: '/oauth/authorize',
 	tokenEndpoint: '/token',
 	tokenExchangeCallback: (options) =>

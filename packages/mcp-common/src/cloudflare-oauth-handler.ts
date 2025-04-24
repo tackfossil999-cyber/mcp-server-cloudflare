@@ -141,17 +141,13 @@ export async function handleTokenExchangeCallback(
  * Creates a Hono app with OAuth routes for a specific Cloudflare worker
  *
  * @param scopes optional subset of scopes to request when handling authorization requests
+ * @param metrics MetricsTracker which is used to track auth metrics
  * @returns a Hono app with configured OAuth routes
  */
 export function createAuthHandlers({
-	serverInfo,
 	scopes,
 	metrics,
 }: {
-	serverInfo: {
-		name: string,
-		version: string,
-	}
 	scopes: Record<string, string>
 	metrics: MetricsTracker
 }) {
@@ -184,8 +180,6 @@ export function createAuthHandlers({
 			} catch (e) {
 				metrics.logEvent(
 					new AuthUser({
-						mcpServer: serverInfo.name,
-						mcpServerVersion: serverInfo.version,
 						errorMessage: `Authorize Error: ${(e as any).toString()}`,
 					})
 				)
@@ -253,8 +247,6 @@ export function createAuthHandlers({
 				metrics.logEvent(
 					new AuthUser({
 						userId: user.id,
-						mcpServer: serverInfo.name,
-						mcpServerVersion: serverInfo.version,
 					})
 				)
 
@@ -263,8 +255,6 @@ export function createAuthHandlers({
 				console.error(e)
 				metrics.logEvent(
 					new AuthUser({
-						mcpServer: serverInfo.name,
-						mcpServerVersion: serverInfo.version,
 						errorMessage: `Callback Error: ${(e as any).toString()}`,
 					})
 				)
