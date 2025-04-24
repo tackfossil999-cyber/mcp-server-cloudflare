@@ -3,8 +3,7 @@ import { type ServerOptions } from '@modelcontextprotocol/sdk/server/index.js'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { type ZodRawShape } from 'zod'
 
-import { MetricsTracker, SessionStart, ToolCall } from '@repo/mcp-observability'
-
+import { MetricsTracker, SessionStart, ToolCall } from '../../mcp-observability/src'
 import { McpError } from './mcp-error'
 
 import type { ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js'

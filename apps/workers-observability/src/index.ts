@@ -9,8 +9,8 @@ import {
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
 import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
-import { MetricsTracker } from '@repo/mcp-observability'
 
+import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerLogsTools } from './tools/logs'
 
 import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-oauth-handler'
