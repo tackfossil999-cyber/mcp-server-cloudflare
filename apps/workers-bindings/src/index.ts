@@ -32,7 +32,18 @@ export type Props = {
 }
 
 export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, Props> {
-	server: CloudflareMCPServer
+	_server: CloudflareMCPServer | undefined
+	set server(server: CloudflareMCPServer) {
+		this._server = server
+	}
+
+	get server(): CloudflareMCPServer {
+		if (!this._server) {
+			throw new Error('Tried to access server before it was initialized')
+		}
+
+		return this._server
+	}
 
 	initialState: WorkersBindingsMCPState = {
 		activeAccountId: null,
@@ -40,13 +51,14 @@ export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, P
 
 	constructor(ctx: DurableObjectState, env: Env) {
 		super(ctx, env)
+	}
+
+	async init() {
 		this.server = new CloudflareMCPServer(this.props.user.id, this.env.MCP_METRICS, {
 			name: this.env.MCP_SERVER_NAME,
 			version: this.env.MCP_SERVER_VERSION,
 		})
-	}
 
-	async init() {
 		registerAccountTools(this)
 		registerKVTools(this)
 		registerWorkersTools(this)

@@ -13,7 +13,18 @@ import type { FileList } from '../shared/schema'
 import type { Props } from '.'
 
 export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
-	server: CloudflareMCPServer
+	_server: CloudflareMCPServer | undefined
+	set server(server: CloudflareMCPServer) {
+		this._server = server
+	}
+
+	get server(): CloudflareMCPServer {
+		if (!this._server) {
+			throw new Error('Tried to access server before it was initialized')
+		}
+
+		return this._server
+	}
 
 	constructor(
 		public ctx: DurableObjectState,
@@ -21,15 +32,6 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 	) {
 		console.log('creating container DO')
 		super(ctx, env)
-		this.server = new CloudflareMCPServer(
-			this.props.user.id,
-			this.env.MCP_METRICS,
-			{
-				name: this.env.MCP_SERVER_NAME,
-				version: this.env.MCP_SERVER_VERSION,
-			},
-			{ instructions: BASE_INSTRUCTIONS }
-		)
 	}
 
 	async destroyContainer(): Promise<void> {
@@ -48,6 +50,17 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 	}
 
 	async init() {
+		this.props.user.id
+		this.server = new CloudflareMCPServer(
+			this.props.user.id,
+			this.env.MCP_METRICS,
+			{
+				name: this.env.MCP_SERVER_NAME,
+				version: this.env.MCP_SERVER_VERSION,
+			},
+			{ instructions: BASE_INSTRUCTIONS }
+		)
+
 		this.server.tool(
 			'container_initialize',
 			'Start or reset the container',

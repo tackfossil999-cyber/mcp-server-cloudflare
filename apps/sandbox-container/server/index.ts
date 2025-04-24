@@ -41,7 +41,14 @@ export default {
 	fetch: (req: Request, env: Env, ctx: ExecutionContext) => {
 		// @ts-ignore
 		if (env.ENVIRONMENT === 'test') {
-			ctx.props = {}
+			ctx.props = {
+				accessToken: 'foobar',
+				user: {
+					id: '123def',
+					email: '1@example.com',
+				},
+				accounts: [],
+			} as Props
 			return ContainerMcpAgent.mount('/sse', { binding: 'CONTAINER_MCP_AGENT' }).fetch(
 				req,
 				env as Record<string, DurableObjectNamespace<McpAgent> | any>,

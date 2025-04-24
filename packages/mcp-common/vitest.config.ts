@@ -20,5 +20,7 @@ export default defineWorkersProject({
 				},
 			},
 		},
+		// evals are slow!
+		testTimeout: 60000,
 	},
 })

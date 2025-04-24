@@ -1,18 +1,19 @@
 import { isPromise } from 'node:util/types'
 import { type ServerOptions } from '@modelcontextprotocol/sdk/server/index.js'
-import { McpServer, type ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js'
-
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { type ZodRawShape } from 'zod'
 
 import { MetricsTracker, SessionStart, ToolCall } from '@repo/mcp-observability'
 
 import { McpError } from './mcp-error'
 
+import type { ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js'
+
 export class CloudflareMCPServer extends McpServer {
 	private metrics
 
 	constructor(
-		private userId: string | undefined,
+		userId: string | undefined,
 		wae: AnalyticsEngineDataset,
 		serverInfo: {
 			[x: string]: unknown
@@ -49,30 +50,30 @@ export class CloudflareMCPServer extends McpServer {
 								// promise succeeds
 								this.metrics.logEvent(
 									new ToolCall({
-										userId,
 										toolName: name,
+										userId,
 									})
 								)
 								return r
 							})
 							.catch((e: any) => {
 								// promise throws
-								this.trackToolCallError(e, name)
+								this.trackToolCallError(e, name, userId)
 								throw e
 							})
 					} else {
 						// non-promise succeeds
 						this.metrics.logEvent(
 							new ToolCall({
-								userId,
 								toolName: name,
+								userId,
 							})
 						)
 						return toolCall
 					}
 				} catch (e: any) {
 					// non-promise throws
-					this.trackToolCallError(e, name)
+					this.trackToolCallError(e, name, userId)
 					throw e
 				}
 			}
@@ -83,7 +84,7 @@ export class CloudflareMCPServer extends McpServer {
 		}
 	}
 
-	private trackToolCallError(e: any, toolName: string) {
+	private trackToolCallError(e: any, toolName: string, userId?: string) {
 		let errorCode = -1
 		if (e instanceof McpError) {
 			errorCode = e.code
@@ -91,7 +92,7 @@ export class CloudflareMCPServer extends McpServer {
 		this.metrics.logEvent(
 			new ToolCall({
 				toolName,
-				userId: this.userId,
+				userId: userId,
 				errorCode: errorCode,
 			})
 		)
