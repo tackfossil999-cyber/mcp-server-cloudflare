@@ -363,6 +363,7 @@ END:VCALENDAR`
 
 	// Setup company backgrounds
 	const companyNames = [
+		'asana',
 		'atlassian',
 		'cloudflare',
 		'intercom',
