@@ -14,7 +14,7 @@ export const withAccountCheck = <T extends Record<string, any>>(
 	handler: ToolHandler<T>
 ) => {
 	return async (params: T) => {
-		const accountId = agent.getActiveAccountId()
+		const accountId = await agent.getActiveAccountId()
 		if (!accountId) {
 			return {
 				content: [
@@ -30,7 +30,7 @@ export const withAccountCheck = <T extends Record<string, any>>(
 			const result = await handler({
 				...params,
 				accountId,
-				apiToken: agent.props.accessToken as string,
+				apiToken: agent.props.accessToken || '',
 			})
 			return {
 				content: [{ type: 'text' as const, text: JSON.stringify(result) }],
