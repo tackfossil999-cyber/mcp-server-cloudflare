@@ -14,6 +14,7 @@ import { registerD1Tools } from '@repo/mcp-common/src/tools/d1'
 import { registerKVTools } from '@repo/mcp-common/src/tools/kv_namespace'
 import { registerR2BucketTools } from '@repo/mcp-common/src/tools/r2_bucket'
 import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
+import { registerHyperdriveTools } from '@repo/mcp-common/src/tools/hyperdrive'
 import { MetricsTracker } from '@repo/mcp-observability'
 
 import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-oauth-handler'
@@ -75,6 +76,7 @@ export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, P
 		registerWorkersTools(this)
 		registerR2BucketTools(this)
 		registerD1Tools(this)
+		registerHyperdriveTools(this)
 	}
 
 	async getActiveAccountId() {
@@ -108,16 +110,37 @@ const BindingsScopes = {
 } as const
 
 // Export the OAuth handler as the default
-export default new OAuthProvider({
-	apiRoute: '/sse',
-	apiHandler: WorkersBindingsMCP.mount('/sse'),
-	// @ts-ignore
-	defaultHandler: createAuthHandlers({ scopes: BindingsScopes, metrics }),
-	authorizeEndpoint: '/oauth/authorize',
-	tokenEndpoint: '/token',
-	tokenExchangeCallback: (options) =>
-		handleTokenExchangeCallback(options, env.CLOUDFLARE_CLIENT_ID, env.CLOUDFLARE_CLIENT_SECRET),
-	// Cloudflare access token TTL
-	accessTokenTTL: 3600,
-	clientRegistrationEndpoint: '/register',
-})
+export default {
+	fetch: (req: Request, env: Env, ctx: ExecutionContext) => {
+		// @ts-ignore
+		// if (env.ENVIRONMENT === 'test') {
+			ctx.props = {
+				accessToken: env.CLOUDFLARE_API_TOKEN,
+				user: {
+					id: '1234',
+					email: 'jdelorey@cloudflare.com',
+				},
+				accounts: [],
+			} as Props
+			return WorkersBindingsMCP.mount('/sse').fetch(
+				req,
+				env as Record<string, DurableObjectNamespace<McpAgent> | any>,
+				ctx
+			)
+		// }
+
+		return new OAuthProvider({
+			apiRoute: '/sse',
+			apiHandler: WorkersBindingsMCP.mount('/sse'),
+			// @ts-ignore
+			defaultHandler: createAuthHandlers({ scopes: BindingsScopes, metrics }),
+			authorizeEndpoint: '/oauth/authorize',
+			tokenEndpoint: '/token',
+			tokenExchangeCallback: (options) =>
+				handleTokenExchangeCallback(options, env.CLOUDFLARE_CLIENT_ID, env.CLOUDFLARE_CLIENT_SECRET),
+			// Cloudflare access token TTL
+			accessTokenTTL: 3600,
+			clientRegistrationEndpoint: '/register',
+		}).fetch(req, env, ctx)
+	},
+}

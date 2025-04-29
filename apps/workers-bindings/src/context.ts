@@ -11,4 +11,5 @@ export interface Env {
 	MCP_OBJECT: DurableObjectNamespace<WorkersBindingsMCP>
 	USER_DETAILS: DurableObjectNamespace<UserDetails>
 	MCP_METRICS: AnalyticsEngineDataset
+	CLOUDFLARE_API_TOKEN: string
 }
