@@ -113,7 +113,7 @@
 				{
 					"name": "sandbox-container",
 					// UPDATE WHEN DEPLOYING A NEW IMAGE
-					"image": "registry.cloudchamber.cfdata.org/sandbox-container:b19a2f9",
+					"image": "registry.cloudchamber.cfdata.org/sandbox-container:1acac68",
 					"class_name": "ContainerMcpAgent",
 					"max_instances": 20,
 					"rollout_step_percentage": 100,
