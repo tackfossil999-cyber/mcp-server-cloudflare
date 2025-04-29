@@ -78,6 +78,4 @@ export default {
 			clientRegistrationEndpoint: '/register',
 		}).fetch(req, env, ctx)
 	},
-} /*
-	
-*/
+} 

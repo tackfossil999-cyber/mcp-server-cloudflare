@@ -15,6 +15,7 @@ import { registerD1Tools } from '@repo/mcp-common/src/tools/d1'
 import { registerKVTools } from '@repo/mcp-common/src/tools/kv_namespace'
 import { registerR2BucketTools } from '@repo/mcp-common/src/tools/r2_bucket'
 import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
+import { registerHyperdriveTools } from '@repo/mcp-common/src/tools/hyperdrive'
 import { MetricsTracker } from '@repo/mcp-observability'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
@@ -72,6 +73,7 @@ export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, P
 		registerWorkersTools(this)
 		registerR2BucketTools(this)
 		registerD1Tools(this)
+		registerHyperdriveTools(this)
 	}
 
 	async getActiveAccountId() {
