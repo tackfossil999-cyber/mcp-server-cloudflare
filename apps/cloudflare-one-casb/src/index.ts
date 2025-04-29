@@ -1,11 +1,12 @@
 import OAuthProvider from '@cloudflare/workers-oauth-provider'
 import { McpAgent } from 'agents/mcp'
-import { env } from 'cloudflare:workers'
 
 import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
+import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
+import { getEnv } from '@repo/mcp-common/src/env'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
 
@@ -13,7 +14,11 @@ import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerIntegrationsTools } from './tools/integrations'
 
 import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { CloudflareMcpAgent } from '@repo/mcp-common/src/types/cloudflare-mcp-agent'
+import type { Env } from './context'
+
+export { UserDetails }
+
+const env = getEnv<Env>()
 
 const metrics = new MetricsTracker(env.MCP_METRICS, {
 	name: env.MCP_SERVER_NAME,
@@ -46,32 +51,37 @@ export class CASBMCP extends McpAgent<Env, State, Props> {
 	}
 
 	async init() {
-		this.server = new CloudflareMCPServer(this.props.user.id, this.env.MCP_METRICS, {
-			name: this.env.MCP_SERVER_NAME,
-			version: this.env.MCP_SERVER_VERSION,
+		this.server = new CloudflareMCPServer({
+			userId: this.props.user.id,
+			wae: this.env.MCP_METRICS,
+			serverInfo: {
+				name: this.env.MCP_SERVER_NAME,
+				version: this.env.MCP_SERVER_VERSION,
+			},
 		})
 
 		registerAccountTools(this)
 		registerIntegrationsTools(this)
 	}
 
-	getActiveAccountId() {
+	async getActiveAccountId() {
 		try {
-			return this.state.activeAccountId ?? null
+			// Get UserDetails Durable Object based off the userId and retrieve the activeAccountId from it
+			// we do this so we can persist activeAccountId across sessions
+			const userDetails = getUserDetails(env, this.props.user.id)
+			return await userDetails.getActiveAccountId()
 		} catch (e) {
-			console.error('getActiveAccountId failured: ', e)
+			this.server.recordError(e)
 			return null
 		}
 	}
 
-	setActiveAccountId(accountId: string) {
+	async setActiveAccountId(accountId: string) {
 		try {
-			this.setState({
-				...this.state,
-				activeAccountId: accountId,
-			})
+			const userDetails = getUserDetails(env, this.props.user.id)
+			await userDetails.setActiveAccountId(accountId)
 		} catch (e) {
-			return null
+			this.server.recordError(e)
 		}
 	}
 }

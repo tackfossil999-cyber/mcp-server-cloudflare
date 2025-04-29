@@ -73,7 +73,6 @@ export type zReturnedAssetsResult = z.infer<typeof AssetsResponse>
 export const AssetCategoriesResponse = z.array(AssetCategory)
 export type zReturnedAssetCategoriesResult = z.infer<typeof AssetCategoriesResponse>
 
-
 export const assetCategoryTypeParam = z
 	.enum([
 		'Account',
@@ -127,7 +126,7 @@ export const assetCategoryTypeParam = z
 	.optional()
 	.describe('Type of cloud resource or service category')
 
-	export const assetCategoryVendorParam = z
+export const assetCategoryVendorParam = z
 	.enum([
 		'AWS',
 		'Bitbucket',

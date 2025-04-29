@@ -16,7 +16,6 @@ import {
 	assetCategoryVendorParam,
 } from '@repo/mcp-common/src/schemas/cf1-integrations'
 
-import type { McpAgentWithAccount } from '@repo/mcp-common/src/api/account'
 import type { ToolDefinition } from '@repo/mcp-common/src/types/tools'
 import type { CASBMCP } from '../index'
 
@@ -244,11 +243,6 @@ const toolDefinitions: Array<ToolDefinition<any>> = [
  */
 export function registerIntegrationsTools(agent: CASBMCP) {
 	toolDefinitions.forEach(({ name, description, params, handler }) => {
-		agent.server.tool(
-			name,
-			description,
-			params,
-			withAccountCheck(agent as unknown as McpAgentWithAccount, handler)
-		)
+		agent.server.tool(name, description, params, withAccountCheck(agent, handler))
 	})
 }
