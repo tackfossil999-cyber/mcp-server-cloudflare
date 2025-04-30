@@ -26,10 +26,8 @@ eachModel('$modelName', ({ model }) => {
 			const client = await initializeClient(/* Pass necessary mocks/config */)
 			const { promptOutput, toolCalls } = await runTask(client, model, input)
 
-			if (input.includes(`Create a new Hyperdrive configuration`)) {
-				const toolCall = toolCalls.find((call) => call.toolName === 'hyperdrive_config_create')
-				expect(toolCall, 'Tool hyperdrive_configs_create was not called').toBeDefined()
-			}
+			const toolCall = toolCalls.find((call) => call.toolName === 'hyperdrive_config_create')
+			expect(toolCall, 'Tool hyperdrive_configs_create was not called').toBeDefined()
 
 			return promptOutput
 		},

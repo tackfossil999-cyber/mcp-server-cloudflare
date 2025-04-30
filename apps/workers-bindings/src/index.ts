@@ -117,8 +117,10 @@ export default {
 		}
 
 		return new OAuthProvider({
-			apiRoute: ['/mcp', '/sse'],
-			apiHandler: createApiHandler(WorkersBindingsMCP),
+			apiHandlers: {
+				'/mcp': WorkersBindingsMCP.serve('/mcp'),
+				'/sse': WorkersBindingsMCP.serveSSE('/sse'),
+			},
 			// @ts-ignore
 			defaultHandler: createAuthHandlers({ scopes: BindingsScopes, metrics }),
 			authorizeEndpoint: '/oauth/authorize',
