@@ -22,7 +22,7 @@
 		"wrangler": "4.10.0"
 	},
 	"dependencies": {
-		"@cloudflare/workers-oauth-provider": "0.0.3",
+		"@cloudflare/workers-oauth-provider": "0.0.5",
 		"@modelcontextprotocol/sdk": "1.10.2",
 		"@n8n/json-schema-to-zod": "1.1.0",
 		"@repo/mcp-common": "workspace:*",
