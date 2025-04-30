@@ -108,16 +108,16 @@
 		"production": {
 			"name": "mcp-cloudflare-container-sandbox-production",
 			"account_id": "6702657b6aa048cf3081ff3ff3c9c52f",
-			"routes": [{ "pattern": "sandbox.mcp.cloudflare.com", "custom_domain": true }],
+			"routes": [{ "pattern": "containers.mcp.cloudflare.com", "custom_domain": true }],
 			"containers": [
 				{
 					"name": "sandbox-container",
 					// UPDATE WHEN DEPLOYING A NEW IMAGE
-					"image": "registry.cloudchamber.cfdata.org/sandbox-container:1acac68",
+					"image": "registry.cloudchamber.cfdata.org/sandbox-container:d802004",
 					"class_name": "ContainerMcpAgent",
-					"max_instances": 20,
+					"max_instances": 30,
 					"rollout_step_percentage": 100,
-					"instances": 20,
+					"instances": 3,
 				}
 			],
 			"durable_objects": {
@@ -133,8 +133,6 @@
 				]
 			},
 			"vars": {
-				"CLOUDFLARE_CLIENT_ID": "<PLACEHOLDER>",
-				"CLOUDFLARE_CLIENT_SECRET": "<PLACEHOLDER>",
 				"ENVIRONMENT": "prod",
 				"MCP_SERVER_NAME": "<PLACEHOLDER>",
 				"MCP_SERVER_VERSION": "<PLACEHOLDER>"
