@@ -1,4 +1,4 @@
-import { AIGatewayMCP } from './index'
+import type { AIGatewayMCP } from './index'
 
 import type { UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
 

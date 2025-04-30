@@ -1,7 +1,6 @@
 import OAuthProvider from '@cloudflare/workers-oauth-provider'
 import { McpAgent } from 'agents/mcp'
 
-import { createApiHandler } from '@repo/mcp-common/src/api-handler'
 import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
@@ -102,8 +101,10 @@ export default {
 		}
 
 		return new OAuthProvider({
-			apiRoute: ['/mcp', '/sse'],
-			apiHandler: createApiHandler(LogsMCP),
+			apiHandlers: {
+				'/mcp': LogsMCP.serve('/mcp'),
+				'/sse': LogsMCP.serveSSE('/sse'),
+			},
 			// @ts-ignore
 			defaultHandler: createAuthHandlers({ scopes: LogPushScopes, metrics }),
 			authorizeEndpoint: '/oauth/authorize',

@@ -1,7 +1,6 @@
 import OAuthProvider from '@cloudflare/workers-oauth-provider'
 import { McpAgent } from 'agents/mcp'
 
-import { createApiHandler } from '@repo/mcp-common/src/api-handler'
 import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
@@ -99,9 +98,10 @@ export default {
 		}
 
 		return new OAuthProvider({
-			apiRoute: ['/mcp', '/sse'],
-			// @ts-ignore
-			apiHandler: createApiHandler(CASBMCP),
+			apiHandlers: {
+				'/mcp': CASBMCP.serve('/mcp'),
+				'/sse': CASBMCP.serveSSE('/sse'),
+			},
 			// @ts-ignore
 			defaultHandler: createAuthHandlers({ scopes: CloudflareOneCasbScopes, metrics }),
 			authorizeEndpoint: '/oauth/authorize',
