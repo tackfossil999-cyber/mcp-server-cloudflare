@@ -14,4 +14,6 @@ export interface Env {
 	DEV_DISABLE_OAUTH: string
 	DEV_CLOUDFLARE_API_TOKEN: string
 	DEV_CLOUDFLARE_EMAIL: string
+	OPENAI_API_KEY: string
+	AI: Ai
 }
