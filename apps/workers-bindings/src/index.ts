@@ -1,6 +1,7 @@
 import OAuthProvider from '@cloudflare/workers-oauth-provider'
 import { McpAgent } from 'agents/mcp'
 
+import { createApiHandler } from '@repo/mcp-common/src/api-handler'
 import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
@@ -108,15 +109,16 @@ const BindingsScopes = {
 
 export default {
 	fetch: async (req: Request, env: Env, ctx: ExecutionContext) => {
-		if (env.ENVIRONMENT === 'development' && env.DEV_DISABLE_OAUTH === 'true') {
+		if (
+			(env.ENVIRONMENT === 'development' || env.ENVIRONMENT === 'test') &&
+			env.DEV_DISABLE_OAUTH === 'true'
+		) {
 			return await handleDevMode(WorkersBindingsMCP, req, env, ctx)
 		}
 
 		return new OAuthProvider({
-			apiHandlers: {
-				'/mcp': WorkersBindingsMCP.serve('/mcp'),
-				'/sse': WorkersBindingsMCP.serveSSE('/sse'),
-			},
+			apiRoute: ['/mcp', '/sse'],
+			apiHandler: createApiHandler(WorkersBindingsMCP),
 			// @ts-ignore
 			defaultHandler: createAuthHandlers({ scopes: BindingsScopes, metrics }),
 			authorizeEndpoint: '/oauth/authorize',

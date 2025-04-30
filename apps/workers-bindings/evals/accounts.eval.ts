@@ -22,9 +22,11 @@ eachModel('$modelName', ({ model }) => {
 			},
 		],
 		task: async (input: string) => {
+			console.log('input', input)
 			const client = await initializeClient(/* Pass necessary mocks/config */)
 			const { promptOutput, toolCalls } = await runTask(client, model, input)
-
+			console.log('toolCalls', toolCalls)
+			console.log('promptOutput', promptOutput)
 			if (input.includes('List all my Cloudflare accounts')) {
 				const toolCall = toolCalls.find((call) => call.toolName === 'accounts_list')
 				expect(toolCall, 'Tool accounts_list was not called').toBeDefined()

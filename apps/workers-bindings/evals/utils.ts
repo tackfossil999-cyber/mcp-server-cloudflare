@@ -1,5 +1,5 @@
 import { MCPClientManager } from 'agents/mcp/client'
-import { jsonSchema, streamText, tool } from 'ai'
+import { streamText, tool, jsonSchema } from 'ai'
 import { z } from 'zod'
 
 import type { LanguageModelV1, StreamTextResult, ToolCallPart, ToolSet } from 'ai'
@@ -49,6 +49,7 @@ export async function runTask(
 		return acc
 	}, {} as ToolSet)
 
+
 	const res = streamText({
 		model,
 		system:
@@ -58,6 +59,9 @@ export async function runTask(
 		maxRetries: 1,
 		maxSteps: 10,
 	})
+
+	for await (const part of res.fullStream) {
+	}
 
 	// convert into an LLM readable result so our factuality checker can validate tool calls
 	let messagesWithTools = ''
