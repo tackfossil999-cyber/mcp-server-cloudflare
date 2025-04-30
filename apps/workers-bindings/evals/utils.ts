@@ -6,7 +6,7 @@ import type { LanguageModelV1, StreamTextResult, ToolCallPart, ToolSet } from 'a
 
 export async function initializeClient(): Promise<MCPClientManager> {
 	const clientManager = new MCPClientManager('test-client', '0.0.0')
-	await clientManager.connect('http://localhost:8976/sse')
+	await clientManager.connect('http://localhost:8977/sse')
 	return clientManager
 }
 

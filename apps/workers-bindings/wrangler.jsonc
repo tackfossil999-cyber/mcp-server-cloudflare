@@ -36,7 +36,7 @@
 		"enabled": true
 	},
 	"dev": {
-		"port": 8976
+		"port": 8977
 	},
 	"vars": {
 		"ENVIRONMENT": "development",
