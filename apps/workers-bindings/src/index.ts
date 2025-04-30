@@ -3,11 +3,11 @@ import { McpAgent } from 'agents/mcp'
 
 import {
 	createAuthHandlers,
-	getUserAndAccounts,
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
 import { getEnv } from '@repo/mcp-common/src/env'
+import { handleDevMode } from '@repo/mcp-common/src/dev-mode'
 import { RequiredScopes } from '@repo/mcp-common/src/scopes'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
@@ -106,24 +106,10 @@ const BindingsScopes = {
 	'd1:write': 'Create, read, and write to D1 databases',
 } as const
 
-// TODO: Move this in to mcp-common
-async function handleDevMode(req: Request, env: Env, ctx: ExecutionContext) {
-	const { user, accounts } = await getUserAndAccounts(env.DEV_CLOUDFLARE_API_TOKEN, {
-		'X-Auth-Email': env.DEV_CLOUDFLARE_EMAIL,
-		'X-Auth-Key': env.DEV_CLOUDFLARE_API_TOKEN,
-	})
-	ctx.props = {
-		accessToken: env.DEV_CLOUDFLARE_API_TOKEN,
-		user,
-		accounts,
-	} as Props
-	return WorkersBindingsMCP.mount('/sse').fetch(req, env, ctx)
-}
-
 export default {
 	fetch: async (req: Request, env: Env, ctx: ExecutionContext) => {
 		if (env.ENVIRONMENT === 'development' && env.DEV_DISABLE_OAUTH === 'true') {
-			return await handleDevMode(req, env, ctx)
+			return await handleDevMode(WorkersBindingsMCP, req, env, ctx)
 		}
 
 		return new OAuthProvider({

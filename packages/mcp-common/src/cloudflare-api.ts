@@ -1,8 +1,15 @@
 import { Cloudflare } from 'cloudflare'
+import { env } from 'cloudflare:workers'
 
 import type { z } from 'zod'
 
 export function getCloudflareClient(apiToken: string) {
+	// @ts-expect-error We don't have actual env in this package
+	if (env.DEV_DISABLE_OAUTH) {
+		// @ts-expect-error We don't have actual env in this package
+		return new Cloudflare({ apiEmail: env.DEV_CLOUDFLARE_EMAIL, apiKey: env.DEV_CLOUDFLARE_API_TOKEN })
+	}
+	
 	return new Cloudflare({ apiToken })
 }
 
