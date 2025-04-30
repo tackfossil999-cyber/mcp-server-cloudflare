@@ -23,7 +23,7 @@
 		"check:turbo": "run-turbo check",
 		"types": "run-turbo types",
 		"test:ci": "run-vitest-ci",
-		"test": "vitest run",
+		"test": "vitest run --passWithNoTests",
 		"fix:format": "prettier . --write",
 		"test:watch": "vitest",
 		"eval:ci": "run-turbo eval:ci"
