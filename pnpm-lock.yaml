@@ -198,8 +198,8 @@ importers:
   apps/browser-rendering:
     dependencies:
       '@cloudflare/workers-oauth-provider':
-        specifier: 0.0.3
-        version: 0.0.3
+        specifier: 0.0.5
+        version: 0.0.5
       '@hono/zod-validator':
         specifier: 0.4.3
         version: 0.4.3(hono@4.7.6)(zod@3.24.2)

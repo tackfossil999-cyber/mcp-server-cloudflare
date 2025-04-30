@@ -12,7 +12,7 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@cloudflare/workers-oauth-provider": "0.0.3",
+		"@cloudflare/workers-oauth-provider": "0.0.5",
 		"@hono/zod-validator": "0.4.3",
 		"@modelcontextprotocol/sdk": "1.10.2",
 		"@repo/mcp-common": "workspace:*",
