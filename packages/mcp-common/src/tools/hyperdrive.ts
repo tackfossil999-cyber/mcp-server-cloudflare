@@ -242,7 +242,8 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 			password: HyperdriveOriginPasswordSchema.optional().nullable(),
 			caching_disabled: HyperdriveCachingDisabledSchema.optional().nullable(),
 			caching_max_age: HyperdriveCachingMaxAgeSchema.optional().nullable(),
-			caching_stale_while_revalidate: HyperdriveCachingStaleWhileRevalidateSchema.optional().nullable(),
+			caching_stale_while_revalidate:
+				HyperdriveCachingStaleWhileRevalidateSchema.optional().nullable(),
 		},
 		async ({
 			hyperdrive_id,

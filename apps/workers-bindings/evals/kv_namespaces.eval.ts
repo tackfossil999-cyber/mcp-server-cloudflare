@@ -15,22 +15,23 @@ eachModel('$modelName', ({ model }) => {
 			},
 			{
 				input: 'List all my Cloudflare KV Namespaces.',
-				expected: 'The kv_namespaces_list tool should be called to retrieve the list of kv namespaces. There should be at least one kv namespace in the list.',
+				expected:
+					'The kv_namespaces_list tool should be called to retrieve the list of kv namespaces. There should be at least one kv namespace in the list.',
 			},
 			{
-				input: 'Rename my Cloudflare KV Namespace called "my-test-namespace" to "my-new-test-namespace".',
+				input:
+					'Rename my Cloudflare KV Namespace called "my-test-namespace" to "my-new-test-namespace".',
 				expected: 'The kv_namespace_update tool should be called to rename the kv namespace.',
 			},
 			{
 				input: 'Get details of my Cloudflare KV Namespace called "my-new-test-namespace".',
-				expected: 'The kv_namespace_get tool should be called to retrieve the details of the kv namespace.',
+				expected:
+					'The kv_namespace_get tool should be called to retrieve the details of the kv namespace.',
 			},
 			{
 				input: 'Look up the id of my only KV namespace and delete it.',
 				expected: 'The kv_namespace_delete tool should be called to delete the kv namespace.',
 			},
-
-      
 		],
 		task: async (input: string) => {
 			const client = await initializeClient(/* Pass necessary mocks/config */)

@@ -6,10 +6,14 @@ import type { z } from 'zod'
 export function getCloudflareClient(apiToken: string) {
 	// @ts-expect-error We don't have actual env in this package
 	if (env.DEV_DISABLE_OAUTH) {
-		// @ts-expect-error We don't have actual env in this package
-		return new Cloudflare({ apiEmail: env.DEV_CLOUDFLARE_EMAIL, apiKey: env.DEV_CLOUDFLARE_API_TOKEN })
+		return new Cloudflare({
+			// @ts-expect-error We don't have actual env in this package
+			apiEmail: env.DEV_CLOUDFLARE_EMAIL,
+			// @ts-expect-error We don't have actual env in this package
+			apiKey: env.DEV_CLOUDFLARE_API_TOKEN,
+		})
 	}
-	
+
 	return new Cloudflare({ apiToken })
 }
 

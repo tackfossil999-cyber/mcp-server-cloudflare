@@ -27,7 +27,7 @@
 		"@repo/mcp-common": "workspace:*",
 		"@repo/mcp-observability": "workspace:*",
 		"@types/node": "22.14.1",
-		"agents": "0.0.75",
+		"agents": "0.0.67",
 		"cron-schedule": "5.0.4",
 		"esbuild": "0.25.1",
 		"hono": "4.7.6",

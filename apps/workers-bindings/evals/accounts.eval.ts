@@ -23,7 +23,7 @@ eachModel('$modelName', ({ model }) => {
 		],
 		task: async (input: string) => {
 			const client = await initializeClient(/* Pass necessary mocks/config */)
-			const { promptOutput, toolCalls, fullResult } = await runTask(client, model, input)
+			const { promptOutput, toolCalls } = await runTask(client, model, input)
 
 			if (input.includes('List all my Cloudflare accounts')) {
 				const toolCall = toolCalls.find((call) => call.toolName === 'accounts_list')
