@@ -11,12 +11,10 @@ import { getEnv } from '@repo/mcp-common/src/env'
 import { RequiredScopes } from '@repo/mcp-common/src/scopes'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
-import { registerD1Tools } from '@repo/mcp-common/src/tools/d1'
-import { registerHyperdriveTools } from '@repo/mcp-common/src/tools/hyperdrive'
-import { registerKVTools } from '@repo/mcp-common/src/tools/kv_namespace'
-import { registerR2BucketTools } from '@repo/mcp-common/src/tools/r2_bucket'
-import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
-import { MetricsTracker } from '@repo/mcp-observability'
+import { registerZoneTools } from '@repo/mcp-common/src/tools/zone'
+
+import { MetricsTracker } from '../../../packages/mcp-observability/src'
+import { registerAnalyticTools } from './tools/analytics'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import type { Env } from './context'
@@ -30,13 +28,13 @@ const metrics = new MetricsTracker(env.MCP_METRICS, {
 	version: env.MCP_SERVER_VERSION,
 })
 
-export type WorkersBindingsMCPState = { activeAccountId: string | null }
-
 // Context from the auth process, encrypted & stored in the auth token
 // and provided to the DurableMCP as this.props
-type Props = AuthProps
+export type Props = AuthProps
 
-export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, Props> {
+export type State = { activeAccountId: string | null }
+
+export class DNSAnalyticsMCP extends McpAgent<Env, State, Props> {
 	_server: CloudflareMCPServer | undefined
 	set server(server: CloudflareMCPServer) {
 		this._server = server
@@ -48,10 +46,6 @@ export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, P
 		}
 
 		return this._server
-	}
-
-	initialState: WorkersBindingsMCPState = {
-		activeAccountId: null,
 	}
 
 	constructor(ctx: DurableObjectState, env: Env) {
@@ -69,11 +63,11 @@ export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, P
 		})
 
 		registerAccountTools(this)
-		registerKVTools(this)
-		registerWorkersTools(this)
-		registerR2BucketTools(this)
-		registerD1Tools(this)
-		registerHyperdriveTools(this)
+
+		// Register Cloudflare DNS Analytics tools
+		registerAnalyticTools(this)
+
+		registerZoneTools(this)
 	}
 
 	async getActiveAccountId() {
@@ -98,30 +92,27 @@ export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, P
 	}
 }
 
-const BindingsScopes = {
+const AnalyticsScopes = {
 	...RequiredScopes,
 	'account:read': 'See your account info such as account details, analytics, and memberships.',
-	'workers:write':
-		'See and change Cloudflare Workers data such as zones, KV storage, namespaces, scripts, and routes.',
-	'd1:write': 'Create, read, and write to D1 databases',
+	'zone:read': 'See your zones',
+	'dns_settings:read': 'See your DNS settings',
+	'dns_analytics:read': 'See your DNS analytics',
 } as const
 
 export default {
 	fetch: async (req: Request, env: Env, ctx: ExecutionContext) => {
-		if (
-			(env.ENVIRONMENT === 'development' || env.ENVIRONMENT === 'test') &&
-			env.DEV_DISABLE_OAUTH === 'true'
-		) {
-			return await handleDevMode(WorkersBindingsMCP, req, env, ctx)
+		if (env.ENVIRONMENT === 'development' && env.DEV_DISABLE_OAUTH === 'true') {
+			return await handleDevMode(DNSAnalyticsMCP, req, env, ctx)
 		}
 
 		return new OAuthProvider({
 			apiHandlers: {
-				'/mcp': WorkersBindingsMCP.serve('/mcp'),
-				'/sse': WorkersBindingsMCP.serveSSE('/sse'),
+				'/mcp': DNSAnalyticsMCP.serve('/mcp'),
+				'/sse': DNSAnalyticsMCP.serveSSE('/sse'),
 			},
 			// @ts-ignore
-			defaultHandler: createAuthHandlers({ scopes: BindingsScopes, metrics }),
+			defaultHandler: createAuthHandlers({ scopes: AnalyticsScopes, metrics }),
 			authorizeEndpoint: '/oauth/authorize',
 			tokenEndpoint: '/token',
 			tokenExchangeCallback: (options) =>

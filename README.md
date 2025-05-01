@@ -22,7 +22,6 @@ The following servers are included in this repository:
 | [**Digital Experience Monitoring server**](/apps/dex-analysis) | Get quick insight on critical applications for your organization                                 | `https://dex.mcp.cloudflare.com/sse`                    |
 | [**Cloudflare One CASB server**](/apps/casb)          | Quickly identify any security misconfigurations for SaaS applications to safeguard users & data  | `https://casb.mcp.cloudflare.com/sse`                   |
 
-
 ## Access the remote MCP server from any MCP client
 
 If your MCP client has first class support for remote MCP servers, the client will provide a way to accept the server URL directly within its interface (e.g. [Cloudflare AI Playground](https://playground.ai.cloudflare.com/))

@@ -5,10 +5,10 @@ import { fetchCloudflareApi } from '@repo/mcp-common/src/cloudflare-api'
 import type { AuditlogMCP } from '../index'
 
 export const actionResults = z.enum(['success', 'failure', ''])
-export const actionTypes = z.enum(['create', 'delete', 'view', 'update'])
+export const actionTypes = z.enum(['create', 'delete', 'view', 'update', 'login'])
 export const actorContexts = z.enum(['api_key', 'api_token', 'dash', 'oauth', 'origin_ca_key'])
-export const actorTypes = z.enum(['cloudflare_admin', 'account', 'user'])
-export const resourceScopes = z.enum(['accounts', 'user', 'zones'])
+export const actorTypes = z.enum(['cloudflare_admin', 'account', 'user', 'system'])
+export const resourceScopes = z.enum(['memberships', 'accounts', 'user', 'zones'])
 export const sortDirections = z.enum(['desc', 'asc'])
 
 export const auditLogsQuerySchema = z.object({
