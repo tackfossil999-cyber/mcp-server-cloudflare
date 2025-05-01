@@ -1,4 +1,4 @@
-import type { ContainerManager, ContainerMcpAgent } from './index'
+import type { ContainerManager, ContainerMcpAgent, UserContainer } from './index'
 
 export interface Env {
 	OAUTH_KV: KVNamespace
@@ -10,6 +10,8 @@ export interface Env {
 	OPENAI_API_KEY: string
 	CONTAINER_MCP_AGENT: DurableObjectNamespace<ContainerMcpAgent>
 	CONTAINER_MANAGER: DurableObjectNamespace<ContainerManager>
+	USER_CONTAINER: DurableObjectNamespace<UserContainer>
+	USER_BLOCKLIST: KVNamespace
 	MCP_METRICS: AnalyticsEngineDataset
 	AI: Ai
 	DEV_DISABLE_OAUTH: string

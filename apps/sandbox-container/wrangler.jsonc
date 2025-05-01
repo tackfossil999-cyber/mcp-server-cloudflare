@@ -8,7 +8,7 @@
 		{
 			"name": "sandbox-container",
 			"image": "./Dockerfile",
-			"class_name": "ContainerMcpAgent",
+			"class_name": "UserContainer",
 			"max_instances": 2,
 			"rollout_step_percentage": 100
 		}
@@ -22,6 +22,10 @@
 			{
 				"class_name": "ContainerManager",
 				"name": "CONTAINER_MANAGER"
+			},
+			{
+				"class_name": "UserContainer",
+				"name": "USER_CONTAINER"
 			}
 		]
 	},
@@ -29,6 +33,10 @@
 		{
 			"new_sqlite_classes": ["ContainerManager", "ContainerMcpAgent"],
 			"tag": "v1"
+		},
+		{
+			"new_sqlite_classes": ["UserContainer"],
+			"tag": "v2"
 		}
 	],
 	"observability": {
@@ -38,6 +46,10 @@
 		{
 			"binding": "OAUTH_KV",
 			"id": "DEV_KV"
+		},
+		{
+			"binding": "USER_BLOCKLIST",
+			"id": "DEV_BLOCKLIST"
 		}
 	],
 	"dev": {
@@ -63,59 +75,14 @@
 		"staging": {
 			"name": "mcp-cloudflare-container-sandbox-staging",
 			"account_id": "6702657b6aa048cf3081ff3ff3c9c52f",
-			"routes": [{ "pattern": "sandbox-staging.mcp.cloudflare.com", "custom_domain": true }],
+			"routes": [{ "pattern": "containers-staging.mcp.cloudflare.com", "custom_domain": true }],
 			"containers": [
 				{
-					"name": "sandbox-container",
-					"image": "./Dockerfile",
-					"class_name": "ContainerMcpAgent",
-					"max_instances": 2,
-					"rollout_step_percentage": 100
-				}
-			],
-			"durable_objects": {
-				"bindings": [
-					{
-						"class_name": "ContainerMcpAgent",
-						"name": "CONTAINER_MCP_AGENT"
-					},
-					{
-						"class_name": "ContainerManager",
-						"name": "CONTAINER_MANAGER"
-					}
-				]
-			},
-			"vars": {
-				"CLOUDFLARE_CLIENT_ID": "<PLACEHOLDER>",
-				"CLOUDFLARE_CLIENT_SECRET": "<PLACEHOLDER>",
-				"ENVIRONMENT": "staging",
-				"MCP_SERVER_NAME": "<PLACEHOLDER>",
-				"MCP_SERVER_VERSION": "<PLACEHOLDER>"
-			},
-			"analytics_engine_datasets": [
-				{
-					"binding": "MCP_METRICS",
-					"dataset": "mcp-metrics-staging"
-				}
-			],
-			"kv_namespaces": [
-				{
-					"binding": "OAUTH_KV",
-					"id": "DEV_KV"
-				}
-			],
-		},
-		"production": {
-			"name": "mcp-cloudflare-container-sandbox-production",
-			"account_id": "6702657b6aa048cf3081ff3ff3c9c52f",
-			"routes": [{ "pattern": "containers.mcp.cloudflare.com", "custom_domain": true }],
-			"containers": [
-				{
-					"name": "sandbox-container",
+					"name": "sandbox-container-staging",
 					// UPDATE WHEN DEPLOYING A NEW IMAGE
 					"image": "registry.cloudchamber.cfdata.org/sandbox-container:d802004",
-					"class_name": "ContainerMcpAgent",
-					"max_instances": 30,
+					"class_name": "UserContainer",
+					"max_instances": 5,
 					"rollout_step_percentage": 100,
 					"instances": 3,
 				}
@@ -129,6 +96,63 @@
 					{
 						"class_name": "ContainerManager",
 						"name": "CONTAINER_MANAGER"
+					},
+					{
+						"class_name": "UserContainer",
+						"name": "USER_CONTAINER"
+					}
+				]
+			},
+			"vars": {
+				"ENVIRONMENT": "staging",
+				"MCP_SERVER_NAME": "<PLACEHOLDER>",
+				"MCP_SERVER_VERSION": "<PLACEHOLDER>"
+			},
+			"analytics_engine_datasets": [
+				{
+					"binding": "MCP_METRICS",
+					"dataset": "mcp-metrics-staging"
+				}
+			],
+			"kv_namespaces": [
+				{
+					"binding": "OAUTH_KV",
+					"id": "65cf7200dde9433aa8fbab5a935e071d"
+				},
+				{
+					"binding": "USER_BLOCKLIST",
+					"id": "TODO"
+				}
+			],
+		},
+		"production": {
+			"name": "mcp-cloudflare-container-sandbox-production",
+			"account_id": "6702657b6aa048cf3081ff3ff3c9c52f",
+			"routes": [{ "pattern": "containers.mcp.cloudflare.com", "custom_domain": true }],
+			"containers": [
+				{
+					"name": "sandbox-container",
+					// UPDATE WHEN DEPLOYING A NEW IMAGE
+					"image": "registry.cloudchamber.cfdata.org/sandbox-container:d802004",
+					"class_name": "UserContainer",
+					"max_instances": 20,
+					"rollout_step_percentage": 100,
+					"instances": 3,
+				}
+			],
+			"durable_objects": {
+				"bindings": [
+					{
+						"class_name": "ContainerMcpAgent",
+						"name": "CONTAINER_MCP_AGENT"
+					},
+					{
+						"class_name": "ContainerManager",
+						"name": "CONTAINER_MANAGER"
+					},
+					{
+						"class_name": "UserContainer",
+						"name": "USER_CONTAINER"
 					}
 				]
 			},
@@ -147,6 +171,10 @@
 				{
 					"binding": "OAUTH_KV",
 					"id": "8d66696bdd534133bbc6a773b8caf99b"
+				},
+				{
+					"binding": "USER_BLOCKLIST",
+					"id": "TODO"
 				}
 			],
 		},

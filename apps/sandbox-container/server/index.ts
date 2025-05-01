@@ -16,8 +16,9 @@ import { ContainerMcpAgent } from './containerMcp'
 import type { McpAgent } from 'agents/mcp'
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import type { Env } from './context'
+import { UserContainer } from './userContainer'
 
-export { ContainerManager, ContainerMcpAgent }
+export { ContainerManager, ContainerMcpAgent, UserContainer }
 
 const env = getEnv<Env>()
 

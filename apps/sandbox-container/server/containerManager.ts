@@ -28,8 +28,8 @@ export class ContainerManager extends DurableObject<Env> {
 			console.log(id, time, now, now.valueOf() - time.valueOf())
 
 			if (now.valueOf() - time.valueOf() > 10 * 60 * 1000) {
-				const doId = this.env.CONTAINER_MCP_AGENT.idFromString(id)
-				const stub = this.env.CONTAINER_MCP_AGENT.get(doId)
+				const doId = this.env.USER_CONTAINER.idFromString(id)
+				const stub = this.env.USER_CONTAINER.get(doId)
 				await stub.destroyContainer()
 				await this.killContainer(id)
 			}
