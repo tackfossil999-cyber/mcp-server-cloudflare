@@ -1,7 +1,6 @@
 import OAuthProvider from '@cloudflare/workers-oauth-provider'
 import { McpAgent } from 'agents/mcp'
 
-import { createApiHandler } from '@repo/mcp-common/src/api-handler'
 import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
@@ -60,27 +59,13 @@ export class ObservabilityMCP extends McpAgent<Env, State, Props> {
 			sentry: initSentryWithUser(env, this.ctx, this.props.user.id),
 			options: {
 				instructions: `# Cloudflare Workers Observability Tool
+				* A cloudflare worker is a serverless function
+				* Workers Observability is the tool to inspect the logs for your cloudflare Worker
+				* Each log is a structured JSON payload with keys and values
 
-This tool provides powerful capabilities to analyze and troubleshoot your Cloudflare Workers through logs and metrics. Here's how to use it effectively:
 
-## IMPORTANT: Query Discipline
-
-**STOP after the first successful query if it answers the user's question.** Do not run multiple queries unless absolutely necessary. The first query often contains the answer - review it thoroughly before running additional queries.
-
-## Best Practices
-
-### Efficient Querying
-- Start with a focused query that's most likely to answer the question
-- Review results completely before deciding if additional queries are needed
-- If the first query provides the answer, STOP and present it to the user
-- Only run additional queries when specifically directed or when essential information is missing
-
-### When to STOP Querying
-- STOP after presenting meaningful results from the first query
-- STOP when you've answered the user's specific question
-- STOP when the user hasn't requested additional exploration
-- Only continue if explicitly directed with "EXPLORE" or similar instruction
-`,
+				This server allows you to analyze your Cloudflare Workers logs and metrics.
+				`,
 			},
 		})
 
@@ -130,8 +115,10 @@ export default {
 		}
 
 		return new OAuthProvider({
-			apiRoute: ['/mcp', '/sse'],
-			apiHandler: createApiHandler(ObservabilityMCP),
+			apiHandlers: {
+				'/mcp': ObservabilityMCP.serve('/mcp'),
+				'/sse': ObservabilityMCP.serveSSE('/sse'),
+			},
 			// @ts-ignore
 			defaultHandler: createAuthHandlers({ scopes: ObservabilityScopes, metrics }),
 			authorizeEndpoint: '/oauth/authorize',

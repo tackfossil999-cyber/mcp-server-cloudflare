@@ -1,13 +1,14 @@
 {
-	"name": "containers-starter",
-	"version": "0.0.0",
+	"name": "containers-mcp",
+	"version": "0.0.1",
 	"private": true,
 	"type": "module",
 	"scripts": {
 		"check:types": "run-tsc",
+		"check:lint": "run-eslint-workers",
 		"deploy": "wrangler deploy",
 		"dev": "concurrently \"tsx container/index.ts\" \"wrangler dev --var \"ENVIRONMENT:dev\"\"",
-		"build": "docker build -f Dockerfile ../../",
+		"build:container": "docker build --platform linux/amd64 --tag sandbox-container:$(git rev-parse --short HEAD) -f Dockerfile ../../ && wrangler containers push sandbox-container:$(git rev-parse --short HEAD)",
 		"start": "wrangler dev",
 		"start:container": "tsx container/index.ts",
 		"postinstall": "mkdir -p workdir",
@@ -18,7 +19,7 @@
 		"eval:ci": "start-server-and-test --expect 404 eval:server http://localhost:8976 'vitest run --testTimeout=60000 --config vitest.config.evals.ts'"
 	},
 	"dependencies": {
-		"@cloudflare/workers-oauth-provider": "0.0.3",
+		"@cloudflare/workers-oauth-provider": "0.0.5",
 		"@hono/node-server": "1.13.8",
 		"@hono/zod-validator": "0.4.3",
 		"@modelcontextprotocol/sdk": "1.10.2",
@@ -40,7 +41,8 @@
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.8.14",
 		"@types/mock-fs": "4.13.4",
-		"ai": "4.3.6",
+		"@types/node": "22.14.1",
+		"ai": "4.3.10",
 		"concurrently": "9.1.2",
 		"mock-fs": "5.5.0",
 		"start-server-and-test": "2.0.11",

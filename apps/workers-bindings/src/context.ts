@@ -3,7 +3,7 @@ import type { WorkersBindingsMCP } from './index'
 
 export interface Env {
 	OAUTH_KV: KVNamespace
-	ENVIRONMENT: 'development' | 'staging' | 'production'
+	ENVIRONMENT: 'development' | 'staging' | 'production' | 'test'
 	MCP_SERVER_NAME: string
 	MCP_SERVER_VERSION: string
 	CLOUDFLARE_CLIENT_ID: string
@@ -14,4 +14,7 @@ export interface Env {
 	DEV_DISABLE_OAUTH: string
 	DEV_CLOUDFLARE_API_TOKEN: string
 	DEV_CLOUDFLARE_EMAIL: string
+	CLOUDFLARE_API_TOKEN: string
+	OPENAI_API_KEY: string
+	AI: Ai
 }

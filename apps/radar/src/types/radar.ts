@@ -153,3 +153,17 @@ export const HttpDimensionParam = z
 	.describe(
 		"Dimension used to group HTTP data. Allowed only when the format is 'summary' or 'timeseriesGroups'."
 	)
+
+export const L7AttackDimensionParam = z
+	.enum([
+		'httpMethod',
+		'httpVersion',
+		'ipVersion',
+		'mitigationProduct',
+		'managedRules',
+		// TODO: add 'vertical' and 'industry' once they are in the cloudflare API lib
+	])
+	.optional()
+	.describe(
+		"Dimension used to group L7 attack data. Allowed only when the format is 'summary' or 'timeseriesGroups'."
+	)

@@ -1,18 +1,18 @@
 import OAuthProvider from '@cloudflare/workers-oauth-provider'
 import { McpAgent } from 'agents/mcp'
 
-import { createApiHandler } from '@repo/mcp-common/src/api-handler'
 import {
 	createAuthHandlers,
-	getUserAndAccounts,
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
+import { handleDevMode } from '@repo/mcp-common/src/dev-mode'
 import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
 import { getEnv } from '@repo/mcp-common/src/env'
 import { RequiredScopes } from '@repo/mcp-common/src/scopes'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
 import { registerD1Tools } from '@repo/mcp-common/src/tools/d1'
+import { registerHyperdriveTools } from '@repo/mcp-common/src/tools/hyperdrive'
 import { registerKVTools } from '@repo/mcp-common/src/tools/kv_namespace'
 import { registerR2BucketTools } from '@repo/mcp-common/src/tools/r2_bucket'
 import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
@@ -73,6 +73,7 @@ export class WorkersBindingsMCP extends McpAgent<Env, WorkersBindingsMCPState, P
 		registerWorkersTools(this)
 		registerR2BucketTools(this)
 		registerD1Tools(this)
+		registerHyperdriveTools(this)
 	}
 
 	async getActiveAccountId() {
@@ -105,29 +106,20 @@ const BindingsScopes = {
 	'd1:write': 'Create, read, and write to D1 databases',
 } as const
 
-// TODO: Move this in to mcp-common
-async function handleDevMode(req: Request, env: Env, ctx: ExecutionContext) {
-	const { user, accounts } = await getUserAndAccounts(env.DEV_CLOUDFLARE_API_TOKEN, {
-		'X-Auth-Email': env.DEV_CLOUDFLARE_EMAIL,
-		'X-Auth-Key': env.DEV_CLOUDFLARE_API_TOKEN,
-	})
-	ctx.props = {
-		accessToken: env.DEV_CLOUDFLARE_API_TOKEN,
-		user,
-		accounts,
-	} as Props
-	return WorkersBindingsMCP.mount('/sse').fetch(req, env, ctx)
-}
-
 export default {
 	fetch: async (req: Request, env: Env, ctx: ExecutionContext) => {
-		if (env.ENVIRONMENT === 'development' && env.DEV_DISABLE_OAUTH === 'true') {
-			return await handleDevMode(req, env, ctx)
+		if (
+			(env.ENVIRONMENT === 'development' || env.ENVIRONMENT === 'test') &&
+			env.DEV_DISABLE_OAUTH === 'true'
+		) {
+			return await handleDevMode(WorkersBindingsMCP, req, env, ctx)
 		}
 
 		return new OAuthProvider({
-			apiRoute: ['/mcp', '/sse'],
-			apiHandler: createApiHandler(WorkersBindingsMCP),
+			apiHandlers: {
+				'/mcp': WorkersBindingsMCP.serve('/mcp'),
+				'/sse': WorkersBindingsMCP.serveSSE('/sse'),
+			},
 			// @ts-ignore
 			defaultHandler: createAuthHandlers({ scopes: BindingsScopes, metrics }),
 			authorizeEndpoint: '/oauth/authorize',

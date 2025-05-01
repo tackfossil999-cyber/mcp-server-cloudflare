@@ -1,4 +1,4 @@
-# Model Context Protocol (MCP) Server + Cloudflare Documentation (via Autorag)
+# Model Context Protocol (MCP) Server + Cloudflare Documentation (via Vectorize)
 
 This is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server that supports remote MCP connections. It connects to a Vectorize DB (in this case, indexed w/ the Cloudflare docs)
 

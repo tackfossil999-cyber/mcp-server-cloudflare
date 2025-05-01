@@ -1,8 +1,19 @@
 import { DurableObject } from 'cloudflare:workers'
 
+import { getEnv } from '@repo/mcp-common/src/env'
+import { MetricsTracker } from '@repo/mcp-observability'
+
+import { ContainerEvent } from './metrics'
+
 import type { Env } from './context'
 
+const env = getEnv<Env>()
 export class ContainerManager extends DurableObject<Env> {
+	metrics = new MetricsTracker(env.MCP_METRICS, {
+		name: env.MCP_SERVER_NAME,
+		version: env.MCP_SERVER_VERSION,
+	})
+
 	constructor(
 		public ctx: DurableObjectState,
 		public env: Env
@@ -27,9 +38,10 @@ export class ContainerManager extends DurableObject<Env> {
 
 			console.log(id, time, now, now.valueOf() - time.valueOf())
 
-			if (now.valueOf() - time.valueOf() > 10 * 60 * 1000) {
-				const doId = this.env.CONTAINER_MCP_AGENT.idFromString(id)
-				const stub = this.env.CONTAINER_MCP_AGENT.get(doId)
+			// 15m timeout for container lifetime
+			if (now.valueOf() - time.valueOf() > 15 * 60 * 1000) {
+				const doId = this.env.USER_CONTAINER.idFromString(id)
+				const stub = this.env.USER_CONTAINER.get(doId)
 				await stub.destroyContainer()
 				await this.killContainer(id)
 			}
@@ -42,6 +54,13 @@ export class ContainerManager extends DurableObject<Env> {
 		for (const c of activeContainers.keys()) {
 			activeIds.push(c)
 		}
+
+		this.metrics.logEvent(
+			new ContainerEvent({
+				active: activeIds.length,
+			})
+		)
+
 		return activeIds
 	}
 }

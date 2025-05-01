@@ -12,12 +12,13 @@ import { MetricsTracker } from '@repo/mcp-observability'
 
 import { ContainerManager } from './containerManager'
 import { ContainerMcpAgent } from './containerMcp'
+import { UserContainer } from './userContainer'
 
 import type { McpAgent } from 'agents/mcp'
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import type { Env } from './context'
 
-export { ContainerManager, ContainerMcpAgent }
+export { ContainerManager, ContainerMcpAgent, UserContainer }
 
 const env = getEnv<Env>()
 
@@ -78,6 +79,4 @@ export default {
 			clientRegistrationEndpoint: '/register',
 		}).fetch(req, env, ctx)
 	},
-} /*
-	
-*/
+}

@@ -117,9 +117,7 @@ export const zSearchNeedle = z.object({
 	matchCase: z.boolean().optional(),
 })
 
-const zViews = z
-	.enum(['traces', 'events', 'calculations', 'invocations', 'requests', 'patterns'])
-	.optional()
+const zViews = z.enum(['events', 'calculations', 'invocations'])
 
 export const zAggregateResult = z.object({
 	groups: z.array(z.object({ key: z.string(), value: zPrimitiveUnion })).optional(),
@@ -306,6 +304,19 @@ export const zReturnedQueryRunEvents = z.object({
 export const zQueryRunRequest = z.object({
 	// TODO: Fix these types
 	queryId: z.string(),
+	view: zViews.optional().default('calculations').describe(`## Examples by View Type
+		### Events View
+		- "Show me all errors for the worker api-proxy in the last 30 minutes"
+		- "Show events from worker auth-service where the path contains /login"
+
+		### Calculation View
+		- "What is the p99 of wall time for worker api-proxy?"
+		- "What's the count of requests by status code for worker cdn-router?"
+
+		### Invocation View
+		- "Find a request to worker api-proxy that resulted in a 500 error"
+		- "List successful requests for the image-resizer worker with status code 200"
+				`),
 	parameters: z.object({
 		datasets: z
 			.array(z.string())
@@ -348,22 +359,7 @@ export const zQueryRunRequest = z.object({
 		.describe(
 			'Use this limit to limit the number of events returned when the view is events. 5 is a sensible default'
 		),
-	view: zViews.optional().default('calculations').describe(`## Examples by View Type
-### Events View
-- "Show me all errors for the worker api-proxy in the last 30 minutes"
-- "List successful requests for the image-resizer worker with status code 200"
-- "Show events from worker auth-service where the path contains /login"
 
-### Calculation View
-- "What is the p99 of wall time for worker api-proxy?"
-- "What's the count of requests by status code for worker cdn-router?"
-
-### Invocation View
-- "Find a request to worker api-proxy that resulted in a 500 error"
-- "Find the slowest request to worker image-processor in the last hour"
-
-TRACES AND PATTERNS ARE NOT CURRENTLY SUPPORTED
-		`),
 	dry: z.boolean().optional().default(true),
 	offset: z
 		.string()
