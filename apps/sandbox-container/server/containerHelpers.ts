@@ -28,11 +28,11 @@ export async function startAndWaitForPort(
 
 				// force DO to keep track of running state
 				monitor = container.monitor()
-				monitor.then(() => console.log('Container exited'))
+				void monitor.then(() => console.log('Container exited'))
 			}
 
 			const conn = await port.connect(`10.0.0.1:${portToAwait}`)
-			conn.close()
+			await conn.close()
 			console.log('Connected')
 			return true
 		} catch (err: any) {

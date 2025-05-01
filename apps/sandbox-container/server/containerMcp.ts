@@ -9,7 +9,7 @@ import { stripProtocolFromFilePath } from './utils'
 import type { Env } from './context'
 import type { Props, UserContainer } from '.'
 
-export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
+export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 	_server: CloudflareMCPServer | undefined
 	set server(server: CloudflareMCPServer) {
 		this._server = server
@@ -57,7 +57,7 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 				const userInBlocklist = await this.env.USER_BLOCKLIST.get(this.props.user.id)
 				if (userInBlocklist) {
 					return {
-						content: [{ type: 'text', text: "Blocked from intializing container." }],
+						content: [{ type: 'text', text: 'Blocked from intializing container.' }],
 					}
 				}
 				return {
@@ -66,16 +66,20 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 			}
 		)
 
-		this.server.tool('container_ping', `Ping the container for liveliness. Use this tool to check if the container is running.`, {}, async ({}) => {
-			return {
-				content: [{ type: 'text', text: await this.userContainer.container_ping() }],
+		this.server.tool(
+			'container_ping',
+			`Ping the container for liveliness. Use this tool to check if the container is running.`,
+			async () => {
+				return {
+					content: [{ type: 'text', text: await this.userContainer.container_ping() }],
+				}
 			}
-		})
+		)
 		this.server.tool(
 			'container_exec',
 			`Run a command in a container and return the results from stdout. 
 			If necessary, set a timeout. To debug, stream back standard error. 
-			If you\'re using python, ALWAYS use python3 alongside pip3`,
+			If you're using python, ALWAYS use python3 alongside pip3`,
 			{ args: ExecParams },
 			async ({ args }) => {
 				return {
@@ -106,22 +110,26 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 				}
 			}
 		)
-		this.server.tool('container_files_list', 'List working directory file tree. This just reads the contents of the current working directory', {}, async ({}) => {
-			// Begin workaround using container read rather than ls:
-			const readFile = await this.userContainer.container_file_read('.')
-			return {
-				content: [
-					{
-						type: 'resource',
-						resource: {
-							text: readFile.type === "text" ? readFile.textOutput : readFile.base64Output,
-							uri: `file://`,
-							mimeType: readFile.mimeType,
+		this.server.tool(
+			'container_files_list',
+			'List working directory file tree. This just reads the contents of the current working directory',
+			async () => {
+				// Begin workaround using container read rather than ls:
+				const readFile = await this.userContainer.container_file_read('.')
+				return {
+					content: [
+						{
+							type: 'resource',
+							resource: {
+								text: readFile.type === 'text' ? readFile.textOutput : readFile.base64Output,
+								uri: `file://`,
+								mimeType: readFile.mimeType,
+							},
 						},
-					},
-				],
+					],
+				}
 			}
-		})
+		)
 		this.server.tool(
 			'container_file_read',
 			'Read a specific file or directory. Use this tool if you would like to read files or display them to the user. This allow you to get a displayable image for the user if there is an image file.',
@@ -135,7 +143,7 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 						{
 							type: 'resource',
 							resource: {
-								text: readFile.type === "text" ? readFile.textOutput : readFile.base64Output,
+								text: readFile.type === 'text' ? readFile.textOutput : readFile.base64Output,
 								uri: `file://${path}`,
 								mimeType: readFile.mimeType,
 							},

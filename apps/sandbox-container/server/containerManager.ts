@@ -1,13 +1,17 @@
 import { DurableObject } from 'cloudflare:workers'
 
-import type { Env } from './context'
-import { ContainerEvent } from './metrics'
+import { getEnv } from '@repo/mcp-common/src/env'
 import { MetricsTracker } from '@repo/mcp-observability'
 
+import { ContainerEvent } from './metrics'
+
+import type { Env } from './context'
+
+const env = getEnv<Env>()
 export class ContainerManager extends DurableObject<Env> {
-	metrics = new MetricsTracker(this.env.MCP_METRICS, {
-		name: this.env.MCP_SERVER_NAME,
-		version: this.env.MCP_SERVER_VERSION
+	metrics = new MetricsTracker(env.MCP_METRICS, {
+		name: env.MCP_SERVER_NAME,
+		version: env.MCP_SERVER_VERSION,
 	})
 
 	constructor(
@@ -51,9 +55,11 @@ export class ContainerManager extends DurableObject<Env> {
 			activeIds.push(c)
 		}
 
-		this.metrics.logEvent(new ContainerEvent({
-			active: activeIds.length
-		}))
+		this.metrics.logEvent(
+			new ContainerEvent({
+				active: activeIds.length,
+			})
+		)
 
 		return activeIds
 	}

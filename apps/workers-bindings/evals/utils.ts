@@ -59,6 +59,8 @@ export async function runTask(
 		maxSteps: 10,
 	})
 
+	// we need to consume the fill stream, so this is empty
+	/* eslint-ignore no-empty */
 	for await (const _ of res.fullStream) {
 	}
 

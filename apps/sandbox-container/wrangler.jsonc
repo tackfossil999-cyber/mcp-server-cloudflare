@@ -84,7 +84,7 @@
 					"class_name": "UserContainer",
 					"max_instances": 5,
 					"rollout_step_percentage": 100,
-					"instances": 3,
+					"instances": 3
 				}
 			],
 			"durable_objects": {
@@ -123,7 +123,7 @@
 					"binding": "USER_BLOCKLIST",
 					"id": "68e95343ded8448db179256c68f175b2"
 				}
-			],
+			]
 		},
 		"production": {
 			"name": "mcp-cloudflare-container-sandbox-production",
@@ -137,7 +137,7 @@
 					"class_name": "UserContainer",
 					"max_instances": 50,
 					"rollout_step_percentage": 100,
-					"instances": 10,
+					"instances": 10
 				}
 			],
 			"durable_objects": {
@@ -176,7 +176,7 @@
 					"binding": "USER_BLOCKLIST",
 					"id": "b874d6ae29ec43e5afad7be8da067676"
 				}
-			],
-		},
+			]
+		}
 	}
 }

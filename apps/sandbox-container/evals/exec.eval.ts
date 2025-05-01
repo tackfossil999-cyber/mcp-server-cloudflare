@@ -1,6 +1,5 @@
-import { assert, expect } from 'vitest'
+import { expect } from 'vitest'
 import { describeEval } from 'vitest-evals'
-import { z } from 'zod'
 
 import { checkFactuality } from '@repo/eval-tools/src/scorers'
 import { eachModel } from '@repo/eval-tools/src/test-models'

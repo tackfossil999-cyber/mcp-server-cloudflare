@@ -1,9 +1,10 @@
 import { jsonSchemaToZod } from '@n8n/json-schema-to-zod'
 import { MCPClientManager } from 'agents/mcp/client'
-import { LanguageModelV1, streamText, StreamTextResult, tool, ToolCallPart, ToolSet } from 'ai'
+import { streamText, tool } from 'ai'
 import { z } from 'zod'
 
 import type { JsonSchemaObject } from '@n8n/json-schema-to-zod'
+import type { LanguageModelV1, StreamTextResult, ToolCallPart, ToolSet } from 'ai'
 
 export async function initializeClient(): Promise<MCPClientManager> {
 	const clientManager = new MCPClientManager('test-client', '0.0.0')
@@ -56,12 +57,14 @@ export async function runTask(
 		maxSteps: 10,
 	})
 
-	for await (const part of res.fullStream) {
+	// consume the stream
+	// eslint-disable-next-line no-empty
+	for await (const _ of res.fullStream) {
 	}
 
 	// convert into an LLM readable result so our factuality checker can validate tool calls
 	let messagesWithTools = ''
-	let toolCalls: ToolCallPart[] = []
+	const toolCalls: ToolCallPart[] = []
 	const messages = (await res.response).messages
 	for (const message of messages) {
 		console.log(message.content)

@@ -139,14 +139,14 @@ app.post('/exec', zValidator('json', ExecParams), (c) => {
 	const execParams = c.req.valid('json')
 	const proc = exec(execParams.args)
 	return streamText(c, async (stream) => {
-		return new Promise(async (resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			if (proc.stdout) {
 				// Stream data from stdout
 				proc.stdout.on('data', async (data) => {
 					await stream.write(data.toString())
 				})
 			} else {
-				await stream.write('WARNING: no stdout stream for process')
+				void stream.write('WARNING: no stdout stream for process')
 			}
 
 			if (execParams.streamStderr) {
@@ -155,7 +155,7 @@ app.post('/exec', zValidator('json', ExecParams), (c) => {
 						await stream.write(data.toString())
 					})
 				} else {
-					await stream.write('WARNING: no stderr stream for process')
+					void stream.write('WARNING: no stderr stream for process')
 				}
 			}
 
@@ -163,7 +163,7 @@ app.post('/exec', zValidator('json', ExecParams), (c) => {
 			proc.on('exit', async (code) => {
 				await stream.write(`Process exited with code: ${code}`)
 				if (code === 0) {
-					stream.close()
+					await stream.close()
 					resolve()
 				} else {
 					console.error(`Process exited with code ${code}`)

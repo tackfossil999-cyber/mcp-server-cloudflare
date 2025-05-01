@@ -1,4 +1,4 @@
-import { MetricsEvent, MetricsEventIndexIds } from "@repo/mcp-observability"
+import { MetricsEvent, MetricsEventIndexIds } from '@repo/mcp-observability'
 
 export class ContainerEvent extends MetricsEvent {
 	constructor(
