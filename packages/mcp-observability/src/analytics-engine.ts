@@ -111,6 +111,7 @@ export enum MetricsEventIndexIds {
 	AUTH_USER = 'auth_user',
 	SESSION_START = 'session_start',
 	TOOL_CALL = 'tool_call',
+	CONTAINER_MANAGER = 'container_manager',
 }
 
 /**

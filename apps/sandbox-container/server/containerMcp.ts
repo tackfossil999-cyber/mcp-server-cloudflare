@@ -4,7 +4,7 @@ import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 
 import { ExecParams, FilePathParam, FileWrite } from '../shared/schema'
 import { BASE_INSTRUCTIONS } from './prompts'
-import { fileToBase64, stripProtocolFromFilePath } from './utils'
+import { stripProtocolFromFilePath } from './utils'
 
 import type { Env } from './context'
 import type { Props, UserContainer } from '.'
@@ -73,7 +73,9 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 		})
 		this.server.tool(
 			'container_exec',
-			'Run a command in a container and return the results from stdout. If necessary, set a timeout. To debug, stream back standard error.',
+			`Run a command in a container and return the results from stdout. 
+			If necessary, set a timeout. To debug, stream back standard error. 
+			If you\'re using python, ALWAYS use python3 alongside pip3`,
 			{ args: ExecParams },
 			async ({ args }) => {
 				return {
@@ -106,15 +108,15 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 		)
 		this.server.tool('container_files_list', 'List working directory file tree. This just reads the contents of the current working directory', {}, async ({}) => {
 			// Begin workaround using container read rather than ls:
-			const { blob, mimeType } = await this.userContainer.container_file_read('.')
+			const readFile = await this.userContainer.container_file_read('.')
 			return {
 				content: [
 					{
 						type: 'resource',
 						resource: {
-							text: await blob.text(),
+							text: readFile.type === "text" ? readFile.textOutput : readFile.base64Output,
 							uri: `file://`,
-							mimeType: mimeType,
+							mimeType: readFile.mimeType,
 						},
 					},
 				],
@@ -122,40 +124,23 @@ export class ContainerMcpAgent extends McpAgent<Env, {}, Props> {
 		})
 		this.server.tool(
 			'container_file_read',
-			'Read a specific file or directory',
+			'Read a specific file or directory. Use this tool if you would like to read files or display them to the user. This allow you to get a displayable image for the user if there is an image file.',
 			{ args: FilePathParam },
 			async ({ args }) => {
 				const path = await stripProtocolFromFilePath(args.path)
-				const { blob, mimeType } = await this.userContainer.container_file_read(path)
+				const readFile = await this.userContainer.container_file_read(path)
 
-				if (mimeType && mimeType.startsWith('text')) {
-					return {
-						content: [
-							{
-								type: 'resource',
-								resource: {
-									text: await blob.text(),
-									uri: `file://${path}`,
-									mimeType: mimeType,
-								},
+				return {
+					content: [
+						{
+							type: 'resource',
+							resource: {
+								text: readFile.type === "text" ? readFile.textOutput : readFile.base64Output,
+								uri: `file://${path}`,
+								mimeType: readFile.mimeType,
 							},
-						],
-					}
-				} else {
-					return {
-						content: [
-							{
-								type: 'resource',
-								resource: {
-									// for some reason the RPC type for Blob is not exactly the same as the regular Blob type
-									// @ts-ignore
-									blob: await fileToBase64(blob),
-									uri: `file://${path}`,
-									mimeType: mimeType,
-								},
-							},
-						],
-					}
+						},
+					],
 				}
 			}
 		)

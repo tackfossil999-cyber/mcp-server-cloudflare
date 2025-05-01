@@ -1,8 +1,15 @@
 import { DurableObject } from 'cloudflare:workers'
 
 import type { Env } from './context'
+import { ContainerEvent } from './metrics'
+import { MetricsTracker } from '@repo/mcp-observability'
 
 export class ContainerManager extends DurableObject<Env> {
+	metrics = new MetricsTracker(this.env.MCP_METRICS, {
+		name: this.env.MCP_SERVER_NAME,
+		version: this.env.MCP_SERVER_VERSION
+	})
+
 	constructor(
 		public ctx: DurableObjectState,
 		public env: Env
@@ -27,7 +34,8 @@ export class ContainerManager extends DurableObject<Env> {
 
 			console.log(id, time, now, now.valueOf() - time.valueOf())
 
-			if (now.valueOf() - time.valueOf() > 10 * 60 * 1000) {
+			// 15m timeout for container lifetime
+			if (now.valueOf() - time.valueOf() > 15 * 60 * 1000) {
 				const doId = this.env.USER_CONTAINER.idFromString(id)
 				const stub = this.env.USER_CONTAINER.get(doId)
 				await stub.destroyContainer()
@@ -42,6 +50,11 @@ export class ContainerManager extends DurableObject<Env> {
 		for (const c of activeContainers.keys()) {
 			activeIds.push(c)
 		}
+
+		this.metrics.logEvent(new ContainerEvent({
+			active: activeIds.length
+		}))
+
 		return activeIds
 	}
 }

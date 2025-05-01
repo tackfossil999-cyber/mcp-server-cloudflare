@@ -121,7 +121,7 @@
 				},
 				{
 					"binding": "USER_BLOCKLIST",
-					"id": "TODO"
+					"id": "68e95343ded8448db179256c68f175b2"
 				}
 			],
 		},
@@ -135,9 +135,9 @@
 					// UPDATE WHEN DEPLOYING A NEW IMAGE
 					"image": "registry.cloudchamber.cfdata.org/sandbox-container:d802004",
 					"class_name": "UserContainer",
-					"max_instances": 20,
+					"max_instances": 50,
 					"rollout_step_percentage": 100,
-					"instances": 3,
+					"instances": 10,
 				}
 			],
 			"durable_objects": {
@@ -174,7 +174,7 @@
 				},
 				{
 					"binding": "USER_BLOCKLIST",
-					"id": "TODO"
+					"id": "b874d6ae29ec43e5afad7be8da067676"
 				}
 			],
 		},

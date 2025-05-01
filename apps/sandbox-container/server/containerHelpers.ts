@@ -1,4 +1,4 @@
-export const MAX_CONTAINERS = 20
+export const MAX_CONTAINERS = 50
 export async function startAndWaitForPort(
 	environment: 'dev' | 'prod' | 'test',
 	container: Container | undefined,

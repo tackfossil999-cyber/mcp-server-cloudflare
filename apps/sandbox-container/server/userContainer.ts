@@ -7,6 +7,7 @@ import { getContainerManager } from './containerManager'
 
 import type { FileList } from '../shared/schema'
 import type { Env } from './context'
+import { fileToBase64 } from "./utils"
 
 export class UserContainer extends DurableObject<Env> {
 	constructor(
@@ -39,7 +40,8 @@ export class UserContainer extends DurableObject<Env> {
 		// try to cleanup cleanup old containers
 		const containerManager = getContainerManager(this.env)
 
-		if ((await containerManager.listActive()).length >= MAX_CONTAINERS) {
+		// if more than half of our containers are being used, let's try reaping
+		if ((await containerManager.listActive()).length >= (MAX_CONTAINERS / 2)) {
 			await containerManager.tryKillOldContainers()
 			if ((await containerManager.listActive()).length >= MAX_CONTAINERS) {
 				throw new Error(
@@ -127,7 +129,7 @@ export class UserContainer extends DurableObject<Env> {
 	}
 	async container_file_read(
 		filePath: string
-	): Promise<{ blob: Blob; mimeType: string | undefined }> {
+	): Promise<{ type: "text", textOutput: string; mimeType: string | undefined } | { type: "base64", base64Output: string; mimeType: string | undefined }> {
 		const res = await proxyFetch(
 			this.env.ENVIRONMENT,
 			this.ctx.container,
@@ -137,9 +139,24 @@ export class UserContainer extends DurableObject<Env> {
 		if (!res || !res.ok) {
 			throw new Error(`Request to container failed: ${await res.text()}`)
 		}
-		return {
-			blob: await res.blob(),
-			mimeType: res.headers.get('Content-Type') ?? undefined,
+
+		const mimeType = res.headers.get('Content-Type') ?? undefined
+		const blob = await res.blob()
+
+		console.log(mimeType)
+		
+		if (mimeType && mimeType.startsWith('text')) {
+			return {
+				type: "text",
+				textOutput: await blob.text(),
+				mimeType
+			}
+		} else {
+			return {
+				type: "base64",
+				base64Output: await fileToBase64(blob),
+				mimeType
+			}
 		}
 	}
 
