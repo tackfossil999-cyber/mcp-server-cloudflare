@@ -6,14 +6,6 @@ These MCP servers allow your [MCP Client](https://modelcontextprotocol.io/client
 
 The following servers are included in this repository:
 
-| Server Name                                     | Description                                                                  | Server URL                                     |
-| ----------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------- |
-| [**Documentation server**](/apps/docs-autorag)  | Get up to date reference information on Cloudflare                           | `https://docs.mcp.cloudflare.com/sse`          |
-| [**Workers Bindings server**](/apps/bindings)   | Build Workers applications with storage, AI, and compute primitives          | `https://bindings.mcp.cloudflare.com/sse`      |
-| [**Observability server**](/apps/observability) | Debug and get insight into your application’s logs and analytics             | `https://observability.mcp.cloudflare.com/sse` |
-| [**Radar server**](/apps/radar)                 | Get global Internet traffic insights, trends, URL scans, and other utilities | `https://radar.mcp.cloudflare.com/sse`         |
-
-
 | Server Name                                           | Description                                                                                      | Server URL                                              |
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | [**Documentation server**](/apps/docs-vectorize)        | Get up to date reference information on Cloudflare                                               | `https://docs.mcp.cloudflare.com/sse`                   |
