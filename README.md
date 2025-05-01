@@ -13,6 +13,23 @@ The following servers are included in this repository:
 | [**Observability server**](/apps/observability) | Debug and get insight into your application’s logs and analytics             | `https://observability.mcp.cloudflare.com/sse` |
 | [**Radar server**](/apps/radar)                 | Get global Internet traffic insights, trends, URL scans, and other utilities | `https://radar.mcp.cloudflare.com/sse`         |
 
+
+| Server Name                                           | Description                                                                                      | Server URL                                              |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| [**Documentation server**](/apps/docs-autorag)        | Get up to date reference information on Cloudflare                                               | `https://docs.mcp.cloudflare.com/sse`                   |
+| [**Workers Bindings server**](/apps/bindings)         | Build Workers applications with storage, AI, and compute primitives                              | `https://bindings.mcp.cloudflare.com/sse`               |
+| [**Observability server**](/apps/observability)       | Debug and get insight into your application’s logs and analytics                                 | `https://observability.mcp.cloudflare.com/sse`          |
+| [**Radar server**](/apps/radar)                       | Get global Internet traffic insights, trends, URL scans, and other utilities                     | `https://radar.mcp.cloudflare.com/sse`                  |
+| [**Container server**](/apps/container)               | Spin up a sandbox development environment                                                        | `https://container.mcp.cloudflare.com/sse`              |
+| [**Browser rendering server**](/apps/browser)         | Fetch web pages, convert them to markdown and take screenshots                                   | `https://browser.mcp.cloudflare.com/sse`                |
+| [**Logpush server**](/apps/logpush)                   | Get quick summaries for Logpush job health                                                       | `https://logpush.mcp.cloudflare.com/sse`                |
+| [**AI Gateway server**](/apps/ai-gateway)             | Search your logs, get details about the prompts and responses                                    | `https://ai-gateway.mcp.cloudflare.com/sse`             |
+| [**AutoRAG server**](/apps/autorag)                   | List and search documents on your AutoRAGs                                                       | `https://autorag.mcp.cloudflare.com/sse`                |
+| [**Audit Logs server**](/apps/audit-logs)             | Query audit logs and generate reports for review                                                 | `https://audit-logs.mcp.cloudflare.com/sse`             |
+| [**Digital Experience Monitoring server**](/apps/dem) | Get quick insight on critical applications for your organization                                 | `https://dem.mcp.cloudflare.com/sse`                    |
+| [**Cloudflare One CASB server**](/apps/casb)          | Quickly identify any security misconfigurations for SaaS applications to safeguard users & data  | `https://casb.mcp.cloudflare.com/sse`                   |
+
+
 ## Access the remote MCP server from any MCP client
 
 If your MCP client has first class support for remote MCP servers, the client will provide a way to accept the server URL directly within its interface (e.g. [Cloudflare AI Playground](https://playground.ai.cloudflare.com/))
