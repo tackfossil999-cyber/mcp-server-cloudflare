@@ -49,7 +49,6 @@ export async function runTask(
 		return acc
 	}, {} as ToolSet)
 
-	console.log('streaming res')
 	const res = streamText({
 		model,
 		system:

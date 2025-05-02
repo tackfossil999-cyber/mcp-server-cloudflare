@@ -54,10 +54,6 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 			Use this tool to initialize a container before running any python or node.js code that the user requests ro run.`,
 			// @ts-ignore
 			async () => {
-				console.log('initializing')
-				return {
-					content: [{ type: 'text', text: 'Initialized container' }],
-				}
 				const userInBlocklist = await this.env.USER_BLOCKLIST.get(this.props.user.id)
 				if (userInBlocklist) {
 					return {
