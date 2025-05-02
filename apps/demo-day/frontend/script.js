@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Form handling
 	const emailForm = document.querySelector('.input-group')
-	const emailInput = emailForm.querySelector('input[type="email"]')
+	//const //emailInput = null //emailForm.querySelector('input[type="email"]')
 	const honeypotInput = emailForm.querySelector('input[name="contact_me_by_fax"]')
-	const notifyButton = emailForm.querySelector('.notify-btn')
+	//const notifyButton = emailForm.querySelector('.notify-btn')
 
 	// Check if user has already signed up
 	/*if (localStorage.getItem('mcp_demo_signup')) {
@@ -75,11 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		showSuccessState(savedEmail)
 	}*/
 
-	function showSuccessState(email) {
-		const inputGroup = emailInput.closest('.input-group')
+	/*function showSuccessState(email) {
+		const inputGroup = //emailInput.closest('.input-group')
 		inputGroup.classList.add('success')
-		emailInput.value = email
-		emailInput.disabled = true
+		//emailInput.value = email
+		//emailInput.disabled = true
 		notifyButton.disabled = true
 
 		// Update button
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `
 		notifyButton.classList.add('success')
 		createConfetti(notifyButton)
-	}
+	}*/
 
 	// Rate limiting configuration
 	const RATE_LIMIT_DURATION = 60000 // 1 minute
@@ -175,24 +175,24 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	// Setup accessibility attributes
-	function setupAccessibility() {
-		emailInput.setAttribute('aria-label', 'Email address for notification')
+	/*function setupAccessibility() {
+		//emailInput.setAttribute('aria-label', 'Email address for notification')
 		notifyButton.setAttribute('aria-label', 'Sign up for notification')
 		document.querySelector('.success-message')?.setAttribute('role', 'status')
-	}
+	}*/
 
 	// Debounced email validation on input
 	const validateEmailDebounced = debounce((email) => {
 		const isValid = isValidEmail(email)
-		emailInput.style.border = isValid ? '' : '1px solid red'
+		//emailInput.style.border = isValid ? '' : '1px solid red'
 	}, 300)
 
-	emailInput.addEventListener('input', (e) => validateEmailDebounced(e.target.value))
+	//emailInput.addEventListener('input', (e) => validateEmailDebounced(e.target.value))
 
 	// Enhanced click handler with all improvements
-	notifyButton.addEventListener('click', async (e) => {
+	/*notifyButton.addEventListener('click', async (e) => {
 		e.preventDefault()
-		const email = emailInput.value.trim()
+		//const email = //emailInput.value.trim()
 
 		// Rate limit check
 		if (!checkRateLimit()) {
@@ -202,12 +202,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		// Basic validation
 		if (!email) {
-			emailInput.style.border = '1px solid red'
+			//emailInput.style.border = '1px solid red'
 			return
 		}
 
 		if (!isValidEmail(email)) {
-			emailInput.style.border = '1px solid red'
+			//emailInput.style.border = '1px solid red'
 			showToast('Please enter a valid email address.')
 			return
 		}
@@ -217,8 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			return
 		}*/
 
-		// Honeypot check
-		if (honeypotInput.value) {
+	// Honeypot check
+	/*if (honeypotInput.value) {
 			console.log('Bot detected')
 			return
 		}
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			setupAccessibility()
 		} catch (error) {
 			console.error('Error:', error)
-			emailInput.style.border = '1px solid red'
+			//emailInput.style.border = '1px solid red'
 
 			if (error.message.includes('UNIQUE constraint failed')) {
 				showToast('This email is already registered for the demo. Check your inbox for details.')
@@ -262,10 +262,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				showToast('Something went wrong. Please try again.')
 			}
 		}
-	})
+	})*/
 
 	// Initialize accessibility
-	setupAccessibility()
+	//()
 
 	function setupCalendarActions() {
 		const calendarActions = document.querySelectorAll(
@@ -339,9 +339,9 @@ END:VCALENDAR`
 	setupCalendarActions()
 
 	// Remove red border on input focus
-	emailInput.addEventListener('focus', () => {
-		emailInput.style.border = 'none'
-	})
+	//emailInput.addEventListener('focus', () => {
+	//emailInput.style.border = 'none'
+	//})
 
 	// Company list hover effect
 	const companies = document.querySelectorAll('.demo-companies li')
@@ -385,10 +385,12 @@ END:VCALENDAR`
 		if (company) {
 			item.setAttribute('data-company', company)
 		}
+		console.log('add attrib')
 	})
 
 	// Create background containers for each company
 	companyNames.forEach((company) => {
+		console.log('add container')
 		const background = document.createElement('div')
 		background.className = `company-background ${company}`
 
@@ -445,6 +447,7 @@ END:VCALENDAR`
 		backgrounds[currentBackgroundIndex].classList.add('active')
 		companyItems[currentBackgroundIndex].classList.add('active')
 		currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length
+		console.log('cucle')
 	}
 
 	// Start cycling every 3 seconds
