@@ -17,7 +17,7 @@
 		"bindings": [
 			{
 				"class_name": "ContainerMcpAgent",
-				"name": "CONTAINER_MCP_AGENT"
+				"name": "MCP_OBJECT"
 			},
 			{
 				"class_name": "ContainerManager",
@@ -91,7 +91,7 @@
 				"bindings": [
 					{
 						"class_name": "ContainerMcpAgent",
-						"name": "CONTAINER_MCP_AGENT"
+						"name": "MCP_OBJECT"
 					},
 					{
 						"class_name": "ContainerManager",
@@ -144,7 +144,7 @@
 				"bindings": [
 					{
 						"class_name": "ContainerMcpAgent",
-						"name": "CONTAINER_MCP_AGENT"
+						"name": "MCP_OBJECT"
 					},
 					{
 						"class_name": "ContainerManager",

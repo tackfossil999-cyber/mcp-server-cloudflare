@@ -1,9 +1,7 @@
-import { jsonSchemaToZod } from '@n8n/json-schema-to-zod'
 import { MCPClientManager } from 'agents/mcp/client'
-import { streamText, tool } from 'ai'
+import { jsonSchema, streamText, tool } from 'ai'
 import { z } from 'zod'
 
-import type { JsonSchemaObject } from '@n8n/json-schema-to-zod'
 import type { LanguageModelV1, StreamTextResult, ToolCallPart, ToolSet } from 'ai'
 
 export async function initializeClient(): Promise<MCPClientManager> {
@@ -23,10 +21,14 @@ export async function runTask(
 }> {
 	const tools = clientManager.listTools()
 	const toolSet: ToolSet = tools.reduce((acc, v) => {
+		if (!v.inputSchema.properties) {
+			v.inputSchema.properties = {}
+		}
+
 		acc[v.name] = tool({
-			parameters: jsonSchemaToZod(v.inputSchema as JsonSchemaObject),
+			parameters: jsonSchema(v.inputSchema as any),
 			description: v.description,
-			execute: async (args, opts) => {
+			execute: async (args: any, opts) => {
 				try {
 					const res = await clientManager.callTool(
 						{
@@ -47,6 +49,7 @@ export async function runTask(
 		return acc
 	}, {} as ToolSet)
 
+	console.log('streaming res')
 	const res = streamText({
 		model,
 		system:
