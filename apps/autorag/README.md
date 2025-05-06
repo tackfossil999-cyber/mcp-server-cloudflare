@@ -3,8 +3,7 @@
 This is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server that supports remote MCP
 connections, with Cloudflare OAuth built-in.
 
-It integrates tools powered by the [Cloudflare AutoRAG API](https://developers.cloudflare.com/autorag/) to provide global
-Internet traffic insights, trends and other utilities.
+It integrates tools powered by the [Cloudflare AutoRAG API](https://developers.cloudflare.com/autorag/) to allow you to access and query your account's AutoRAG instances.
 
 ## 🔨 Available Tools
 
