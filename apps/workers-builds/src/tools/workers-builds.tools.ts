@@ -6,7 +6,7 @@ import { fmt } from '@repo/mcp-common/src/format'
 import type { BuildsMCP } from '../workers-builds.app'
 
 /**
- * Registers the logs analysis tool with the MCP server
+ * Registers the Workers Builds tools with the MCP server
  * @param server The MCP server instance
  * @param accountId Cloudflare account ID
  * @param apiToken Cloudflare API token
