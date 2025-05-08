@@ -1,3 +1,7 @@
+import { fetchCloudflareApi } from '../cloudflare-api'
+import { WorkersService } from '../types/workers'
+import { V4Schema } from '../v4-api'
+
 import type { Cloudflare } from 'cloudflare'
 
 /**
@@ -14,6 +18,30 @@ export async function handleWorkersList({
 	accountId: string
 }): Promise<Cloudflare.Workers.Scripts.Script[]> {
 	return (await client.workers.scripts.list({ account_id: accountId })).result
+}
+
+/**
+ * Get details of a worker script from Cloudflare API
+ * @param client Cloudflare API Client
+ * @param scriptName Name of the worker script to download
+ * @param accountId Cloudflare account ID
+ * @returns The script name and id
+ */
+export async function handleGetWorkersService({
+	apiToken,
+	scriptName,
+	accountId,
+}: {
+	apiToken: string
+	scriptName: string
+	accountId: string
+}) {
+	return await fetchCloudflareApi({
+		endpoint: `/workers/services/${scriptName}`,
+		accountId,
+		apiToken,
+		responseSchema: V4Schema(WorkersService),
+	})
 }
 
 /**
