@@ -16,5 +16,6 @@ export interface Env {
 	DEV_CLOUDFLARE_EMAIL: string
 	CLOUDFLARE_API_TOKEN: string
 	OPENAI_API_KEY: string
+	ANTHROPIC_KEY: string
 	AI: Ai
 }

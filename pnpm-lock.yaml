@@ -870,7 +870,7 @@ importers:
   packages/eval-tools:
     dependencies:
       '@ai-sdk/anthropic':
-        specifier: ^1.2.11
+        specifier: 1.2.11
         version: 1.2.11(zod@3.24.2)
       '@ai-sdk/openai':
         specifier: 1.3.20

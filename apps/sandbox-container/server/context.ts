@@ -8,6 +8,7 @@ export interface Env {
 	MCP_SERVER_NAME: string
 	MCP_SERVER_VERSION: string
 	OPENAI_API_KEY: string
+	ANTHROPIC_KEY: string
 	MCP_OBJECT: DurableObjectNamespace<ContainerMcpAgent>
 	CONTAINER_MANAGER: DurableObjectNamespace<ContainerManager>
 	USER_CONTAINER: DurableObjectNamespace<UserContainer>

@@ -2,7 +2,8 @@
 	"name": "stub-worker",
 	"compatibility_date": "2025-04-14",
 	"vars": {
-		"OPENAI_API_KEY": "TODO"
+		"OPENAI_API_KEY": "TODO",
+		"ANTHROPIC_KEY": "TODO"
 	},
 	"ai": {
 		"binding": "AI"
