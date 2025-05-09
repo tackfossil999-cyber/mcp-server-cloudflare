@@ -1,4 +1,7 @@
+import { createAnthropic } from '@ai-sdk/anthropic'
+import { AnthropicMessagesModelId } from '@ai-sdk/anthropic/internal'
 import { createOpenAI } from '@ai-sdk/openai'
+import { OpenAIChatModelId } from '@ai-sdk/openai/internal'
 import { env } from 'cloudflare:test'
 import { describe } from 'vitest'
 import { createWorkersAI } from 'workers-ai-provider'
@@ -13,12 +16,25 @@ type AiTextGenerationModels = Exclude<
 	value2key<AiModels, BaseAiTextToImage>
 >
 
-function getOpenAiModel(modelName: string) {
+function getOpenAiModel(modelName: OpenAIChatModelId) {
 	if (!env.OPENAI_API_KEY) {
 		throw new Error('No API token set!')
 	}
 	const ai = createOpenAI({
 		apiKey: env.OPENAI_API_KEY,
+	})
+
+	const model = ai(modelName)
+
+	return { modelName, model, ai }
+}
+
+function getAnthropicModel(modelName: AnthropicMessagesModelId) {
+	if (!env.ANTHROPIC_KEY) {
+		throw new Error('No Anthropic key set!')
+	}
+	const ai = createAnthropic({
+		apiKey: env.ANTHROPIC_KEY,
 	})
 
 	const model = ai(modelName)
@@ -40,7 +56,8 @@ function getWorkersAiModel(modelName: AiTextGenerationModels) {
 export const eachModel = describe.each([
 	getOpenAiModel('gpt-4o'),
 	getOpenAiModel('gpt-4o-mini'),
-
+	getAnthropicModel('claude-3-5-sonnet-latest'),
+	getAnthropicModel('claude-3-7-sonnet-latest'),
 	// llama 3 is somewhat inconsistent
 	//getWorkersAiModel("@cf/meta/llama-3.3-70b-instruct-fp8-fast")
 	// Currently llama 4 is having issues with tool calling

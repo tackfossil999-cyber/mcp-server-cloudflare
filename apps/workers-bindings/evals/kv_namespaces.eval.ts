@@ -64,7 +64,6 @@ eachModel('$modelName', ({ model }) => {
 		task: async (input: string) => {
 			const client = await initializeClient(/* Pass necessary mocks/config */)
 			const { promptOutput, toolCalls } = await runTask(client, model, input)
-
 			const toolCall = toolCalls.find(
 				(call) => call.toolName === KV_NAMESPACE_TOOLS.kv_namespace_update
 			)
