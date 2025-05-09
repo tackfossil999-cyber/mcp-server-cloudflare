@@ -56,7 +56,6 @@ function getWorkersAiModel(modelName: AiTextGenerationModels) {
 export const eachModel = describe.each([
 	getOpenAiModel('gpt-4o'),
 	getOpenAiModel('gpt-4o-mini'),
-	getAnthropicModel('claude-3-5-sonnet-latest'),
 	getAnthropicModel('claude-3-7-sonnet-latest'),
 	// llama 3 is somewhat inconsistent
 	//getWorkersAiModel("@cf/meta/llama-3.3-70b-instruct-fp8-fast")
