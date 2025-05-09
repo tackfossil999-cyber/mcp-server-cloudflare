@@ -3,7 +3,9 @@
 	"compatibility_date": "2025-04-14",
 	"vars": {
 		"OPENAI_API_KEY": "TODO",
-		"ANTHROPIC_KEY": "TODO"
+		"AI_GATEWAY_TOKEN": "TODO",
+		"CLOUDFLARE_ACCOUNT_ID": "TODO",
+		"AI_GATEWAY_ID": "TODO"
 	},
 	"ai": {
 		"binding": "AI"
