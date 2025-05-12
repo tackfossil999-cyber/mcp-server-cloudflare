@@ -17,6 +17,7 @@
 		"test:ci": "run-vitest-ci",
 		"test": "vitest run --passWithNoTests",
 		"fix:format": "prettier . --write --cache --ignore-unknown",
+		"fix:deps": "run-fix-deps",
 		"test:watch": "vitest",
 		"eval:ci": "run-turbo eval:ci",
 		"update-deps": "syncpack update"
