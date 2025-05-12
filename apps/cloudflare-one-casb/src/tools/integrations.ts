@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { withAccountCheck } from '@repo/mcp-common/src/api/account'
+import { withAccountCheck } from '@repo/mcp-common/src/api/account.api'
 import {
 	handleAssetById,
 	handleAssetCategories,
@@ -10,7 +10,7 @@ import {
 	handleAssetsSearch,
 	handleIntegrationById,
 	handleIntegrations,
-} from '@repo/mcp-common/src/api/cf1-integration'
+} from '@repo/mcp-common/src/api/cf1-integration.api'
 import {
 	assetCategoryTypeParam,
 	assetCategoryVendorParam,

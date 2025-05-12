@@ -4,7 +4,7 @@ import {
 	handleGetWorkersService,
 	handleWorkerScriptDownload,
 	handleWorkersList,
-} from '../api/workers'
+} from '../api/workers.api'
 import { getCloudflareClient } from '../cloudflare-api'
 import { fmt } from '../format'
 

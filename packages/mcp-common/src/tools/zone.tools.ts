@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { handleZonesList } from '../api/zone'
+import { handleZonesList } from '../api/zone.api'
 import { getCloudflareClient } from '../cloudflare-api'
 import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 

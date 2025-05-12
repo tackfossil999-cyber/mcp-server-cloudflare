@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { handleAccountsList } from '../api/account'
+import { handleAccountsList } from '../api/account.api'
 import { getCloudflareClient } from '../cloudflare-api'
 
 import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'

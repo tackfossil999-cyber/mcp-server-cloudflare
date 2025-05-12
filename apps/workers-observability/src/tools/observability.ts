@@ -4,7 +4,7 @@ import {
 	handleWorkerLogsKeys,
 	handleWorkerLogsValues,
 	queryWorkersObservability,
-} from '@repo/mcp-common/src/api/workers-observability'
+} from '@repo/mcp-common/src/api/workers-observability.api'
 import {
 	zKeysRequest,
 	zQueryRunRequest,
