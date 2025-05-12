@@ -30,6 +30,6 @@ jobs:
           du -h ./apps/sandbox-container/.dev.vars
           du -h ./apps/workers-bindings/.dev.vars
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile --child-concurrency=10
       - name: Run evals
         run: pnpm eval:ci
