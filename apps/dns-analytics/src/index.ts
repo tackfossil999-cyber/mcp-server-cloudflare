@@ -10,8 +10,8 @@ import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-object
 import { getEnv } from '@repo/mcp-common/src/env'
 import { RequiredScopes } from '@repo/mcp-common/src/scopes'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
-import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
-import { registerZoneTools } from '@repo/mcp-common/src/tools/zone'
+import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
+import { registerZoneTools } from '@repo/mcp-common/src/tools/zone.tools'
 
 import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerAnalyticTools } from './tools/analytics'

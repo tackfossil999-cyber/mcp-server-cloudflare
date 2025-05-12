@@ -10,7 +10,7 @@ import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-object
 import { getEnv } from '@repo/mcp-common/src/env'
 import { RequiredScopes } from '@repo/mcp-common/src/scopes'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
-import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
+import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
 
 import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerAIGatewayTools } from './tools/ai-gateway'
