@@ -1,20 +1,12 @@
 {
 	"name": "@cloudflare/mcp-server-cloudflare",
 	"version": "1.0.0",
-	"description": "MCP server for interacting with Cloudflare API",
+	"description": "Monorepo for Cloudflare MCP servers",
 	"license": "Apache-2.0",
 	"author": "Cloudflare, Inc. (https://cloudflare.com)",
 	"homepage": "https://github.com/cloudflare/mcp-server-cloudflare",
 	"bugs": "https://github.com/cloudflare/mcp-server-cloudflare/issues",
 	"type": "module",
-	"main": "dist/index.js",
-	"module": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"files": [
-		"dist",
-		"README.md"
-	],
-	"access": "public",
 	"sideEffects": false,
 	"scripts": {
 		"changeset:new": "run-changeset-new",
