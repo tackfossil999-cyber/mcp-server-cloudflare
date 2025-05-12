@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Syncpack lint
-        run: pnpm syncpack lint
+        run: pnpm check:deps
       - name: Run linter
         run: pnpm check:turbo
       - name: Run linter (formatting)
