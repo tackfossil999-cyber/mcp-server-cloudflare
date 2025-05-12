@@ -1,5 +1,5 @@
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
-import { pollUntilReady } from '@repo/mcp-common/src/utils/poll'
+import { pollUntilReady } from '@repo/mcp-common/src/poll'
 
 import { CreateScanResult, UrlParam } from '../types/url-scanner'
 
