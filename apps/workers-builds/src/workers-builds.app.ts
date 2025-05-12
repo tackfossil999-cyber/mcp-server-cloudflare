@@ -19,7 +19,7 @@ import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerBuildsTools } from './tools/workers-builds.tools'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './workers-builds.context'
 
 export { UserDetails }
 

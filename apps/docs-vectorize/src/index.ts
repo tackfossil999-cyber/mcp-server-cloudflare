@@ -6,7 +6,7 @@ import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 
 import { registerDocsTools } from './tools/docs'
 
-import type { Env } from './context'
+import type { Env } from './docs-vectorize.context'
 
 const env = getEnv<Env>()
 

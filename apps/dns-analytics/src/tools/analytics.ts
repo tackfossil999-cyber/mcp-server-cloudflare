@@ -6,7 +6,7 @@ import { getEnv } from '@repo/mcp-common/src/env'
 import type { AccountGetParams } from 'cloudflare/resources/accounts/accounts.mjs'
 import type { ReportGetParams } from 'cloudflare/resources/dns/analytics.mjs'
 import type { ZoneGetParams } from 'cloudflare/resources/dns/settings.mjs'
-import type { Env } from '../context'
+import type { Env } from '../dns-analytics.context'
 import type { DNSAnalyticsMCP } from '../index'
 
 const env = getEnv<Env>()

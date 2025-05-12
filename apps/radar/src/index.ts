@@ -13,12 +13,12 @@ import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
 import { MetricsTracker } from '@repo/mcp-observability'
 
-import { BASE_INSTRUCTIONS } from './context'
+import { BASE_INSTRUCTIONS } from './radar.context'
 import { registerRadarTools } from './tools/radar'
 import { registerUrlScannerTools } from './tools/url-scanner'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './radar.context'
 
 const env = getEnv<Env>()
 

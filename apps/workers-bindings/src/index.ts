@@ -19,7 +19,7 @@ import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker.tools'
 import { MetricsTracker } from '@repo/mcp-observability'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './bindings.context'
 
 export { UserDetails }
 

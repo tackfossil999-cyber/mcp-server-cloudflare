@@ -16,7 +16,7 @@ import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerAutoRAGTools } from './tools/autorag'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './autorag.context'
 
 const env = getEnv<Env>()
 

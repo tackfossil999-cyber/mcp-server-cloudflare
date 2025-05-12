@@ -16,7 +16,7 @@ import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerIntegrationsTools } from './tools/integrations'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './cf1-casb.context'
 
 export { UserDetails }
 

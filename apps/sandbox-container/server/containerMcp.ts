@@ -6,7 +6,7 @@ import { ExecParams, FilePathParam, FileWrite } from '../shared/schema'
 import { BASE_INSTRUCTIONS } from './prompts'
 import { stripProtocolFromFilePath } from './utils'
 
-import type { Env } from './context'
+import type { Env } from './sandbox.server.context'
 import type { Props, UserContainer } from '.'
 
 export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
@@ -50,7 +50,7 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 
 		this.server.tool(
 			'container_initialize',
-			`Start or restart the container. 
+			`Start or restart the container.
 			Use this tool to initialize a container before running any python or node.js code that the user requests ro run.`,
 			// @ts-ignore
 			async () => {
@@ -77,8 +77,8 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 		)
 		this.server.tool(
 			'container_exec',
-			`Run a command in a container and return the results from stdout. 
-			If necessary, set a timeout. To debug, stream back standard error. 
+			`Run a command in a container and return the results from stdout.
+			If necessary, set a timeout. To debug, stream back standard error.
 			If you're using python, ALWAYS use python3 alongside pip3`,
 			{ args: ExecParams },
 			async ({ args }) => {

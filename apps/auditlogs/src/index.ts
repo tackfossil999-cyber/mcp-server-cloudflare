@@ -16,7 +16,7 @@ import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerAuditLogTools } from './tools/auditlogs'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './auditlogs.context'
 
 const env = getEnv<Env>()
 

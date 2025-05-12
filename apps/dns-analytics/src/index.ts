@@ -17,7 +17,7 @@ import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerAnalyticTools } from './tools/analytics'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './dns-analytics.context'
 
 export { UserDetails }
 

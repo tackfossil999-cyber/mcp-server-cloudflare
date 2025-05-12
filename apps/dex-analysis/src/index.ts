@@ -16,7 +16,7 @@ import { MetricsTracker } from '@repo/mcp-observability'
 import { registerDEXTools } from './tools/dex'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './dex-analysis.context'
 
 export { UserDetails }
 

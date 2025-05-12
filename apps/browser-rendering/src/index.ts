@@ -16,7 +16,7 @@ import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerBrowserTools } from './tools/browser'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './browser.context'
 
 const env = getEnv<Env>()
 
