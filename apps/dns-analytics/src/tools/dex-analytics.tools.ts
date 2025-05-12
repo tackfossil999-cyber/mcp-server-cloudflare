@@ -1,15 +1,11 @@
 import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
-import { getEnv } from '@repo/mcp-common/src/env'
 
 import type { AccountGetParams } from 'cloudflare/resources/accounts/accounts.mjs'
 import type { ReportGetParams } from 'cloudflare/resources/dns/analytics.mjs'
 import type { ZoneGetParams } from 'cloudflare/resources/dns/settings.mjs'
 import type { DNSAnalyticsMCP } from '../dns-analytics.app'
-import type { Env } from '../dns-analytics.context'
-
-const env = getEnv<Env>()
 
 function getStartDate(days: number) {
 	const today = new Date()
