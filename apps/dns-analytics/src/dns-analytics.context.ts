@@ -1,5 +1,5 @@
 import type { UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
-import type { DNSAnalyticsMCP } from './index'
+import type { DNSAnalyticsMCP } from './dns-analytics.app'
 
 export interface Env {
 	OAUTH_KV: KVNamespace

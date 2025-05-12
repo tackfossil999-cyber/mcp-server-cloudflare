@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { fetchCloudflareApi } from '@repo/mcp-common/src/cloudflare-api'
 
-import type { AuditlogMCP } from '../index'
+import type { AuditlogMCP } from '../auditlogs.app'
 
 export const actionResults = z.enum(['success', 'failure', ''])
 export const actionTypes = z.enum(['create', 'delete', 'view', 'update', 'login'])

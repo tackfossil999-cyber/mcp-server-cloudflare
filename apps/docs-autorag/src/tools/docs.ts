@@ -2,7 +2,7 @@ import { type EmbeddedResource } from '@modelcontextprotocol/sdk/types.js'
 import mime from 'mime'
 import { z } from 'zod'
 
-import type { CloudflareDocumentationMCP } from '../index'
+import type { CloudflareDocumentationMCP } from '../docs-autorag.app'
 
 /**
  * Registers the docs search tool with the MCP server
@@ -12,8 +12,8 @@ export function registerDocsTools(agent: CloudflareDocumentationMCP) {
 	// Register the worker logs analysis tool by worker name
 	agent.server.tool(
 		'search_cloudflare_documentation',
-		`Search the Cloudflare documentation. 
-		
+		`Search the Cloudflare documentation.
+
 		You should use this tool when:
 		- A user asks questions about Cloudflare products (Workers, Developer Platform, Zero Trust, CDN, etc)
 		- A user requests information about a Cloudflare feature

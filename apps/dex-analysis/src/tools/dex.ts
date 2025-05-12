@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { fetchDexTestAnalyzation, fetchDexTests } from '../api/dex'
 
-import type { CloudflareDEXMCP } from '../index'
+import type { CloudflareDEXMCP } from '../dex-analysis.app'
 
 // DEX parameter schema
 const dexTestIdParam = z.string().describe('The DEX Test ID to analyze details of.')

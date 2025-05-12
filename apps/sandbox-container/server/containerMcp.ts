@@ -6,8 +6,8 @@ import { ExecParams, FilePathParam, FileWrite } from '../shared/schema'
 import { BASE_INSTRUCTIONS } from './prompts'
 import { stripProtocolFromFilePath } from './utils'
 
+import type { Props, UserContainer } from './sandbox.server.app'
 import type { Env } from './sandbox.server.context'
-import type { Props, UserContainer } from '.'
 
 export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 	_server: CloudflareMCPServer | undefined

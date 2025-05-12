@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
 
-import type { BrowserMCP } from '../index'
+import type { BrowserMCP } from '../browser.app'
 
 export function registerBrowserTools(agent: BrowserMCP) {
 	agent.server.tool(

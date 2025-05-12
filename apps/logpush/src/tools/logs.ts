@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { fetchCloudflareApi } from '@repo/mcp-common/src/cloudflare-api'
 
-import type { LogsMCP } from '../index'
+import type { LogsMCP } from '../logpush.app'
 
 const zJobIdentifier = z.number().int().min(1).optional().describe('Unique id of the job.')
 const zEnabled = z.boolean().optional().describe('Flag that indicates if the job is enabled.')
@@ -104,7 +104,7 @@ export function registerLogsTools(agent: LogsMCP) {
 	agent.server.tool(
 		'logpush_jobs_by_account_id',
 		`All Logpush jobs by Account ID.
-		
+
 		You should use this tool when:
 		- You have questions or wish to request information about their Cloudflare Logpush jobs by account
 		- You want a condensed version for the output results of your account's Cloudflare Logpush job

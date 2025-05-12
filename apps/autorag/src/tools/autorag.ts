@@ -5,7 +5,7 @@ import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
 
 import { pageParam, perPageParam } from '../types'
 
-import type { AutoRAGMCP } from '../index'
+import type { AutoRAGMCP } from '../autorag.app'
 
 import V4PagePaginationArray = Cloudflare.V4PagePaginationArray
 

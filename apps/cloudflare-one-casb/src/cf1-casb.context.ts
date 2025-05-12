@@ -1,4 +1,4 @@
-import type { CASBMCP, UserDetails } from './index'
+import type { CASBMCP, UserDetails } from './cf1-casb.app'
 
 export interface Env {
 	ENVIRONMENT: 'development' | 'staging' | 'production'

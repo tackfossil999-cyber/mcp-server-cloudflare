@@ -3,7 +3,7 @@ import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
 import { GatewayIdParam, ListLogsParams, LogIdParam, pageParam, perPageParam } from '../types'
 
 import type { LogListParams } from 'cloudflare/resources/ai-gateway'
-import type { AIGatewayMCP } from '../index'
+import type { AIGatewayMCP } from '../ai-gateway.app'
 
 export function registerAIGatewayTools(agent: AIGatewayMCP) {
 	agent.server.tool(

@@ -17,7 +17,7 @@ import {
 } from '@repo/mcp-common/src/types/cf1-integrations.types'
 
 import type { ToolDefinition } from '@repo/mcp-common/src/types/tools.types'
-import type { CASBMCP } from '../index'
+import type { CASBMCP } from '../cf1-casb.app'
 
 const PAGE_SIZE = 3
 

@@ -1,4 +1,4 @@
-import type { RadarMCP, UserDetails } from './index'
+import type { RadarMCP, UserDetails } from './radar.app'
 
 export interface Env {
 	OAUTH_KV: KVNamespace

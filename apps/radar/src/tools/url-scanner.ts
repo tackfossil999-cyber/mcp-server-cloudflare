@@ -3,7 +3,7 @@ import { pollUntilReady } from '@repo/mcp-common/src/poll'
 
 import { CreateScanResult, UrlParam } from '../types/url-scanner'
 
-import type { RadarMCP } from '../index'
+import type { RadarMCP } from '../radar.app'
 
 const MAX_WAIT_SECONDS = 30
 const INTERVAL_SECONDS = 2

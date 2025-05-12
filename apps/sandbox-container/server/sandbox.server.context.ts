@@ -1,4 +1,4 @@
-import type { ContainerManager, ContainerMcpAgent, UserContainer } from './index'
+import type { ContainerManager, ContainerMcpAgent, UserContainer } from './sandbox.server.app'
 
 export interface Env {
 	OAUTH_KV: KVNamespace

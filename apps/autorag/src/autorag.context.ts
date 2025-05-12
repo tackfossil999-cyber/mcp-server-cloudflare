@@ -1,5 +1,5 @@
 import type { UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
-import type { AutoRAGMCP } from './index'
+import type { AutoRAGMCP } from './autorag.app'
 
 export interface Env {
 	OAUTH_KV: KVNamespace

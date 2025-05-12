@@ -1,5 +1,5 @@
 import type { UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
-import type { LogsMCP } from './index'
+import type { LogsMCP } from './logpush.app'
 
 export interface Env {
 	OAUTH_KV: KVNamespace

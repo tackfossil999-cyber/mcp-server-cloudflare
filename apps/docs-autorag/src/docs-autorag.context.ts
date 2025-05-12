@@ -1,4 +1,4 @@
-import type { CloudflareDocumentationMCP } from './index'
+import type { CloudflareDocumentationMCP } from './docs-autorag.app'
 
 export interface Env {
 	ENVIRONMENT: 'development' | 'staging' | 'production'

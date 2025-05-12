@@ -1,5 +1,5 @@
 import type { UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
-import type { BrowserMCP } from './index'
+import type { BrowserMCP } from './browser.app'
 
 export interface Env {
 	OAUTH_KV: KVNamespace

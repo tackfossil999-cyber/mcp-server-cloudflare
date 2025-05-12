@@ -1,7 +1,10 @@
 import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
-import { PaginationLimitParam, PaginationOffsetParam } from '@repo/mcp-common/src/types/shared.types'
+import {
+	PaginationLimitParam,
+	PaginationOffsetParam,
+} from '@repo/mcp-common/src/types/shared.types'
 
 import {
 	AiDimensionParam,
@@ -35,7 +38,7 @@ import {
 } from '../types/radar'
 import { resolveAndInvoke } from '../utils'
 
-import type { RadarMCP } from '../index'
+import type { RadarMCP } from '../radar.app'
 
 export function registerRadarTools(agent: RadarMCP) {
 	agent.server.tool(

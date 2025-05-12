@@ -11,7 +11,7 @@ import {
 	zValuesRequest,
 } from '@repo/mcp-common/src/types/workers-logs.types'
 
-import type { ObservabilityMCP } from '../index'
+import type { ObservabilityMCP } from '../workers-observability.app'
 
 /**
  * Registers the logs analysis tool with the MCP server

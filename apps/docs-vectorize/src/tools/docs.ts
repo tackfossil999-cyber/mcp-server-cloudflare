@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import type { CloudflareDocumentationMCP } from '../index'
+import type { CloudflareDocumentationMCP } from '../docs-vectorize.app'
 
 // Always return 10 results for simplicity, don't make it configurable
 const TOP_K = 10
