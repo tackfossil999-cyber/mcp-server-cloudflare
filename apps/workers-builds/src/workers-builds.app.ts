@@ -6,7 +6,7 @@ import {
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import { handleDevMode } from '@repo/mcp-common/src/dev-mode'
-import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
+import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
 import { getEnv } from '@repo/mcp-common/src/env'
 import { fmt } from '@repo/mcp-common/src/format'
 import { RequiredScopes } from '@repo/mcp-common/src/scopes'

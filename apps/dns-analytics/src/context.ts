@@ -1,4 +1,4 @@
-import type { UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
+import type { UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
 import type { DNSAnalyticsMCP } from './index'
 
 export interface Env {
