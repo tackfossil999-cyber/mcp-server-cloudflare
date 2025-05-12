@@ -9,7 +9,7 @@ import {
 	zKeysRequest,
 	zQueryRunRequest,
 	zValuesRequest,
-} from '@repo/mcp-common/src/types/workers-logs-schemas'
+} from '@repo/mcp-common/src/types/workers-logs.types'
 
 import type { ObservabilityMCP } from '../index'
 

@@ -1,5 +1,5 @@
 import { fetchCloudflareApi } from '../cloudflare-api'
-import { WorkersService } from '../types/workers'
+import { WorkersService } from '../types/workers.types'
 import { V4Schema } from '../v4-api'
 
 import type { Cloudflare } from 'cloudflare'

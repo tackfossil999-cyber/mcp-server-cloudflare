@@ -1,7 +1,7 @@
 import type { Cloudflare } from 'cloudflare'
 import type { Account } from 'cloudflare/resources/accounts/accounts.mjs'
-import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent'
-import type { ToolHandler } from '../types/tools'
+import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
+import type { ToolHandler } from '../types/tools.types'
 
 export async function handleAccountsList({ client }: { client: Cloudflare }): Promise<Account[]> {
 	// Currently limited to 50 accounts

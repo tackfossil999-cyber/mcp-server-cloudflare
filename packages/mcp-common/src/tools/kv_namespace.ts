@@ -1,11 +1,11 @@
 import { getCloudflareClient } from '../cloudflare-api'
 import { MISSING_ACCOUNT_ID_RESPONSE } from '../constants'
-import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent'
+import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 import {
 	KvNamespaceIdSchema,
 	KvNamespacesListParamsSchema,
 	KvNamespaceTitleSchema,
-} from '../types/kv_namespace'
+} from '../types/kv_namespace.types'
 
 export const KV_NAMESPACE_TOOLS = {
 	kv_namespaces_list: 'kv_namespaces_list',
@@ -22,7 +22,7 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 	agent.server.tool(
 		KV_NAMESPACE_TOOLS.kv_namespaces_list,
 		`
-			List all of the kv namespaces in your Cloudflare account. 
+			List all of the kv namespaces in your Cloudflare account.
 			Use this tool when you need to list all of the kv namespaces in your Cloudflare account.
 			Returns a list of kv namespaces with the following properties:
 			- id: The id of the kv namespace.

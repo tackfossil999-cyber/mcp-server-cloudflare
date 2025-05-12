@@ -4,10 +4,10 @@ import {
 	GetBuildResult,
 	ListBuildsByScriptResult,
 	ListBuildsByScriptResultInfo,
-} from '../types/workers-builds.schema'
+} from '../types/workers-builds.types'
 import { V4Schema } from '../v4-api'
 
-import type { LogLine } from '../types/workers-builds.schema'
+import type { LogLine } from '../types/workers-builds.types'
 
 export async function listBuilds({
 	accountId,

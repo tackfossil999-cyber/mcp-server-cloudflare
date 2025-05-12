@@ -2,14 +2,14 @@ import { z } from 'zod'
 
 import { getCloudflareClient } from '../cloudflare-api'
 import { MISSING_ACCOUNT_ID_RESPONSE } from '../constants'
-import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent'
+import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 import {
 	D1DatabaseNameParam,
 	D1DatabasePrimaryLocationHintParam,
 	D1DatabaseQueryParamsParam,
 	D1DatabaseQuerySqlParam,
-} from '../types/d1'
-import { PaginationPageParam, PaginationPerPageParam } from '../types/shared'
+} from '../types/d1.types'
+import { PaginationPageParam, PaginationPerPageParam } from '../types/shared.types'
 
 export function registerD1Tools(agent: CloudflareMcpAgent) {
 	agent.server.tool(

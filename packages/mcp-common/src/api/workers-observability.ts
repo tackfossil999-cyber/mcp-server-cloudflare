@@ -5,11 +5,11 @@ import {
 	zKeysResponse,
 	zReturnedQueryRunResult,
 	zValuesResponse,
-} from '../types/workers-logs-schemas'
+} from '../types/workers-logs.types'
 import { V4Schema } from '../v4-api'
 
 import type { z } from 'zod'
-import type { zKeysRequest, zQueryRunRequest, zValuesRequest } from '../types/workers-logs-schemas'
+import type { zKeysRequest, zQueryRunRequest, zValuesRequest } from '../types/workers-logs.types'
 
 type QueryRunRequest = z.infer<typeof zQueryRunRequest>
 

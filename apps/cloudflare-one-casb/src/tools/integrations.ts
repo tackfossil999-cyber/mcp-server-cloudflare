@@ -14,9 +14,9 @@ import {
 import {
 	assetCategoryTypeParam,
 	assetCategoryVendorParam,
-} from '@repo/mcp-common/src/schemas/cf1-integrations'
+} from '@repo/mcp-common/src/types/cf1-integrations.types'
 
-import type { ToolDefinition } from '@repo/mcp-common/src/types/tools'
+import type { ToolDefinition } from '@repo/mcp-common/src/types/tools.types'
 import type { CASBMCP } from '../index'
 
 const PAGE_SIZE = 3

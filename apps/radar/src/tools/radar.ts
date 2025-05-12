@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
-import { PaginationLimitParam, PaginationOffsetParam } from '@repo/mcp-common/src/types/shared'
+import { PaginationLimitParam, PaginationOffsetParam } from '@repo/mcp-common/src/types/shared.types'
 
 import {
 	AiDimensionParam,

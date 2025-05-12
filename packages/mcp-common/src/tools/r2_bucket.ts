@@ -1,14 +1,14 @@
 import { getCloudflareClient } from '../cloudflare-api'
 import { MISSING_ACCOUNT_ID_RESPONSE } from '../constants'
-import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent'
+import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 import {
 	BucketListCursorParam,
 	BucketListDirectionParam,
 	BucketListNameContainsParam,
 	BucketListStartAfterParam,
 	BucketNameSchema,
-} from '../types/r2_bucket'
-import { PaginationPerPageParam } from '../types/shared'
+} from '../types/r2_bucket.types'
+import { PaginationPerPageParam } from '../types/shared.types'
 
 export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	agent.server.tool(

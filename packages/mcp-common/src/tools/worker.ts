@@ -8,7 +8,7 @@ import {
 import { getCloudflareClient } from '../cloudflare-api'
 import { fmt } from '../format'
 
-import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent'
+import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 
 /**
  * Registers the workers tools with the MCP server

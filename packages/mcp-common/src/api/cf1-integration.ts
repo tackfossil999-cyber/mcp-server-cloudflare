@@ -5,7 +5,7 @@ import {
 	AssetsResponse,
 	IntegrationResponse,
 	IntegrationsResponse,
-} from '../schemas/cf1-integrations'
+} from '../types/cf1-integrations.types'
 import { V4Schema } from '../v4-api'
 
 import type { z } from 'zod'
@@ -14,7 +14,7 @@ import type {
 	zReturnedAssetsResult,
 	zReturnedIntegrationResult,
 	zReturnedIntegrationsResult,
-} from '../schemas/cf1-integrations'
+} from '../types/cf1-integrations.types'
 
 interface BaseParams {
 	accountId: string

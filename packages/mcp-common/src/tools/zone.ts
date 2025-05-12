@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { handleZonesList } from '../api/zone'
 import { getCloudflareClient } from '../cloudflare-api'
-import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent'
+import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 
 export function registerZoneTools(agent: CloudflareMcpAgent) {
 	// Tool to list all zones under an account

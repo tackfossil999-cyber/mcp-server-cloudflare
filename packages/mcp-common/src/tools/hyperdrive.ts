@@ -1,6 +1,6 @@
 import { getCloudflareClient } from '../cloudflare-api'
 import { MISSING_ACCOUNT_ID_RESPONSE } from '../constants'
-import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent'
+import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 import {
 	HyperdriveCachingDisabledSchema,
 	HyperdriveCachingMaxAgeSchema,
@@ -17,7 +17,7 @@ import {
 	HyperdriveOriginPortSchema,
 	HyperdriveOriginSchemeSchema,
 	HyperdriveOriginUserSchema,
-} from '../types/hyperdrive'
+} from '../types/hyperdrive.types'
 
 export const HYPERDRIVE_TOOLS = {
 	hyperdrive_configs_list: 'hyperdrive_configs_list',
