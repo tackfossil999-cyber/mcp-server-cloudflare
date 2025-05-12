@@ -13,7 +13,7 @@ import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
 
 import { MetricsTracker } from '../../../packages/mcp-observability/src'
-import { registerIntegrationsTools } from './tools/integrations'
+import { registerIntegrationsTools } from './tools/integrations.tools'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import type { Env } from './cf1-casb.context'

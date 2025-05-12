@@ -14,7 +14,7 @@ import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
 import { registerZoneTools } from '@repo/mcp-common/src/tools/zone.tools'
 
 import { MetricsTracker } from '../../../packages/mcp-observability/src'
-import { registerAnalyticTools } from './tools/analytics'
+import { registerAnalyticTools } from './tools/dex-analytics.tools'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import type { Env } from './dns-analytics.context'

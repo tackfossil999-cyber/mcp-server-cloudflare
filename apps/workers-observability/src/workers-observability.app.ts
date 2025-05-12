@@ -15,7 +15,7 @@ import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
 import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker.tools'
 
 import { MetricsTracker } from '../../../packages/mcp-observability/src'
-import { registerObservabilityTools } from './tools/observability'
+import { registerObservabilityTools } from './tools/workers-observability.tools'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import type { Env } from './workers-observability.context'

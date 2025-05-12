@@ -13,7 +13,7 @@ import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
 import { MetricsTracker } from '@repo/mcp-observability'
 
-import { registerDEXTools } from './tools/dex'
+import { registerDEXTools } from './tools/dex-analysis.tools'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import type { Env } from './dex-analysis.context'

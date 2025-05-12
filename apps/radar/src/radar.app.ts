@@ -14,8 +14,8 @@ import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
 import { MetricsTracker } from '@repo/mcp-observability'
 
 import { BASE_INSTRUCTIONS } from './radar.context'
-import { registerRadarTools } from './tools/radar'
-import { registerUrlScannerTools } from './tools/url-scanner'
+import { registerRadarTools } from './tools/radar.tools'
+import { registerUrlScannerTools } from './tools/url-scanner.tools'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import type { Env } from './radar.context'
