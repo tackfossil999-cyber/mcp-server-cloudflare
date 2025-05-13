@@ -17,6 +17,7 @@
 			"dependsOn": ["^check:types"]
 		},
 		"check:lint": {
+			"env": ["GITHUB_ACTIONS"],
 			"dependsOn": ["^check:lint"]
 		},
 		"eval:ci": {
