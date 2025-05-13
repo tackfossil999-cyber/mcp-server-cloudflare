@@ -6,20 +6,20 @@ import {
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import { handleDevMode } from '@repo/mcp-common/src/dev-mode'
-import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
+import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
 import { getEnv } from '@repo/mcp-common/src/env'
 import { fmt } from '@repo/mcp-common/src/format'
 import { RequiredScopes } from '@repo/mcp-common/src/scopes'
 import { initSentryWithUser } from '@repo/mcp-common/src/sentry'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
-import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
-import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker'
+import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
+import { registerWorkersTools } from '@repo/mcp-common/src/tools/worker.tools'
 
 import { MetricsTracker } from '../../../packages/mcp-observability/src'
 import { registerBuildsTools } from './tools/workers-builds.tools'
 
 import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { Env } from './workers-builds.context'
 
 export { UserDetails }
 
