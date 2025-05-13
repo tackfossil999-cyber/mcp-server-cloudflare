@@ -1,5 +1,4 @@
-import type { UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
-import type { GraphQLMCP } from './index'
+import type { GraphQLMCP, UserDetails } from './graphql.app'
 
 export interface Env {
 	OAUTH_KV: KVNamespace
@@ -15,4 +14,7 @@ export interface Env {
 	SENTRY_ACCESS_CLIENT_SECRET: string
 	GIT_HASH: string
 	SENTRY_DSN: string
+	DEV_DISABLE_OAUTH: string
+	DEV_CLOUDFLARE_API_TOKEN: string
+	DEV_CLOUDFLARE_EMAIL: string
 }

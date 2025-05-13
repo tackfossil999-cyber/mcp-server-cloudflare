@@ -1,23 +1,23 @@
 {
-	"name": "graphql",
-	"version": "0.0.0",
+	"name": "graphql-mcp-server",
+	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"check:lint": "run-eslint-workers",
 		"check:types": "run-tsc",
-		"deploy": "wrangler deploy",
+		"deploy": "run-wrangler-deploy",
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
-		"cf-typegen": "wrangler types",
+		"types": "wrangler types --include-env=false",
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@cloudflare/workers-oauth-provider": "0.0.3",
+		"@cloudflare/workers-oauth-provider": "0.0.5",
 		"@hono/zod-validator": "0.4.3",
-		"@modelcontextprotocol/sdk": "1.9.0",
+		"@modelcontextprotocol/sdk": "1.10.2",
 		"@repo/mcp-common": "workspace:*",
 		"@repo/mcp-observability": "workspace:*",
-		"agents": "0.0.62",
+		"agents": "0.0.67",
 		"cloudflare": "4.2.0",
 		"hono": "4.7.6",
 		"zod": "3.24.2",
@@ -25,7 +25,6 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.8.14",
-		"@cloudflare/workers-types": "4.20250410.0",
 		"@types/node": "^22.15.0",
 		"prettier": "3.5.3",
 		"typescript": "5.5.4",

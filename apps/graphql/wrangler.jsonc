@@ -4,13 +4,13 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"main": "src/index.ts",
+	"main": "src/graphql.app.ts",
 	"compatibility_date": "2025-03-10",
 	"compatibility_flags": ["nodejs_compat"],
 	"name": "mcp-cloudflare-graphql-dev",
 	"migrations": [
 		{
-			"new_sqlite_classes": ["UserDetails", "GraphQLMCP"],
+			"new_sqlite_classes": ["GraphQLMCP"],
 			"tag": "v1"
 		}
 	],

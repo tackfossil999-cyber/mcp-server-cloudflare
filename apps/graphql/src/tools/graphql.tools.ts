@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import * as LZString from 'lz-string'
 
-import type { GraphQLMCP } from '../index'
+import type { GraphQLMCP } from '../graphql.app'
 
 // GraphQL API endpoint
 const CLOUDFLARE_GRAPHQL_ENDPOINT = 'https://api.cloudflare.com/client/v4/graphql'
@@ -62,6 +62,23 @@ interface TypeDetailsResponse {
 		__type: GraphQLType
 	}
 }
+
+// Define the structure of a single error
+const graphQLErrorSchema = z.object({
+	message: z.string(),
+	path: z.array(z.union([z.string(), z.number()])),
+	extensions: z.object({
+		code: z.string(),
+		timestamp: z.string(),
+		ray_id: z.string(),
+	}),
+});
+  
+// Define the overall GraphQL response schema
+const graphQLResponseSchema = z.object({
+	data: z.union([z.record(z.unknown()), z.null()]),
+	errors: z.union([z.array(graphQLErrorSchema), z.null()]),
+});
 
 /**
  * Fetches the high-level overview of the GraphQL schema
@@ -179,7 +196,7 @@ async function executeGraphQLRequest<T>(query: string, apiToken: string): Promis
 		throw new Error(`Failed to execute GraphQL request: ${response.statusText}`)
 	}
 
-	const data = (await response.json()) as any
+	const data = graphQLResponseSchema.parse(await response.json())
 
 	// Check for GraphQL errors in the response
 	if (data && data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
@@ -222,7 +239,7 @@ async function executeGraphQLQuery(query: string, variables: any, apiToken: stri
 		throw new Error(`Failed to execute GraphQL query: ${response.statusText}`)
 	}
 
-	const result = (await response.json()) as any
+	const result = graphQLResponseSchema.parse(await response.json())
 
 	// Check for GraphQL errors in the response
 	if (result && result.errors && Array.isArray(result.errors) && result.errors.length > 0) {

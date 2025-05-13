@@ -5,18 +5,20 @@ import {
 	createAuthHandlers,
 	handleTokenExchangeCallback,
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details'
+import { handleDevMode } from '@repo/mcp-common/src/dev-mode'
+import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
 import { getEnv } from '@repo/mcp-common/src/env'
+import { RequiredScopes } from '@repo/mcp-common/src/scopes'
 import { initSentryWithUser } from '@repo/mcp-common/src/sentry'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
-import { registerAccountTools } from '@repo/mcp-common/src/tools/account'
-import { registerZoneTools } from '@repo/mcp-common/src/tools/zone'
+import { registerAccountTools } from '@repo/mcp-common/src/tools/account.tools'
+import { registerZoneTools } from '@repo/mcp-common/src/tools/zone.tools'
 import { MetricsTracker } from '@repo/mcp-observability'
 
-import { registerGraphQLTools } from './tools/graphql'
+import { registerGraphQLTools } from './tools/graphql.tools'
 
-import type { AccountSchema, UserSchema } from '@repo/mcp-common/src/cloudflare-oauth-handler'
-import type { Env } from './context'
+import type { AuthProps } from '@repo/mcp-common/src/cloudflare-oauth-handler'
+import type { Env } from './graphql.context'
 
 export { UserDetails }
 
@@ -29,13 +31,8 @@ const metrics = new MetricsTracker(env.MCP_METRICS, {
 
 // Context from the auth process, encrypted & stored in the auth token
 // and provided to the DurableMCP as this.props
-export type Props = {
-	accessToken: string
-	user: UserSchema['result']
-	accounts: AccountSchema['result']
-}
-
-export type State = { activeAccountId: string | null }
+type Props = AuthProps
+type State = { activeAccountId: string | null }
 
 export class GraphQLMCP extends McpAgent<Env, State, Props> {
 	_server: CloudflareMCPServer | undefined
@@ -49,10 +46,6 @@ export class GraphQLMCP extends McpAgent<Env, State, Props> {
 		}
 
 		return this._server
-	}
-
-	initialState: State = {
-		activeAccountId: null,
 	}
 
 	constructor(ctx: DurableObjectState, env: Env) {
@@ -103,23 +96,35 @@ export class GraphQLMCP extends McpAgent<Env, State, Props> {
 }
 
 const GraphQLScopes = {
+	...RequiredScopes,
 	'account:read': 'See your account info such as account details, analytics, and memberships.',
-	'user:read': 'See your user info such as name, email address, and account memberships.',
 	'zone:read': 'See zone data such as settings, analytics, and DNS records.',
-	offline_access: 'Grants refresh tokens for long-lived access.',
 } as const
 
-export default new OAuthProvider({
-	apiRoute: '/sse',
-	// @ts-ignore
-	apiHandler: GraphQLMCP.mount('/sse'),
-	// @ts-ignore
-	defaultHandler: createAuthHandlers({ scopes: GraphQLScopes, metrics }),
-	authorizeEndpoint: '/oauth/authorize',
-	tokenEndpoint: '/token',
-	tokenExchangeCallback: (options) =>
-		handleTokenExchangeCallback(options, env.CLOUDFLARE_CLIENT_ID, env.CLOUDFLARE_CLIENT_SECRET),
-	// Cloudflare access token TTL
-	accessTokenTTL: 3600,
-	clientRegistrationEndpoint: '/register',
-})
+export default {
+	fetch: async (req: Request, env: Env, ctx: ExecutionContext) => {
+		if (env.ENVIRONMENT === 'development' && env.DEV_DISABLE_OAUTH === 'true') {
+			return await handleDevMode(GraphQLMCP, req, env, ctx)
+		}
+
+		return new OAuthProvider({
+			apiHandlers: {
+				'/mcp': GraphQLMCP.serve('/mcp'),
+				'/sse': GraphQLMCP.serveSSE('/sse'),
+			},
+			// @ts-ignore
+			defaultHandler: createAuthHandlers({ scopes: GraphQLScopes, metrics }),
+			authorizeEndpoint: '/oauth/authorize',
+			tokenEndpoint: '/token',
+			tokenExchangeCallback: (options) =>
+				handleTokenExchangeCallback(
+					options,
+					env.CLOUDFLARE_CLIENT_ID,
+					env.CLOUDFLARE_CLIENT_SECRET
+			),
+			// Cloudflare access token TTL
+			accessTokenTTL: 3600,
+			clientRegistrationEndpoint: '/register',
+		}).fetch(req, env, ctx)
+	}
+}
