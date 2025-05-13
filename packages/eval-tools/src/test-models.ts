@@ -85,7 +85,7 @@ export const eachModel = describe.each([
 	getOpenAiModel('gpt-4o'),
 	getOpenAiModel('gpt-4o-mini'),
 	getAnthropicModel('claude-3-5-sonnet-20241022'),
-	getGeminiModel('gemini-2.5-pro-exp-03-25')
+	getGeminiModel('gemini-2.0-flash')
 	// llama 3 is somewhat inconsistent
 	//getWorkersAiModel("@cf/meta/llama-3.3-70b-instruct-fp8-fast")
 	// Currently llama 4 is having issues with tool calling
