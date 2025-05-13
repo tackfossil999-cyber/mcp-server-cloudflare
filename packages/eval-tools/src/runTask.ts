@@ -61,7 +61,7 @@ export async function runTask(
 	// convert into an LLM readable result so our factuality checker can validate tool calls
 	let messagesWithTools = ''
 	const toolCalls: ToolCallPart[] = []
-	const response = res.response;
+	const response = res.response
 	const messages = response.messages
 
 	for (const message of messages) {

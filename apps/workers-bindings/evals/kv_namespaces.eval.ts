@@ -54,8 +54,7 @@ eachModel('$modelName', ({ model }) => {
 	describeEval('Rename Cloudflare KV Namespace', {
 		data: async () => [
 			{
-				input:
-					'Rename my Cloudflare KV Namespace with ID 1234 to "my-new-test-namespace".',
+				input: 'Rename my Cloudflare KV Namespace with ID 1234 to "my-new-test-namespace".',
 				expected: `The ${KV_NAMESPACE_TOOLS.kv_namespace_update} tool should be called to rename the kv namespace.`,
 			},
 		],
