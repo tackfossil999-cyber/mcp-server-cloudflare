@@ -84,7 +84,7 @@ function getWorkersAiModel(modelName: AiTextGenerationModels) {
 export const eachModel = describe.each([
 	getOpenAiModel('gpt-4o'),
 	getOpenAiModel('gpt-4o-mini'),
-	getAnthropicModel('claude-3-5-sonnet-20241022'),
+	// getAnthropicModel('claude-3-5-sonnet-20241022'), TODO: The evals pass with anthropic, but our rate limit is so low with AI wholesaling that we can't use it in CI because it's impossible to get a complete run with the current limits
 	getGeminiModel('gemini-2.0-flash')
 	// llama 3 is somewhat inconsistent
 	//getWorkersAiModel("@cf/meta/llama-3.3-70b-instruct-fp8-fast")
