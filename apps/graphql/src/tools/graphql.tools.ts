@@ -1011,9 +1011,6 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 				const compressedQuery = LZString.compressToEncodedURIComponent(query)
 				const compressedVariables = LZString.compressToEncodedURIComponent(JSON.stringify(variables))
 				const explorerUrl = `https://graphql.cloudflare.com/explorer?query=${compressedQuery}&variables=${compressedVariables}`
-				
-				// Add the explorer URL to the result
-				result.explorerUrl = explorerUrl
 
 				// Check if the response is too large (MCP server will fail if > 1MB)
 				const resultString = JSON.stringify(result)
