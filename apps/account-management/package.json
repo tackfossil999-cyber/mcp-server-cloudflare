@@ -1,5 +1,5 @@
 {
-	"name": "cloudflare-browser-mcp-server",
+	"name": "cloudflare-account-management-mcp-server",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {

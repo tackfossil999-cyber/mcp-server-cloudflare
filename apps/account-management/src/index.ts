@@ -61,7 +61,6 @@ export class AccountManagementMCP extends McpAgent<Env, State, Props> {
 
 		registerAccountTools(this)
 
-		// Register Cloudflare Log Push tools
 		registerAccountManagementTools(this)
 	}
 
