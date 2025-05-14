@@ -572,8 +572,8 @@ importers:
         specifier: 0.8.14
         version: 0.8.14(@cloudflare/workers-types@4.20250416.0)(@vitest/runner@3.0.9)(@vitest/snapshot@3.0.9)(vitest@3.0.9)
       '@types/node':
-        specifier: ^22.15.0
-        version: 22.15.17
+        specifier: 22.14.1
+        version: 22.14.1
       prettier:
         specifier: 3.5.3
         version: 3.5.3
@@ -582,7 +582,7 @@ importers:
         version: 5.5.4
       vitest:
         specifier: 3.0.9
-        version: 3.0.9(@types/node@22.15.17)(@vitest/ui@3.0.9)(lightningcss@1.29.2)(tsx@4.19.3)
+        version: 3.0.9(@types/node@22.14.1)(@vitest/ui@3.0.9)(lightningcss@1.29.2)(tsx@4.19.3)
       wrangler:
         specifier: 4.10.0
         version: 4.10.0(@cloudflare/workers-types@4.20250416.0)
@@ -5324,13 +5324,13 @@ snapshots:
 
   '@types/mock-fs@4.13.4':
     dependencies:
-      '@types/node': 22.15.17
+      '@types/node': 22.14.1
 
   '@types/ms@2.1.0': {}
 
   '@types/node-fetch@2.6.12':
     dependencies:
-      '@types/node': 22.15.17
+      '@types/node': 22.14.1
       form-data: 4.0.2
 
   '@types/node@12.20.55': {}
@@ -5346,6 +5346,7 @@ snapshots:
   '@types/node@22.15.17':
     dependencies:
       undici-types: 6.21.0
+    optional: true
 
   '@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4)':
     dependencies:
