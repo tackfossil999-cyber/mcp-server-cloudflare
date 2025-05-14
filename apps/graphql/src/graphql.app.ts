@@ -121,10 +121,10 @@ export default {
 					options,
 					env.CLOUDFLARE_CLIENT_ID,
 					env.CLOUDFLARE_CLIENT_SECRET
-			),
+				),
 			// Cloudflare access token TTL
 			accessTokenTTL: 3600,
 			clientRegistrationEndpoint: '/register',
 		}).fetch(req, env, ctx)
-	}
+	},
 }

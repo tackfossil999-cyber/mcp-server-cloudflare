@@ -7,14 +7,14 @@ connections, with Cloudflare OAuth built-in. It integrates tools powered by the 
 
 Currently available tools:
 
-| **Category**           | **Tool**                        | **Description**                                                                                                      |
-| ---------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **GraphQL Schema Search** | `graphql_schema_search` | Search the Cloudflare GraphQL API schema for types, fields, and enum values matching a keyword |
-| **GraphQL Schema Overview** | `graphql_schema_overview` | Fetch the high-level overview of the Cloudflare GraphQL API schema |
-| **GraphQL Type Details** | `graphql_type_details` | Fetch detailed information about a specific GraphQL type |
-| **GraphQL Complete Schema** | `graphql_complete_schema` | Fetch the complete Cloudflare GraphQL API schema (combines overview and important type details)|
-| **GraphQL Query Execution** | `graphql_query` | Execute a GraphQL query against the Cloudflare API |
-| **GraphQL API Explorer** | `graphql_api_explorer` | Generate a Cloudflare [GraphQL API Explorer](https://graphql.cloudflare.com/explorer) link |
+| **Category**                | **Tool**                  | **Description**                                                                                 |
+| --------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------- |
+| **GraphQL Schema Search**   | `graphql_schema_search`   | Search the Cloudflare GraphQL API schema for types, fields, and enum values matching a keyword  |
+| **GraphQL Schema Overview** | `graphql_schema_overview` | Fetch the high-level overview of the Cloudflare GraphQL API schema                              |
+| **GraphQL Type Details**    | `graphql_type_details`    | Fetch detailed information about a specific GraphQL type                                        |
+| **GraphQL Complete Schema** | `graphql_complete_schema` | Fetch the complete Cloudflare GraphQL API schema (combines overview and important type details) |
+| **GraphQL Query Execution** | `graphql_query`           | Execute a GraphQL query against the Cloudflare API                                              |
+| **GraphQL API Explorer**    | `graphql_api_explorer`    | Generate a Cloudflare [GraphQL API Explorer](https://graphql.cloudflare.com/explorer) link      |
 
 ### Prompt Examples
 

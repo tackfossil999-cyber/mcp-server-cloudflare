@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import * as LZString from 'lz-string'
+import { z } from 'zod'
 
 import type { GraphQLMCP } from '../graphql.app'
 
@@ -72,13 +72,13 @@ const graphQLErrorSchema = z.object({
 		timestamp: z.string(),
 		ray_id: z.string(),
 	}),
-});
-  
+})
+
 // Define the overall GraphQL response schema
 const graphQLResponseSchema = z.object({
 	data: z.union([z.record(z.unknown()), z.null()]),
 	errors: z.union([z.array(graphQLErrorSchema), z.null()]),
-});
+})
 
 /**
  * Fetches the high-level overview of the GraphQL schema
@@ -1009,7 +1009,9 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 
 				// Generate GraphQL API Explorer link for this query
 				const compressedQuery = LZString.compressToEncodedURIComponent(query)
-				const compressedVariables = LZString.compressToEncodedURIComponent(JSON.stringify(variables))
+				const compressedVariables = LZString.compressToEncodedURIComponent(
+					JSON.stringify(variables)
+				)
 				const explorerUrl = `https://graphql.cloudflare.com/explorer?query=${compressedQuery}&variables=${compressedVariables}`
 
 				// Check if the response is too large (MCP server will fail if > 1MB)
@@ -1075,21 +1077,23 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 		async (params) => {
 			try {
 				const { query, variables = {} } = params
-				
+
 				// Compress the query and variables using lz-string
 				const compressedQuery = LZString.compressToEncodedURIComponent(query)
-				const compressedVariables = LZString.compressToEncodedURIComponent(JSON.stringify(variables))
-				
+				const compressedVariables = LZString.compressToEncodedURIComponent(
+					JSON.stringify(variables)
+				)
+
 				// Generate the GraphQL API Explorer URL
 				const explorerUrl = `https://graphql.cloudflare.com/explorer?query=${compressedQuery}&variables=${compressedVariables}`
-				
+
 				return {
 					content: [
 						{
 							type: 'text',
-							text: `**[Open in GraphQL Explorer](${explorerUrl})**\n\nYou can click the link above to open the Cloudflare GraphQL API Explorer with your query pre-populated.\n\n**Query:**\n\`\`\`graphql\n${query}\n\`\`\`\n\n${Object.keys(variables).length > 0 ? `**Variables:**\n\`\`\`json\n${JSON.stringify(variables, null, 2)}\n\`\`\`\n` : ''}`
-						}
-					]
+							text: `**[Open in GraphQL Explorer](${explorerUrl})**\n\nYou can click the link above to open the Cloudflare GraphQL API Explorer with your query pre-populated.\n\n**Query:**\n\`\`\`graphql\n${query}\n\`\`\`\n\n${Object.keys(variables).length > 0 ? `**Variables:**\n\`\`\`json\n${JSON.stringify(variables, null, 2)}\n\`\`\`\n` : ''}`,
+						},
+					],
 				}
 			} catch (error) {
 				return {
@@ -1097,10 +1101,10 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 						{
 							type: 'text',
 							text: JSON.stringify({
-								error: `Error generating GraphQL API Explorer link: ${error instanceof Error ? error.message : String(error)}`
-							})
-						}
-					]
+								error: `Error generating GraphQL API Explorer link: ${error instanceof Error ? error.message : String(error)}`,
+							}),
+						},
+					],
 				}
 			}
 		}
