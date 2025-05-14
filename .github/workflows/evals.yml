@@ -2,23 +2,19 @@ name: Evals
 on:
   push:
 
+env:
+  FORCE_COLOR: 1
+
 jobs:
   eval:
+    name: Eval
     runs-on: ubuntu-24.04
-    strategy:
-      matrix:
-        node-version: [22]
+    permissions:
+      contents: read
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.8.0
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+      - uses: ./.github/actions/setup
       - name: Create .dev.vars file
         run: |
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > ./apps/sandbox-container/.dev.vars
@@ -29,7 +25,5 @@ jobs:
         run: |
           du -h ./apps/sandbox-container/.dev.vars
           du -h ./apps/workers-bindings/.dev.vars
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --child-concurrency=10
       - name: Run evals
         run: pnpm eval:ci

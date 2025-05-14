@@ -1,26 +1,27 @@
-name: Test and check
+name: Branches
 on:
   push:
+    branches-ignore: ['main']
+
+env:
+  FORCE_COLOR: 1
 
 jobs:
   test:
+    name: Test & Check
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 10
     strategy:
       matrix:
         node-version: [20, 22]
     steps:
       - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.8.0
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --child-concurrency=10
+
       - name: Syncpack lint
         run: pnpm check:deps
       - name: Run linter
@@ -29,3 +30,4 @@ jobs:
         run: pnpm check:format
       - name: Run tests
         run: pnpm test
+
