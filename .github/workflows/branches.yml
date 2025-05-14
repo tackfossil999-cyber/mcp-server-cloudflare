@@ -31,3 +31,15 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+  build-workers:
+    name: Build Workers
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Build Workers
+        run: pnpm turbo deploy -- -e staging --dry-run
