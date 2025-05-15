@@ -1,4 +1,4 @@
-import Cloudflare from 'cloudflare'
+import { V4PagePaginationArray } from 'cloudflare/src/pagination.js'
 import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
@@ -6,8 +6,6 @@ import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
 import { pageParam, perPageParam } from '../types'
 
 import type { AutoRAGMCP } from '../autorag.app'
-
-import V4PagePaginationArray = Cloudflare.V4PagePaginationArray
 
 export function registerAutoRAGTools(agent: AutoRAGMCP) {
 	agent.server.tool(
@@ -33,6 +31,7 @@ export function registerAutoRAGTools(agent: AutoRAGMCP) {
 				const client = getCloudflareClient(agent.props.accessToken)
 				const r = (await client.getAPIList(
 					`/accounts/${accountId}/autorag/rags`,
+					// @ts-ignore
 					V4PagePaginationArray,
 					{ query: { page: params.page, per_page: params.per_page } }
 				)) as unknown as {
