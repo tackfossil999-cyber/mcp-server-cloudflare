@@ -53,11 +53,6 @@ export async function runTask(
 		maxSteps: 10,
 	})
 
-	// we need to consume the fill stream, so this is empty
-	// eslint-disable-next-line no-empty
-	// for await (const _ of res.fullStream) {
-	// }
-
 	// convert into an LLM readable result so our factuality checker can validate tool calls
 	let messagesWithTools = ''
 	const toolCalls: ToolCallPart[] = []

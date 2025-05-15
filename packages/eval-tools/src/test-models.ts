@@ -20,23 +20,26 @@ type AiTextGenerationModels = Exclude<
 >
 
 function getOpenAiModel(modelName: OpenAIChatModelId) {
-	if (!env.OPENAI_API_KEY) {
-		throw new Error('No API token set!')
+	if (!env.CLOUDFLARE_ACCOUNT_ID || !env.AI_GATEWAY_ID || !env.AI_GATEWAY_TOKEN) {
+		throw new Error('No AI gateway credentials set!')
 	}
-	const ai = createOpenAI({
-		apiKey: env.OPENAI_API_KEY,
+
+	const aigateway = createAiGateway({
+		accountId: env.CLOUDFLARE_ACCOUNT_ID,
+		gateway: env.AI_GATEWAY_ID,
+		apiKey: env.AI_GATEWAY_TOKEN,
 	})
 
-	const model = ai(modelName)
+	const ai = createOpenAI({
+		apiKey: '',
+	})
+
+	const model = aigateway([ai(modelName)])
 
 	return { modelName, model, ai }
 }
 
 function getAnthropicModel(modelName: AnthropicMessagesModelId) {
-	if (!env.CLOUDFLARE_ACCOUNT_ID || !env.AI_GATEWAY_ID || !env.AI_GATEWAY_TOKEN) {
-		throw new Error('No AI gateway credentials set!')
-	}
-
 	const aigateway = createAiGateway({
 		accountId: env.CLOUDFLARE_ACCOUNT_ID,
 		gateway: env.AI_GATEWAY_ID,
@@ -90,6 +93,4 @@ export const eachModel = describe.each([
 	//getWorkersAiModel("@cf/meta/llama-3.3-70b-instruct-fp8-fast")
 	// Currently llama 4 is having issues with tool calling
 	//getWorkersAiModel("@cf/meta/llama-4-scout-17b-16e-instruct")
-
-	// TODO: add Claude, Gemini, new OpenAI models via AI gateway
 ])
