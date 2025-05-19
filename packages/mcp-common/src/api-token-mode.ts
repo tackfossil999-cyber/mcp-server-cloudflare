@@ -16,13 +16,16 @@ export async function isApiTokenRequest(req: Request, env: RequiredEnv) {
 	}
 
 	const authHeader = req.headers.get('Authorization')
+	console.log(authHeader)
 	if (!authHeader) return false
 
 	const [type, token] = authHeader.split(' ')
 	if (type !== 'Bearer') return false
 
-	// Return true only if the token doesn't start with 'token:'
-	return !token.startsWith('token:')
+	// Return true only if the token was issued by the OAuthProvider.
+	// A token provisioned by the OAuthProvider has 3 parts, split by colons.
+	const codeParts = token.split(':')
+	return codeParts.length !== 3
 }
 
 export async function handleApiTokenMode<
