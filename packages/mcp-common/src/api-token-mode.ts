@@ -16,7 +16,6 @@ export async function isApiTokenRequest(req: Request, env: RequiredEnv) {
 	}
 
 	const authHeader = req.headers.get('Authorization')
-	console.log(authHeader)
 	if (!authHeader) return false
 
 	const [type, token] = authHeader.split(' ')
