@@ -45,6 +45,14 @@ If your client does not yet support remote MCP servers, you will need to set up 
 }
 ```
 
+## Using Cloudflare's MCP servers from the OpenAI Responses API
+
+To use one of Cloudflare's MCP servers with [OpenAI's responses API](https://openai.com/index/new-tools-and-features-in-the-responses-api/), you will need to provide the Responses API with a **user** API token (not an Account API token) that has the scopes (permissions) required for that particular MCP server.
+
+For example, to use the [Browser Rendering MCP server](https://github.com/cloudflare/mcp-server-cloudflare/tree/main/apps/browser-rendering) with OpenAI, create a user API token in the Cloudflare dashboard [here](https://dash.cloudflare.com/profile/api-tokens), with the following permissions:
+
+<img width="937" alt="Screenshot 2025-05-21 at 10 38 02 AM" src="https://github.com/user-attachments/assets/872e253f-23ce-43b3-983c-45f9d0f66100" />
+
 ## Need access to more Cloudflare tools?
 
 We're continuing to add more functionality to this remote MCP server repo. If you'd like to leave feedback, file a bug or provide a feature request, [please open an issue](https://github.com/cloudflare/mcp-server-cloudflare/issues/new/choose) on this repository
