@@ -1,6 +1,6 @@
 {
 	"name": "docs-vectorize",
-	"version": "0.0.4",
+	"version": "0.1.0",
 	"private": true,
 	"scripts": {
 		"check:lint": "run-eslint-workers",
@@ -14,10 +14,10 @@
 	"dependencies": {
 		"@cloudflare/workers-oauth-provider": "0.0.5",
 		"@hono/zod-validator": "0.4.3",
-		"@modelcontextprotocol/sdk": "1.10.2",
+		"@modelcontextprotocol/sdk": "1.11.3",
 		"@repo/mcp-common": "workspace:*",
 		"@repo/mcp-observability": "workspace:*",
-		"agents": "0.0.67",
+		"agents": "0.0.89",
 		"cloudflare": "4.2.0",
 		"hono": "4.7.6",
 		"mime": "4.0.6",

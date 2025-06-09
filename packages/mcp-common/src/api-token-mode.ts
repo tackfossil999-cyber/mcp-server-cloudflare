@@ -58,10 +58,23 @@ export async function handleApiTokenMode<
 	}
 
 	const { user, accounts } = await getUserAndAccounts(token, opts)
-	ctx.props = {
-		accessToken: token,
-		user,
-		accounts,
-	} as AuthProps
+
+	// If user is null, handle API token mode
+	if (user === null) {
+		ctx.props = {
+			type: 'account_token',
+			accessToken: token,
+			// we always select the first account from the response,
+			// this assumes that account owned tokens can only access one account
+			account: accounts[0],
+		} satisfies AuthProps
+	} else {
+		ctx.props = {
+			type: 'user_token',
+			accessToken: token,
+			user,
+			accounts,
+		} satisfies AuthProps
+	}
 	return agent.mount('/sse').fetch(req, env, ctx)
 }

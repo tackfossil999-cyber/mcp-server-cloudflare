@@ -6,6 +6,7 @@ import { AuthUser } from '../../mcp-observability/src'
 import { getAuthorizationURL, getAuthToken, refreshAuthToken } from './cloudflare-auth'
 import { McpError } from './mcp-error'
 import { useSentry } from './sentry'
+import { V4Schema } from './v4-api'
 
 import type {
 	OAuthHelpers,
@@ -35,50 +36,53 @@ const AuthRequestSchema = z.object({
 })
 
 // AuthRequest but with extra params that we use in our authentication logic
-export const AuthRequestSchemaWithExtraParams = AuthRequestSchema.merge(
+const AuthRequestSchemaWithExtraParams = AuthRequestSchema.merge(
 	z.object({ codeVerifier: z.string() })
 )
 
-export const AuthQuery = z.object({
+const AuthQuery = z.object({
 	code: z.string().describe('OAuth code from CF dash'),
 	state: z.string().describe('Value of the OAuth state'),
 	scope: z.string().describe('OAuth scopes granted'),
 })
 
-export type UserSchema = z.infer<typeof UserResponseSchema>
-const UserResponseSchema = z.object({
-	result: z.object({
-		id: z.string(),
-		email: z.string(),
-	}),
+type UserSchema = z.infer<typeof UserSchema>
+const UserSchema = z.object({
+	id: z.string(),
+	email: z.string(),
 })
-
-export type AccountSchema = z.infer<typeof AccountResponseSchema>
-const AccountResponseSchema = z.object({
-	result: z.array(
-		z.object({
-			name: z.string(),
-			id: z.string(),
-		})
-	),
+const AccountSchema = z.object({
+	name: z.string(),
+	id: z.string(),
 })
+type AccountsSchema = z.infer<typeof AccountsSchema>
+const AccountsSchema = z.array(AccountSchema)
 
-export type AuthProps = {
-	accessToken: string
-	user: UserSchema['result']
-	accounts: AccountSchema['result']
-}
+const AccountAuthProps = z.object({
+	type: z.literal('account_token'),
+	accessToken: z.string(),
+	account: AccountSchema,
+})
+const UserAuthProps = z.object({
+	type: z.literal('user_token'),
+	accessToken: z.string(),
+	user: UserSchema,
+	accounts: AccountsSchema,
+})
+export type AuthProps = z.infer<typeof AuthProps>
+const AuthProps = z.discriminatedUnion('type', [AccountAuthProps, UserAuthProps])
 
 export async function getUserAndAccounts(
 	accessToken: string,
 	devModeHeaders?: HeadersInit
-): Promise<{ user: UserSchema['result']; accounts: AccountSchema['result'] }> {
+): Promise<{ user: UserSchema | null; accounts: AccountsSchema }> {
 	const headers = devModeHeaders
 		? devModeHeaders
 		: {
 				Authorization: `Bearer ${accessToken}`,
 			}
 
+	// Fetch the user & accounts info from Cloudflare
 	const [userResponse, accountsResponse] = await Promise.all([
 		fetch('https://api.cloudflare.com/client/v4/user', {
 			headers,
@@ -88,22 +92,32 @@ export async function getUserAndAccounts(
 		}),
 	])
 
-	if (!userResponse.ok) {
-		console.log(await userResponse.text())
+	const { result: user } = V4Schema(UserSchema).parse(await userResponse.json())
+	const { result: accounts } = V4Schema(AccountsSchema).parse(await accountsResponse.json())
+	if (!user || !userResponse.ok) {
+		// If accounts is present, then assume that we have an account scoped token
+		if (accounts !== null) {
+			return { user: null, accounts }
+		}
+		console.log(user)
 		throw new McpError('Failed to fetch user', 500, { reportToSentry: true })
 	}
-	if (!accountsResponse.ok) {
-		console.log(await accountsResponse.text())
+	if (!accounts || !accountsResponse.ok) {
+		console.log(accounts)
 		throw new McpError('Failed to fetch accounts', 500, { reportToSentry: true })
 	}
-
-	// Fetch the user & accounts info from Cloudflare
-	const { result: user } = UserResponseSchema.parse(await userResponse.json())
-	const { result: accounts } = AccountResponseSchema.parse(await accountsResponse.json())
 
 	return { user, accounts }
 }
 
+/**
+ * Exchanges an OAuth authorization code for access and refresh tokens, then fetches user and account details.
+ *
+ * @param c - Hono context containing OAuth environment variables (client ID/secret)
+ * @param code - OAuth authorization code received from the authorization server
+ * @param code_verifier - PKCE code verifier used to validate the authorization request
+ * @returns Promise resolving to an object containing access token, refresh token, user profile, and accounts
+ */
 async function getTokenAndUserDetails(
 	c: Context<AuthContext>,
 	code: string,
@@ -111,8 +125,8 @@ async function getTokenAndUserDetails(
 ): Promise<{
 	accessToken: string
 	refreshToken: string
-	user: UserSchema['result']
-	accounts: AccountSchema['result']
+	user: UserSchema
+	accounts: AccountsSchema
 }> {
 	// Exchange the code for an access token
 	const { access_token: accessToken, refresh_token: refreshToken } = await getAuthToken({
@@ -124,6 +138,10 @@ async function getTokenAndUserDetails(
 	})
 
 	const { user, accounts } = await getUserAndAccounts(accessToken)
+	// User cannot be null for OAuth flow
+	if (user === null) {
+		throw new McpError('Failed to fetch user', 500, { reportToSentry: true })
+	}
 
 	return { accessToken, refreshToken, user, accounts }
 }

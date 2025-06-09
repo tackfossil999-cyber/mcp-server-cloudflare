@@ -53,14 +53,21 @@ export class GraphQLMCP extends McpAgent<Env, State, Props> {
 	}
 
 	async init() {
+		// TODO: Probably we'll want to track account tokens usage through an account identifier at some point
+		const userId = this.props.type === 'user_token' ? this.props.user.id : undefined
+		const sentry =
+			this.props.type === 'user_token'
+				? initSentryWithUser(env, this.ctx, this.props.user.id)
+				: undefined
+
 		this.server = new CloudflareMCPServer({
-			userId: this.props.user.id,
+			userId,
 			wae: this.env.MCP_METRICS,
 			serverInfo: {
 				name: this.env.MCP_SERVER_NAME,
 				version: this.env.MCP_SERVER_VERSION,
 			},
-			sentry: initSentryWithUser(env, this.ctx, this.props.user.id),
+			sentry,
 		})
 
 		// Register account tools
@@ -75,6 +82,10 @@ export class GraphQLMCP extends McpAgent<Env, State, Props> {
 
 	async getActiveAccountId() {
 		try {
+			// account tokens are scoped to one account
+			if (this.props.type === 'account_token') {
+				return this.props.account.id
+			}
 			// Get UserDetails Durable Object based off the userId and retrieve the activeAccountId from it
 			// we do this so we can persist activeAccountId across sessions
 			const userDetails = getUserDetails(env, this.props.user.id)
@@ -87,6 +98,10 @@ export class GraphQLMCP extends McpAgent<Env, State, Props> {
 
 	async setActiveAccountId(accountId: string) {
 		try {
+			// account tokens are scoped to one account
+			if (this.props.type === 'account_token') {
+				return
+			}
 			const userDetails = getUserDetails(env, this.props.user.id)
 			await userDetails.setActiveAccountId(accountId)
 		} catch (e) {

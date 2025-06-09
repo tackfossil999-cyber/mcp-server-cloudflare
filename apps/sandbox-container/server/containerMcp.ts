@@ -24,6 +24,10 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 	}
 
 	get userContainer(): DurableObjectStub<UserContainer> {
+		// TODO: Support account scoped tokens?
+		if (this.props.type === 'account_token') {
+			throw new Error('Container server does not currently support account scoped tokens')
+		}
 		const userContainer = this.env.USER_CONTAINER.idFromName(this.props.user.id)
 		return this.env.USER_CONTAINER.get(userContainer)
 	}
@@ -37,9 +41,11 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 	}
 
 	async init() {
-		this.props.user.id
+		// TODO: Probably we'll want to track account tokens usage through an account identifier at some point
+		const userId = this.props.type === 'user_token' ? this.props.user.id : undefined
+
 		this.server = new CloudflareMCPServer({
-			userId: this.props.user.id,
+			userId,
 			wae: this.env.MCP_METRICS,
 			serverInfo: {
 				name: this.env.MCP_SERVER_NAME,
@@ -52,8 +58,20 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 			'container_initialize',
 			`Start or restart the container.
 			Use this tool to initialize a container before running any python or node.js code that the user requests ro run.`,
-			// @ts-ignore
 			async () => {
+				if (this.props.type === 'account_token') {
+					return {
+						// TODO: Support account scoped tokens?
+						// we'll need to add support for an account blocklist in that case
+						content: [
+							{
+								type: 'text',
+								text: 'Container server does not currently support account scoped tokens.',
+							},
+						],
+					}
+				}
+
 				const userInBlocklist = await this.env.USER_BLOCKLIST.get(this.props.user.id)
 				if (userInBlocklist) {
 					return {

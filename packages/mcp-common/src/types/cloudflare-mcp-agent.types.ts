@@ -1,16 +1,11 @@
 import { type McpAgent } from 'agents/mcp'
 
-import { type AccountSchema, type UserSchema } from '../cloudflare-oauth-handler'
-
+import type { AuthProps } from '../cloudflare-oauth-handler'
 import type { CloudflareMCPServer } from '../server'
 
 export type CloudflareMCPAgentState = { activeAccountId: string | null }
 
-export type CloudflareMCPAgentProps = {
-	accessToken: string
-	user: UserSchema['result']
-	accounts: AccountSchema['result']
-}
+export type CloudflareMCPAgentProps = AuthProps
 
 // We omit server in this type, so that we can later use our own CloudflareMCPServer type ( which extends McpServer )
 type McpAgentWithoutServer<EnvType = unknown> = Omit<
