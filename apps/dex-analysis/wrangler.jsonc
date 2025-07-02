@@ -35,7 +35,9 @@
 		}
 	],
 	"vars": {
-		"ENVIRONMENT": "development"
+		"ENVIRONMENT": "development",
+		"MCP_SERVER_NAME": "PLACEHOLDER",
+		"MCP_SERVER_VERSION": "PLACEHOLDER"
 	},
 	"dev": {
 		"port": 8976

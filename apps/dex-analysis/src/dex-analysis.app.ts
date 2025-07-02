@@ -101,7 +101,8 @@ export class CloudflareDEXMCP extends McpAgent<Env, State, Props> {
 const DexScopes = {
 	...RequiredScopes,
 	'account:read': 'See your account info such as account details, analytics, and memberships.',
-	'dex:read': 'See Cloudflare Cloudflare DEX data for your account',
+	'dex:write':
+		'Grants write level access to DEX resources like tests, fleet status, and remote captures.',
 } as const
 
 export default {
