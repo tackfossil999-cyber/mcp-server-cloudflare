@@ -43,6 +43,12 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 			order: HyperdriveListParamOrderSchema.nullable(),
 			direction: HyperdriveListParamDirectionSchema.nullable(),
 		},
+		{
+			title: 'List Hyperdrive configs',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async ({ page, per_page, order, direction }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -164,6 +170,13 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 		{
 			hyperdrive_id: HyperdriveConfigIdSchema,
 		},
+		{
+			title: 'Delete Hyperdrive config',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: true,
+			},
+		},
 		async ({ hyperdrive_id }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -201,6 +214,12 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 		'Get details of a specific Hyperdrive configuration in your Cloudflare account',
 		{
 			hyperdrive_id: HyperdriveConfigIdSchema,
+		},
+		{
+			title: 'Get Hyperdrive config',
+			annotations: {
+				readOnlyHint: true,
+			},
 		},
 		async ({ hyperdrive_id }) => {
 			const account_id = await agent.getActiveAccountId()
@@ -251,6 +270,13 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 			caching_max_age: HyperdriveCachingMaxAgeSchema.optional().nullable(),
 			caching_stale_while_revalidate:
 				HyperdriveCachingStaleWhileRevalidateSchema.optional().nullable(),
+		},
+		{
+			title: 'Edit Hyperdrive config',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: false,
+			},
 		},
 		async ({
 			hyperdrive_id,

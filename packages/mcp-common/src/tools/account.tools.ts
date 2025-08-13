@@ -7,7 +7,17 @@ import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 
 export function registerAccountTools(agent: CloudflareMcpAgent) {
 	// Tool to list all accounts
-	agent.server.tool('accounts_list', 'List all accounts in your Cloudflare account', async () => {
+	agent.server.tool(
+		'accounts_list', 
+		'List all accounts in your Cloudflare account',
+		{},
+		{
+			title: 'List accounts',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
+		async () => {
 		try {
 			const results = await handleAccountsList({
 				client: getCloudflareClient(agent.props.accessToken),
@@ -66,6 +76,13 @@ export function registerAccountTools(agent: CloudflareMcpAgent) {
 			'Set active account to be used for tool calls that require accountId',
 			{
 				activeAccountIdParam,
+			},
+			{
+				title: 'Set active account',
+				annotations: {
+					readOnlyHint: false,
+					destructiveHint: false,
+				},
 			},
 			async (params) => {
 				try {

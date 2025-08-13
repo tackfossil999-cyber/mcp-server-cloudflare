@@ -30,6 +30,12 @@ export function registerDocsTools(agent: CloudflareMcpAgentNoAccount, env: Requi
 		{
 			query: z.string(),
 		},
+		{
+			title: 'Search Cloudflare docs',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async ({ query }) => {
 			const results = await queryVectorize(env.AI, env.VECTORIZE, query, TOP_K)
 			const resultsAsXml = results
@@ -53,6 +59,13 @@ ${result.text}
 	agent.server.tool(
 		'migrate_pages_to_workers_guide',
 		`ALWAYS read this guide before migrating Pages projects to Workers.`,
+		{},
+		{
+			title: 'Get Pages migration guide',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async () => {
 			const res = await fetch(
 				'https://developers.cloudflare.com/workers/prompts/pages-to-workers.txt',

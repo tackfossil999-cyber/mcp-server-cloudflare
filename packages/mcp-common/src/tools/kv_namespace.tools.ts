@@ -29,6 +29,12 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 			- title: The title of the kv namespace.
 			`,
 		{ params: KvNamespacesListParamsSchema.optional() },
+		{
+			title: 'List KV namespaces',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async ({ params }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -80,6 +86,13 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 		{
 			title: KvNamespaceTitleSchema,
 		},
+		{
+			title: 'Create KV namespace',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: false,
+			},
+		},
 		async ({ title }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -117,6 +130,13 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 		'Delete a kv namespace in your Cloudflare account',
 		{
 			namespace_id: KvNamespaceIdSchema,
+		},
+		{
+			title: 'Delete KV namespace',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: true,
+			},
 		},
 		async ({ namespace_id }) => {
 			const account_id = await agent.getActiveAccountId()
@@ -163,6 +183,12 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 		{
 			namespace_id: KvNamespaceIdSchema,
 		},
+		{
+			title: 'Get KV namespace',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async ({ namespace_id }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -201,6 +227,13 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 		{
 			namespace_id: KvNamespaceIdSchema,
 			title: KvNamespaceTitleSchema,
+		},
+		{
+			title: 'Update KV namespace',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: false,
+			},
 		},
 		async ({ namespace_id, title }) => {
 			const account_id = await agent.getActiveAccountId()

@@ -23,6 +23,13 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 	// Tool to list all workers
 	agent.server.tool(
 		'workers_list',
+		{
+			title: 'List Workers',
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+			},
+		},
 		fmt.trim(`
 			List all Workers in your Cloudflare account.
 
@@ -90,6 +97,13 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 	// Tool to get a specific worker's script details
 	agent.server.tool(
 		'workers_get_worker',
+		{
+			title: 'Get Worker details',
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+			},
+		},
 		'Get the details of the Cloudflare Worker.',
 		{
 			scriptName: workerNameParam,
@@ -156,6 +170,13 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 	// Tool to get a specific worker's script content
 	agent.server.tool(
 		'workers_get_worker_code',
+		{
+			title: 'Get Worker code',
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+			},
+		},
 		'Get the source code of a Cloudflare Worker. Note: This may be a bundled version of the worker.',
 		{ scriptName: workerNameParam },
 		async (params) => {

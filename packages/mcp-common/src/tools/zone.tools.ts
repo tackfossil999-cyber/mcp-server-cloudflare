@@ -8,6 +8,13 @@ export function registerZoneTools(agent: CloudflareMcpAgent) {
 	// Tool to list all zones under an account
 	agent.server.tool(
 		'zones_list',
+		{
+			title: 'List zones',
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+			},
+		},
 		'List all zones under a Cloudflare account',
 		{
 			name: z.string().optional().describe('Filter zones by name'),
@@ -80,6 +87,13 @@ export function registerZoneTools(agent: CloudflareMcpAgent) {
 	// Tool to get zone details by ID
 	agent.server.tool(
 		'zone_details',
+		{
+			title: 'Get zone details',
+			annotations: {
+				readOnlyHint: true,
+				destructiveHint: false,
+			},
+		},
 		'Get details for a specific Cloudflare zone',
 		{
 			zoneId: z.string().describe('The ID of the zone to get details for'),

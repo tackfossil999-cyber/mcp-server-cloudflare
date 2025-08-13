@@ -20,6 +20,12 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 			page: PaginationPageParam,
 			per_page: PaginationPerPageParam,
 		},
+		{
+			title: 'List D1 databases',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async ({ name, page, per_page }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -65,6 +71,13 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 			name: D1DatabaseNameParam,
 			primary_location_hint: D1DatabasePrimaryLocationHintParam.nullable().optional(),
 		},
+		{
+			title: 'Create D1 database',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: false,
+			},
+		},
 		async ({ name, primary_location_hint }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -103,6 +116,13 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 		'd1_database_delete',
 		'Delete a d1 database in your Cloudflare account',
 		{ database_id: z.string() },
+		{
+			title: 'Delete D1 database',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: true,
+			},
+		},
 		async ({ database_id }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -138,6 +158,12 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 		'd1_database_get',
 		'Get a D1 database in your Cloudflare account',
 		{ database_id: z.string() },
+		{
+			title: 'Get D1 database',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async ({ database_id }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -177,6 +203,13 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 			database_id: z.string(),
 			sql: D1DatabaseQuerySqlParam,
 			params: D1DatabaseQueryParamsParam.nullable(),
+		},
+		{
+			title: 'Query D1 database',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: false,
+			},
 		},
 		async ({ database_id, sql, params }) => {
 			const account_id = await agent.getActiveAccountId()

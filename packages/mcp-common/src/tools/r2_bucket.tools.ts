@@ -21,6 +21,12 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 			per_page: PaginationPerPageParam,
 			start_after: BucketListStartAfterParam,
 		},
+		{
+			title: 'List R2 buckets',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async ({ cursor, direction, name_contains, per_page, start_after }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -65,6 +71,13 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 		'r2_bucket_create',
 		'Create a new r2 bucket in your Cloudflare account',
 		{ name: BucketNameSchema },
+		{
+			title: 'Create R2 bucket',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: false,
+			},
+		},
 		async ({ name }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -101,6 +114,12 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 		'r2_bucket_get',
 		'Get details about a specific R2 bucket',
 		{ name: BucketNameSchema },
+		{
+			title: 'Get R2 bucket',
+			annotations: {
+				readOnlyHint: true,
+			},
+		},
 		async ({ name }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
@@ -134,6 +153,13 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 		'r2_bucket_delete',
 		'Delete an R2 bucket',
 		{ name: BucketNameSchema },
+		{
+			title: 'Delete R2 bucket',
+			annotations: {
+				readOnlyHint: false,
+				destructiveHint: true,
+			},
+		},
 		async ({ name }) => {
 			const account_id = await agent.getActiveAccountId()
 			if (!account_id) {
