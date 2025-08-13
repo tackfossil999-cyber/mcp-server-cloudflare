@@ -15,10 +15,10 @@
 	"dependencies": {
 		"@cloudflare/workers-oauth-provider": "0.0.5",
 		"@hono/zod-validator": "0.4.3",
-		"@modelcontextprotocol/sdk": "1.13.3",
+		"@modelcontextprotocol/sdk": "1.17.2",
 		"@repo/mcp-common": "workspace:*",
 		"@repo/mcp-observability": "workspace:*",
-		"agents": "0.0.100",
+		"agents": "0.0.113",
 		"cloudflare": "4.2.0",
 		"hono": "4.7.6",
 		"jszip": "3.10.1",
