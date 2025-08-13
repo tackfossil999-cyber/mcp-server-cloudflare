@@ -23,6 +23,12 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 	// Tool to list all workers
 	agent.server.tool(
 		'workers_list',
+		fmt.trim(`
+			List all Workers in your Cloudflare account.
+
+			If you only need details of a single Worker, use workers_get_worker.
+		`),
+		{},
 		{
 			title: 'List Workers',
 			annotations: {
@@ -30,11 +36,6 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 				destructiveHint: false,
 			},
 		},
-		fmt.trim(`
-			List all Workers in your Cloudflare account.
-
-			If you only need details of a single Worker, use workers_get_worker.
-		`),
 		async () => {
 			const accountId = await agent.getActiveAccountId()
 			if (!accountId) {
@@ -97,16 +98,16 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 	// Tool to get a specific worker's script details
 	agent.server.tool(
 		'workers_get_worker',
+		'Get the details of the Cloudflare Worker.',
+		{
+			scriptName: workerNameParam,
+		},
 		{
 			title: 'Get Worker details',
 			annotations: {
 				readOnlyHint: true,
 				destructiveHint: false,
 			},
-		},
-		'Get the details of the Cloudflare Worker.',
-		{
-			scriptName: workerNameParam,
 		},
 		async (params) => {
 			const accountId = await agent.getActiveAccountId()
@@ -170,6 +171,8 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 	// Tool to get a specific worker's script content
 	agent.server.tool(
 		'workers_get_worker_code',
+		'Get the source code of a Cloudflare Worker. Note: This may be a bundled version of the worker.',
+		{ scriptName: workerNameParam },
 		{
 			title: 'Get Worker code',
 			annotations: {
@@ -177,8 +180,6 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 				destructiveHint: false,
 			},
 		},
-		'Get the source code of a Cloudflare Worker. Note: This may be a bundled version of the worker.',
-		{ scriptName: workerNameParam },
 		async (params) => {
 			const accountId = await agent.getActiveAccountId()
 			if (!accountId) {
