@@ -64,7 +64,8 @@
 				]
 			},
 			"vars": {
-				"ENVIRONMENT": "staging"
+				"ENVIRONMENT": "staging",
+				"SENTRY_DSN": "https://d3ffa014f0daa57b27a174476bc2573f@sentry10.cfdata.org/2090"
 			},
 			"ai": {
 				"binding": "AI"
@@ -95,7 +96,8 @@
 				]
 			},
 			"vars": {
-				"ENVIRONMENT": "production"
+				"ENVIRONMENT": "production",
+				"SENTRY_DSN": "https://d3ffa014f0daa57b27a174476bc2573f@sentry10.cfdata.org/2090"
 			},
 			"ai": {
 				"binding": "AI"

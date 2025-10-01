@@ -11,10 +11,10 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@modelcontextprotocol/sdk": "1.17.2",
+		"@modelcontextprotocol/sdk": "1.18.2",
 		"@repo/mcp-common": "workspace:*",
 		"@repo/mcp-observability": "workspace:*",
-		"agents": "0.0.113",
+		"agents": "0.2.7",
 		"zod": "3.24.2"
 	},
 	"devDependencies": {
