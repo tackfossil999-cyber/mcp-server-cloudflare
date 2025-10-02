@@ -1,5 +1,6 @@
 import { getCloudflareClient } from '../cloudflare-api'
 import { MISSING_ACCOUNT_ID_RESPONSE } from '../constants'
+import { getProps } from '../get-props'
 import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 import {
 	HyperdriveCachingDisabledSchema,
@@ -55,7 +56,8 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const response = await client.hyperdrive.configs.list({
 					account_id,
 					...(page && { page }),
@@ -133,7 +135,7 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 	// 			if (caching_stale_while_revalidate !== undefined)
 	// 				caching.stale_while_revalidate = caching_stale_while_revalidate
 
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const hyperdriveConfig = await client.hyperdrive.configs.create({
 	// 				account_id,
 	// 				name,
@@ -183,7 +185,8 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				await client.hyperdrive.configs.delete(hyperdrive_id, { account_id })
 				return {
 					content: [
@@ -227,7 +230,8 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const hyperdriveConfig = await client.hyperdrive.configs.get(hyperdrive_id, {
 					account_id,
 				})
@@ -295,6 +299,7 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
+				const props = getProps(agent)
 				const originPatch: Record<string, any> = {}
 				if (database) originPatch.database = database
 				if (host) originPatch.host = host
@@ -324,7 +329,7 @@ export function registerHyperdriveTools(agent: CloudflareMcpAgent) {
 					}
 				}
 
-				const client = getCloudflareClient(agent.props.accessToken)
+				const client = getCloudflareClient(props.accessToken)
 				const updatedConfig = await client.hyperdrive.configs.edit(hyperdrive_id, {
 					account_id,
 					...editData,

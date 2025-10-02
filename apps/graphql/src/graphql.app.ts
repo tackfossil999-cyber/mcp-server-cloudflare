@@ -8,6 +8,7 @@ import {
 } from '@repo/mcp-common/src/cloudflare-oauth-handler'
 import { getUserDetails, UserDetails } from '@repo/mcp-common/src/durable-objects/user_details.do'
 import { getEnv } from '@repo/mcp-common/src/env'
+import { getProps } from '@repo/mcp-common/src/get-props'
 import { RequiredScopes } from '@repo/mcp-common/src/scopes'
 import { initSentryWithUser } from '@repo/mcp-common/src/sentry'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
@@ -54,11 +55,10 @@ export class GraphQLMCP extends McpAgent<Env, State, Props> {
 
 	async init() {
 		// TODO: Probably we'll want to track account tokens usage through an account identifier at some point
-		const userId = this.props.type === 'user_token' ? this.props.user.id : undefined
+		const props = getProps(this)
+		const userId = props.type === 'user_token' ? props.user.id : undefined
 		const sentry =
-			this.props.type === 'user_token'
-				? initSentryWithUser(env, this.ctx, this.props.user.id)
-				: undefined
+			props.type === 'user_token' ? initSentryWithUser(env, this.ctx, props.user.id) : undefined
 
 		this.server = new CloudflareMCPServer({
 			userId,
@@ -82,13 +82,14 @@ export class GraphQLMCP extends McpAgent<Env, State, Props> {
 
 	async getActiveAccountId() {
 		try {
+			const props = getProps(this)
 			// account tokens are scoped to one account
-			if (this.props.type === 'account_token') {
-				return this.props.account.id
+			if (props.type === 'account_token') {
+				return props.account.id
 			}
 			// Get UserDetails Durable Object based off the userId and retrieve the activeAccountId from it
 			// we do this so we can persist activeAccountId across sessions
-			const userDetails = getUserDetails(env, this.props.user.id)
+			const userDetails = getUserDetails(env, props.user.id)
 			return await userDetails.getActiveAccountId()
 		} catch (e) {
 			this.server.recordError(e)
@@ -98,11 +99,12 @@ export class GraphQLMCP extends McpAgent<Env, State, Props> {
 
 	async setActiveAccountId(accountId: string) {
 		try {
+			const props = getProps(this)
 			// account tokens are scoped to one account
-			if (this.props.type === 'account_token') {
+			if (props.type === 'account_token') {
 				return
 			}
-			const userDetails = getUserDetails(env, this.props.user.id)
+			const userDetails = getUserDetails(env, props.user.id)
 			await userDetails.setActiveAccountId(accountId)
 		} catch (e) {
 			this.server.recordError(e)

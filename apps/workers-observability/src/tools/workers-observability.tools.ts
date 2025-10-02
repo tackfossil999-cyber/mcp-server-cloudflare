@@ -5,6 +5,7 @@ import {
 	handleWorkerLogsValues,
 	queryWorkersObservability,
 } from '@repo/mcp-common/src/api/workers-observability.api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 import {
 	zKeysRequest,
 	zQueryRunRequest,
@@ -61,7 +62,8 @@ This tool provides three primary views of your Worker data:
 				}
 			}
 			try {
-				const response = await queryWorkersObservability(agent.props.accessToken, accountId, query)
+				const props = getProps(agent)
+				const response = await queryWorkersObservability(props.accessToken, accountId, query)
 
 				if (query.view === 'calculations') {
 					let data = ''
@@ -205,7 +207,8 @@ This tool provides three primary views of your Worker data:
 				}
 			}
 			try {
-				const result = await handleWorkerLogsKeys(agent.props.accessToken, accountId, keysQuery)
+				const props = getProps(agent)
+				const result = await handleWorkerLogsKeys(props.accessToken, accountId, keysQuery)
 
 				const tsv = await writeToString(
 					result.map((key) => ({ type: key.type, key: key.key })),
@@ -255,7 +258,8 @@ This tool provides three primary views of your Worker data:
 				}
 			}
 			try {
-				const result = await handleWorkerLogsValues(agent.props.accessToken, accountId, valuesQuery)
+				const props = getProps(agent)
+				const result = await handleWorkerLogsValues(props.accessToken, accountId, valuesQuery)
 				const tsv = await writeToString(
 					result?.map((value) => ({ type: value.type, value: value.value })) || [],
 					{ headers: true, delimiter: '\t' }

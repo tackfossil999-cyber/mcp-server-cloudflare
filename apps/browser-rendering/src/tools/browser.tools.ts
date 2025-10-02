@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 
 import type { BrowserMCP } from '../browser.app'
 
@@ -24,7 +25,8 @@ export function registerBrowserTools(agent: BrowserMCP) {
 				}
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.browserRendering.content.create({
 					account_id: accountId,
 					url: params.url,
@@ -72,7 +74,8 @@ export function registerBrowserTools(agent: BrowserMCP) {
 				}
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = (await client.post(`/accounts/${accountId}/browser-rendering/markdown`, {
 					body: {
 						url: params.url,
@@ -127,8 +130,9 @@ export function registerBrowserTools(agent: BrowserMCP) {
 				}
 			}
 			try {
+				const props = getProps(agent)
 				// Cf client appears to be broken, so we use the raw API instead.
-				// const client = getCloudflareClient(agent.props.accessToken)
+				// const client = getCloudflareClient(props.accessToken)
 				// const r = await client.browserRendering.screenshot.create({
 				// 	account_id: accountId,
 				// 	url: params.url,
@@ -141,7 +145,7 @@ export function registerBrowserTools(agent: BrowserMCP) {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
-							Authorization: `Bearer ${agent.props.accessToken}`,
+							Authorization: `Bearer ${props.accessToken}`,
 						},
 						body: JSON.stringify({
 							url: params.url,

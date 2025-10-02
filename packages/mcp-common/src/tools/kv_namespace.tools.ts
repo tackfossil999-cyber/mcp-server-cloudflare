@@ -1,5 +1,6 @@
 import { getCloudflareClient } from '../cloudflare-api'
 import { MISSING_ACCOUNT_ID_RESPONSE } from '../constants'
+import { getProps } from '../get-props'
 import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 import {
 	KvNamespaceIdSchema,
@@ -41,7 +42,8 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const response = await client.kv.namespaces.list({
 					account_id,
 					...params,
@@ -99,7 +101,8 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const namespace = await client.kv.namespaces.create({ account_id, title })
 				return {
 					content: [
@@ -144,7 +147,8 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const result = await client.kv.namespaces.delete(namespace_id, { account_id })
 				return {
 					content: [
@@ -195,7 +199,8 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const namespace = await client.kv.namespaces.get(namespace_id, { account_id })
 				return {
 					content: [
@@ -241,7 +246,8 @@ export function registerKVTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const result = await client.kv.namespaces.update(namespace_id, {
 					account_id,
 					title,

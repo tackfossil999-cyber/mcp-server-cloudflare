@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { getCloudflareClient } from '../cloudflare-api'
 import { MISSING_ACCOUNT_ID_RESPONSE } from '../constants'
+import { getProps } from '../get-props'
 import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 import {
 	D1DatabaseNameParam,
@@ -32,7 +33,8 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const listResponse = await client.d1.database.list({
 					account_id,
 					name: name ?? undefined,
@@ -84,7 +86,8 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const d1Database = await client.d1.database.create({
 					account_id,
 					name,
@@ -129,7 +132,8 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const deleteResponse = await client.d1.database.delete(database_id, {
 					account_id,
 				})
@@ -170,7 +174,8 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const d1Database = await client.d1.database.get(database_id, {
 					account_id,
 				})
@@ -217,7 +222,8 @@ export function registerD1Tools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const queryResult = await client.d1.database.query(database_id, {
 					account_id,
 					sql,

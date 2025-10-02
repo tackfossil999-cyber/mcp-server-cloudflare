@@ -2,6 +2,7 @@ import { V4PagePaginationArray } from 'cloudflare/src/pagination.js'
 import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 
 import { pageParam, perPageParam } from '../types'
 
@@ -28,7 +29,8 @@ export function registerAutoRAGTools(agent: AutoRAGMCP) {
 				}
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = (await client.getAPIList(
 					`/accounts/${accountId}/autorag/rags`,
 					// @ts-ignore
@@ -90,7 +92,8 @@ export function registerAutoRAGTools(agent: AutoRAGMCP) {
 					}
 				}
 
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = (await client.post(
 					`/accounts/${accountId}/autorag/rags/${params.rag_id}/search`,
 					{
@@ -155,7 +158,8 @@ export function registerAutoRAGTools(agent: AutoRAGMCP) {
 					}
 				}
 
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = (await client.post(
 					`/accounts/${accountId}/autorag/rags/${params.rag_id}/ai-search`,
 					{

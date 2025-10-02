@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { handleZonesList } from '../api/zone.api'
 import { getCloudflareClient } from '../cloudflare-api'
+import { getProps } from '../get-props'
 import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 
 export function registerZoneTools(agent: CloudflareMcpAgent) {
@@ -49,10 +50,11 @@ export function registerZoneTools(agent: CloudflareMcpAgent) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const { page = 1, perPage = 50 } = params
 
 				const zones = await handleZonesList({
-					client: getCloudflareClient(agent.props.accessToken),
+					client: getCloudflareClient(props.accessToken),
 					accountId,
 					...params,
 				})
@@ -112,8 +114,9 @@ export function registerZoneTools(agent: CloudflareMcpAgent) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const { zoneId } = params
-				const client = getCloudflareClient(agent.props.accessToken)
+				const client = getCloudflareClient(props.accessToken)
 
 				// Use the zones.get method to fetch a specific zone
 				const response = await client.zones.get({ zone_id: zoneId })

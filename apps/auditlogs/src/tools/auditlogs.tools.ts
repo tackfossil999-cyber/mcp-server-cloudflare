@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { fetchCloudflareApi } from '@repo/mcp-common/src/cloudflare-api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 
 import type { AuditlogMCP } from '../auditlogs.app'
 
@@ -253,7 +254,8 @@ export function registerAuditLogTools(agent: AuditlogMCP) {
 				}
 			}
 			try {
-				const result = await handleGetAuditLogs(accountId, agent.props.accessToken, params)
+				const props = getProps(agent)
+				const result = await handleGetAuditLogs(accountId, props.accessToken, params)
 				return {
 					content: [
 						{

@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { fetchCloudflareApi } from '@repo/mcp-common/src/cloudflare-api'
 import { getEnv } from '@repo/mcp-common/src/env'
+import { getProps } from '@repo/mcp-common/src/get-props'
 
 import { getReader } from '../warp_diag_reader'
 
@@ -625,7 +626,8 @@ const registerTool = <T extends ZodRawShape, U = unknown>({
 		}
 
 		try {
-			const accessToken = agent.props.accessToken
+			const props = getProps(agent)
+			const accessToken = props.accessToken
 			const res = await callback({ ...(params as T), extra, accountId, accessToken })
 			return {
 				content: [

@@ -1,5 +1,6 @@
 import { getCloudflareClient } from '../cloudflare-api'
 import { MISSING_ACCOUNT_ID_RESPONSE } from '../constants'
+import { getProps } from '../get-props'
 import { type CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 import {
 	BucketListCursorParam,
@@ -33,7 +34,8 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const listResponse = await client.r2.buckets.list({
 					account_id,
 					cursor: cursor ?? undefined,
@@ -84,7 +86,8 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const bucket = await client.r2.buckets.create({
 					account_id,
 					name,
@@ -126,7 +129,8 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const bucket = await client.r2.buckets.get(name, { account_id })
 				return {
 					content: [
@@ -166,7 +170,8 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 				return MISSING_ACCOUNT_ID_RESPONSE
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const result = await client.r2.buckets.delete(name, { account_id })
 				return {
 					content: [
@@ -203,7 +208,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const cors = await client.r2.buckets.cors.get(name, {
 	// 				account_id,
 	// 				...params,
@@ -242,7 +247,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.cors.update(name, {
 	// 				account_id,
 	// 				...cors_config,
@@ -281,7 +286,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.cors.delete(name, {
 	// 				account_id,
 	// 				...params,
@@ -317,7 +322,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const domains = await client.r2.buckets.domains.custom.list(name, { account_id, ...params })
 	// 			return {
 	// 				content: [
@@ -354,7 +359,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.domains.custom.get(name, domain, {
 	// 				account_id,
 	// 				...params,
@@ -390,7 +395,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.domains.custom.create(name, {
 	// 				account_id,
 	// 				...params,
@@ -430,7 +435,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.domains.custom.delete(name, domain, {
 	// 				account_id,
 	// 				...params,
@@ -470,7 +475,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.domains.custom.update(name, domain, {
 	// 				account_id,
 	// 				...params,
@@ -506,7 +511,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.eventNotifications.get(name, {
 	// 				account_id,
 	// 				...params,
@@ -546,7 +551,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.eventNotifications.update(name, queueId, {
 	// 				account_id,
 	// 				...params,
@@ -586,7 +591,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.eventNotifications.delete(name, queueId, {
 	// 				account_id,
 	// 				...params,
@@ -622,7 +627,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.locks.get(name, { account_id, ...params })
 	// 			return {
 	// 				content: [
@@ -655,7 +660,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.locks.update(name, { account_id, ...params })
 	// 			return {
 	// 				content: [
@@ -688,7 +693,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.temporaryCredentials.create({
 	// 				account_id,
 	// 				...params,
@@ -720,7 +725,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 		return MISSING_ACCOUNT_ID_RESPONSE
 	// 	}
 	// 	try {
-	// 		const client = getCloudflareClient(agent.props.accessToken)
+	// 		const client = getCloudflareClient(props.accessToken)
 	// 		const result = await client.r2.buckets.metrics.list({ account_id })
 	// 		return {
 	// 			content: [
@@ -752,7 +757,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.sippy.get(bucketName, { account_id, ...params })
 	// 			console.log('sippy get result', result)
 	// 			return {
@@ -786,7 +791,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.sippy.update(bucketName, { account_id, ...params })
 	// 			return {
 	// 				content: [
@@ -819,7 +824,7 @@ export function registerR2BucketTools(agent: CloudflareMcpAgent) {
 	// 			return MISSING_ACCOUNT_ID_RESPONSE
 	// 		}
 	// 		try {
-	// 			const client = getCloudflareClient(agent.props.accessToken)
+	// 			const client = getCloudflareClient(props.accessToken)
 	// 			const result = await client.r2.buckets.sippy.delete(bucketName, { account_id })
 	// 			return {
 	// 				content: [

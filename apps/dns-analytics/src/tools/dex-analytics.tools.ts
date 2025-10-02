@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 
 import type { AccountGetParams } from 'cloudflare/resources/accounts/accounts.mjs'
 import type { ReportGetParams } from 'cloudflare/resources/dns/analytics.mjs'
@@ -24,7 +25,8 @@ export function registerAnalyticTools(agent: DNSAnalyticsMCP) {
 		},
 		async ({ zone, days }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const start_date = getStartDate(days)
 				const params: ReportGetParams = {
 					zone_id: zone,
@@ -72,7 +74,8 @@ export function registerAnalyticTools(agent: DNSAnalyticsMCP) {
 						],
 					}
 				}
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const params: AccountGetParams = {
 					account_id: accountId,
 				}
@@ -108,7 +111,8 @@ export function registerAnalyticTools(agent: DNSAnalyticsMCP) {
 		},
 		async ({ zone }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const params: ZoneGetParams = {
 					zone_id: zone,
 				}

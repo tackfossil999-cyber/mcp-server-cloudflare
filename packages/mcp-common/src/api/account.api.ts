@@ -1,3 +1,5 @@
+import { getProps } from '../get-props'
+
 import type { Cloudflare } from 'cloudflare'
 import type { Account } from 'cloudflare/resources/accounts/accounts.mjs'
 import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
@@ -27,10 +29,11 @@ export const withAccountCheck = <T extends Record<string, any>>(
 		}
 
 		try {
+			const props = getProps(agent)
 			const result = await handler({
 				...params,
 				accountId,
-				apiToken: agent.props.accessToken || '',
+				apiToken: props.accessToken || '',
 			})
 			return {
 				content: [{ type: 'text' as const, text: JSON.stringify(result) }],

@@ -1,4 +1,5 @@
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 import { pollUntilReady } from '@repo/mcp-common/src/poll'
 
 import { CreateScanResult, UrlParam } from '../types/url-scanner'
@@ -29,7 +30,8 @@ export function registerUrlScannerTools(agent: RadarMCP) {
 			}
 
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 
 				// Search if there are recent scans for the URL
 				const scans = await client.urlScanner.scans.list({
@@ -49,7 +51,7 @@ export function registerUrlScannerTools(agent: RadarMCP) {
 						{
 							method: 'POST',
 							headers: {
-								Authorization: `Bearer ${agent.props.accessToken}`,
+								Authorization: `Bearer ${props.accessToken}`,
 							},
 							body: JSON.stringify({ url }),
 						}

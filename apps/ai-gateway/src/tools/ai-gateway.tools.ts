@@ -1,4 +1,5 @@
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 
 import { GatewayIdParam, ListLogsParams, LogIdParam, pageParam, perPageParam } from '../types'
 
@@ -26,7 +27,8 @@ export function registerAIGatewayTools(agent: AIGatewayMCP) {
 				}
 			}
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.aiGateway.list({
 					account_id: accountId,
 					page: params.page,
@@ -73,7 +75,8 @@ export function registerAIGatewayTools(agent: AIGatewayMCP) {
 
 			const { gateway_id, ...filters } = params
 
-			const client = getCloudflareClient(agent.props.accessToken)
+			const props = getProps(agent)
+			const client = getCloudflareClient(props.accessToken)
 			const r = await client.aiGateway.logs.list(gateway_id, {
 				...filters,
 				account_id: accountId,
@@ -123,7 +126,8 @@ export function registerAIGatewayTools(agent: AIGatewayMCP) {
 			}
 
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.aiGateway.logs.get(params.gateway_id, params.log_id, {
 					account_id: accountId,
 				})
@@ -172,7 +176,8 @@ export function registerAIGatewayTools(agent: AIGatewayMCP) {
 			}
 
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.aiGateway.logs.request(params.gateway_id, params.log_id, {
 					account_id: accountId,
 				})
@@ -221,7 +226,8 @@ export function registerAIGatewayTools(agent: AIGatewayMCP) {
 			}
 
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.aiGateway.logs.response(params.gateway_id, params.log_id, {
 					account_id: accountId,
 				})

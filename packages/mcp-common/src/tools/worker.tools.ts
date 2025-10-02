@@ -7,6 +7,7 @@ import {
 } from '../api/workers.api'
 import { getCloudflareClient } from '../cloudflare-api'
 import { fmt } from '../format'
+import { getProps } from '../get-props'
 
 import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 
@@ -50,8 +51,9 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const results = await handleWorkersList({
-					client: getCloudflareClient(agent.props.accessToken),
+					client: getCloudflareClient(props.accessToken),
 					accountId,
 				})
 				// Extract worker details and sort by created_on date (newest first)
@@ -123,9 +125,10 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const { scriptName } = params
 				const res = await handleGetWorkersService({
-					apiToken: agent.props.accessToken,
+					apiToken: props.accessToken,
 					scriptName,
 					accountId,
 				})
@@ -194,9 +197,10 @@ export function registerWorkersTools(agent: CloudflareMcpAgent) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const { scriptName } = params
 				const scriptContent = await handleWorkerScriptDownload({
-					client: getCloudflareClient(agent.props.accessToken),
+					client: getCloudflareClient(props.accessToken),
 					scriptName,
 					accountId,
 				})

@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { getBuild, getBuildLogs, listBuilds } from '@repo/mcp-common/src/api/workers-builds.api'
 import { fmt } from '@repo/mcp-common/src/format'
+import { getProps } from '@repo/mcp-common/src/get-props'
 
 import type { BuildsMCP } from '../workers-builds.app'
 
@@ -85,8 +86,9 @@ export function registerBuildsTools(agent: BuildsMCP) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const res = await listBuilds({
-					apiToken: agent.props.accessToken,
+					apiToken: props.accessToken,
 					accountId,
 					workerId,
 					page,
@@ -173,8 +175,9 @@ export function registerBuildsTools(agent: BuildsMCP) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const { result: build } = await getBuild({
-					apiToken: agent.props.accessToken,
+					apiToken: props.accessToken,
 					accountId,
 					buildUUID,
 				})
@@ -246,8 +249,9 @@ export function registerBuildsTools(agent: BuildsMCP) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const logs = await getBuildLogs({
-					apiToken: agent.props.accessToken,
+					apiToken: props.accessToken,
 					accountId,
 					buildUUID,
 				})

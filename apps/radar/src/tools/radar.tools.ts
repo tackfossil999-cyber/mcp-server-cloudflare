@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { getCloudflareClient } from '@repo/mcp-common/src/cloudflare-api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 import {
 	PaginationLimitParam,
 	PaginationOffsetParam,
@@ -52,7 +53,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ limit, offset, location, orderBy }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.radar.entities.asns.list({
 					limit,
 					offset,
@@ -91,7 +93,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ asn }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.radar.entities.asns.get(asn)
 
 				return {
@@ -125,7 +128,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ ip }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.radar.entities.get({ ip })
 
 				return {
@@ -165,7 +169,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ limit, offset, asn, location, dateStart, dateEnd, dateRange }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.radar.trafficAnomalies.get({
 					limit,
 					offset,
@@ -210,7 +215,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ limit, date, serviceCategory }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.radar.ranking.internetServices.top({
 					limit,
 					date,
@@ -251,7 +257,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ limit, date, location, rankingType }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.radar.ranking.top({
 					limit,
 					date,
@@ -291,7 +298,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ domain, date }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.radar.ranking.domain.get(domain, { date })
 
 				return {
@@ -331,7 +339,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ dateStart, dateEnd, dateRange, asn, location, continent, dimension }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await resolveAndInvoke(client.radar.http, dimension, {
 					asn,
 					continent,
@@ -378,7 +387,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ dateStart, dateEnd, dateRange, asn, location, continent, dimension }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await resolveAndInvoke(client.radar.dns, dimension, {
 					asn,
 					continent,
@@ -425,7 +435,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ dateStart, dateEnd, dateRange, asn, location, continent, dimension }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await resolveAndInvoke(client.radar.attacks.layer7, dimension, {
 					asn,
 					continent,
@@ -472,7 +483,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ dateStart, dateEnd, dateRange, asn, location, continent, dimension }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await resolveAndInvoke(client.radar.attacks.layer3, dimension, {
 					asn,
 					continent,
@@ -516,7 +528,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ dateStart, dateEnd, dateRange, dimension }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await resolveAndInvoke(client.radar.email.routing, dimension, {
 					dateRange,
 					dateStart,
@@ -557,7 +570,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ dateStart, dateEnd, dateRange, dimension }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await resolveAndInvoke(client.radar.email.security, dimension, {
 					dateRange,
 					dateStart,
@@ -604,7 +618,8 @@ export function registerRadarTools(agent: RadarMCP) {
 			}
 
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await resolveAndInvoke(client.radar.quality.speed, dimension, {
 					asn,
 					continent,
@@ -650,7 +665,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ dateRange, dateStart, dateEnd, asn, location, continent, format, metric }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await client.radar.quality.iqi[format]({
 					asn,
 					continent,
@@ -698,7 +714,8 @@ export function registerRadarTools(agent: RadarMCP) {
 		},
 		async ({ dateRange, dateStart, dateEnd, asn, location, continent, dimension }) => {
 			try {
-				const client = getCloudflareClient(agent.props.accessToken)
+				const props = getProps(agent)
+				const client = getCloudflareClient(props.accessToken)
 				const r = await resolveAndInvoke(client.radar.ai, dimension, {
 					asn,
 					continent,

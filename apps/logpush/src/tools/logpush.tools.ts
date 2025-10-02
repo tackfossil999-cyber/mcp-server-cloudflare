@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { fetchCloudflareApi } from '@repo/mcp-common/src/cloudflare-api'
+import { getProps } from '@repo/mcp-common/src/get-props'
 
 import type { LogsMCP } from '../logpush.app'
 
@@ -125,7 +126,8 @@ export function registerLogsTools(agent: LogsMCP) {
 				}
 			}
 			try {
-				const result = await handleGetAccountLogPushJobs(accountId, agent.props.accessToken)
+				const props = getProps(agent)
+				const result = await handleGetAccountLogPushJobs(accountId, props.accessToken)
 				return {
 					content: [
 						{

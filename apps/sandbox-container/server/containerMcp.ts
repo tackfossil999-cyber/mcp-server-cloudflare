@@ -1,5 +1,6 @@
 import { McpAgent } from 'agents/mcp'
 
+import { getProps } from '@repo/mcp-common/src/get-props'
 import { CloudflareMCPServer } from '@repo/mcp-common/src/server'
 
 import { ExecParams, FilePathParam, FileWrite } from '../shared/schema'
@@ -24,11 +25,12 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 	}
 
 	get userContainer(): DurableObjectStub<UserContainer> {
+		const props = getProps(this)
 		// TODO: Support account scoped tokens?
-		if (this.props.type === 'account_token') {
+		if (props.type === 'account_token') {
 			throw new Error('Container server does not currently support account scoped tokens')
 		}
-		const userContainer = this.env.USER_CONTAINER.idFromName(this.props.user.id)
+		const userContainer = this.env.USER_CONTAINER.idFromName(props.user.id)
 		return this.env.USER_CONTAINER.get(userContainer)
 	}
 
@@ -41,8 +43,9 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 	}
 
 	async init() {
+		const props = getProps(this)
 		// TODO: Probably we'll want to track account tokens usage through an account identifier at some point
-		const userId = this.props.type === 'user_token' ? this.props.user.id : undefined
+		const userId = props.type === 'user_token' ? props.user.id : undefined
 
 		this.server = new CloudflareMCPServer({
 			userId,
@@ -59,7 +62,8 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 			`Start or restart the container.
 			Use this tool to initialize a container before running any python or node.js code that the user requests ro run.`,
 			async () => {
-				if (this.props.type === 'account_token') {
+				const props = getProps(this)
+				if (props.type === 'account_token') {
 					return {
 						// TODO: Support account scoped tokens?
 						// we'll need to add support for an account blocklist in that case
@@ -72,7 +76,7 @@ export class ContainerMcpAgent extends McpAgent<Env, never, Props> {
 					}
 				}
 
-				const userInBlocklist = await this.env.USER_BLOCKLIST.get(this.props.user.id)
+				const userInBlocklist = await this.env.USER_BLOCKLIST.get(props.user.id)
 				if (userInBlocklist) {
 					return {
 						content: [{ type: 'text', text: 'Blocked from intializing container.' }],

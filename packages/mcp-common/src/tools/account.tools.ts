@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { handleAccountsList } from '../api/account.api'
 import { getCloudflareClient } from '../cloudflare-api'
+import { getProps } from '../get-props'
 
 import type { CloudflareMcpAgent } from '../types/cloudflare-mcp-agent.types'
 
@@ -19,8 +20,9 @@ export function registerAccountTools(agent: CloudflareMcpAgent) {
 		},
 		async () => {
 			try {
+				const props = getProps(agent)
 				const results = await handleAccountsList({
-					client: getCloudflareClient(agent.props.accessToken),
+					client: getCloudflareClient(props.accessToken),
 				})
 				// Sort accounts by created_on date (newest first)
 				const accounts = results
@@ -66,7 +68,7 @@ export function registerAccountTools(agent: CloudflareMcpAgent) {
 
 	// Only register set_active_account tool when user token is provided, as it doesn't make sense to expose
 	// this tool for account scoped tokens, given that they're scoped to a single account
-	if (agent.props.type === 'user_token') {
+	if (getProps(agent).type === 'user_token') {
 		const activeAccountIdParam = z
 			.string()
 			.describe(

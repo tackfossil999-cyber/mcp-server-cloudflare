@@ -1,6 +1,8 @@
 import * as LZString from 'lz-string'
 import { z } from 'zod'
 
+import { getProps } from '@repo/mcp-common/src/get-props'
+
 import type { GraphQLMCP } from '../graphql.app'
 
 // GraphQL API endpoint
@@ -499,15 +501,16 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 			}
 
 			try {
+				const props = getProps(agent)
 				// First fetch the schema overview
-				const schemaOverview = await fetchSchemaOverview(agent.props.accessToken)
+				const schemaOverview = await fetchSchemaOverview(props.accessToken)
 
 				// Search the schema for the keyword
 				const searchResults = await searchGraphQLSchema(
 					schemaOverview,
 					keyword,
 					accountId,
-					agent.props.accessToken,
+					props.accessToken,
 					maxDetailsToFetch,
 					onlyObjectTypes
 				)
@@ -616,7 +619,8 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 			}
 
 			try {
-				const schemaOverview = await fetchSchemaOverview(agent.props.accessToken)
+				const props = getProps(agent)
+				const schemaOverview = await fetchSchemaOverview(props.accessToken)
 
 				// Apply pagination to the types array
 				const allTypes = schemaOverview.data.__schema.types || []
@@ -730,7 +734,8 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 			}
 
 			try {
-				const typeDetails = await fetchTypeDetails(typeName, agent.props.accessToken)
+				const props = getProps(agent)
+				const typeDetails = await fetchTypeDetails(typeName, props.accessToken)
 
 				// Apply pagination to fields if they exist
 				const allFields = typeDetails.data.__type.fields || []
@@ -849,8 +854,9 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 			}
 
 			try {
+				const props = getProps(agent)
 				// First fetch the schema overview
-				const schemaOverview = await fetchSchemaOverview(agent.props.accessToken)
+				const schemaOverview = await fetchSchemaOverview(props.accessToken)
 
 				// Apply pagination to the types array
 				const allTypes = schemaOverview.data.__schema.types || []
@@ -927,7 +933,7 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 					// Fetch details for each type
 					for (const typeName of typesToFetch) {
 						try {
-							const typeDetails = await fetchTypeDetails(typeName, agent.props.accessToken)
+							const typeDetails = await fetchTypeDetails(typeName, props.accessToken)
 							if (typeDetails.data.__type) {
 								schema.typeDetails[typeName] = typeDetails.data.__type
 							}
@@ -1002,10 +1008,11 @@ export function registerGraphQLTools(agent: GraphQLMCP) {
 			}
 
 			try {
+				const props = getProps(agent)
 				const { query, variables = {} } = params
 
 				// Execute the GraphQL query and get the raw result
-				const result = await executeGraphQLQuery(query, variables, agent.props.accessToken)
+				const result = await executeGraphQLQuery(query, variables, props.accessToken)
 
 				// Generate GraphQL API Explorer link for this query
 				const compressedQuery = LZString.compressToEncodedURIComponent(query)
